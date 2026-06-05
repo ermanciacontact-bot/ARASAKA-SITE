@@ -53,4 +53,3 @@ data/site-data.js
 ```
 
 Les images utilisees sont des visuels d'illustration appeles depuis Unsplash. Pour un site final de production, remplacer progressivement ces images par des photos de vos propres réalisations ARASAKA.
-
