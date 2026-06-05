@@ -1,0 +1,12 @@
+﻿{
+  "name": "arasaka-dynamic-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Site dynamique multi-pages pour ARASAKA, bâtiment et rénovation en Côte d'Ivoire.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "license": "UNLICENSED"
+}
+

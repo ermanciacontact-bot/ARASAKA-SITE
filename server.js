@@ -1,0 +1,1137 @@
+﻿const http = require("node:http");
+const fs = require("node:fs");
+const path = require("node:path");
+const crypto = require("node:crypto");
+const { URL } = require("node:url");
+const site = require("./data/site-data");
+
+const PORT = Number(process.env.PORT || 4321);
+const ROOT = __dirname;
+const PUBLIC_DIR = path.join(ROOT, "public");
+const LEADS_FILE = path.join(ROOT, "data", "leads.jsonl");
+
+const mimeTypes = {
+  ".css": "text/css; charset=utf-8",
+  ".js": "application/javascript; charset=utf-8",
+  ".svg": "image/svg+xml",
+  ".png": "image/png",
+  ".jpg": "image/jpeg",
+  ".jpeg": "image/jpeg",
+  ".webp": "image/webp",
+  ".ico": "image/x-icon",
+};
+
+function escapeHtml(value) {
+  return String(value ?? "")
+    .replaceAll("&", "&amp;")
+    .replaceAll("<", "&lt;")
+    .replaceAll(">", "&gt;")
+    .replaceAll('"', "&quot;")
+    .replaceAll("'", "&#039;");
+}
+
+function imageUrl(key) {
+  return site.images[key] || "";
+}
+
+function whatsappLink(message) {
+  const encoded = encodeURIComponent(message);
+  return `${site.company.whatsappHref}?text=${encoded}`;
+}
+
+function sectionIntro(kicker, title, text) {
+  return `
+    <div class="section-intro">
+      <p class="kicker">${escapeHtml(kicker)}</p>
+      <h2>${escapeHtml(title)}</h2>
+      <p>${escapeHtml(text)}</p>
+    </div>
+  `;
+}
+
+function serviceCards(limit) {
+  return site.services
+    .slice(0, limit || site.services.length)
+    .map(
+      (service) => `
+        <article class="service-card">
+          <span class="service-mark" aria-hidden="true">${escapeHtml(service.title.slice(0, 2))}</span>
+          <h3>${escapeHtml(service.title)}</h3>
+          <p>${escapeHtml(service.short)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function materialCards() {
+  return site.materials
+    .map(
+      (material) => `
+        <article class="material-card">
+          <img src="${imageUrl(material.imageKey)}" alt="${escapeHtml(material.title)} - ${escapeHtml(material.subtitle)}" loading="lazy">
+          <div>
+            <p class="card-eyebrow">${escapeHtml(material.subtitle)}</p>
+            <h3>${escapeHtml(material.title)}</h3>
+            <p>${escapeHtml(material.text)}</p>
+            <dl class="material-benefits">
+              <dt>Thermique</dt>
+              <dd>${escapeHtml(material.thermal || "")}</dd>
+              <dt>Écologique</dt>
+              <dd>${escapeHtml(material.eco || "")}</dd>
+            </dl>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function planSvg(slug) {
+  const extra = {
+    compact: `
+      <rect x="236" y="66" width="62" height="76" class="pool"/>
+      <text x="267" y="108" class="tiny">Bassin</text>
+      <rect x="42" y="146" width="170" height="28" class="veranda"/>
+      <text x="127" y="164" class="tiny">Véranda</text>
+    `,
+    patio: `
+      <rect x="132" y="84" width="66" height="62" class="garden"/>
+      <text x="165" y="119" class="tiny">Patio</text>
+      <rect x="230" y="66" width="68" height="74" class="pool"/>
+      <text x="264" y="106" class="tiny">Lagon</text>
+    `,
+    veranda: `
+      <rect x="36" y="146" width="224" height="32" class="veranda"/>
+      <text x="148" y="165" class="tiny">Grande véranda</text>
+      <rect x="264" y="92" width="42" height="82" class="garden"/>
+      <text x="285" y="136" class="tiny vertical">Jardin</text>
+    `,
+    diaspora: `
+      <rect x="226" y="72" width="78" height="72" class="pool"/>
+      <text x="265" y="111" class="tiny">Piscine</text>
+      <rect x="48" y="36" width="204" height="22" class="veranda"/>
+      <text x="150" y="51" class="tiny">Suivi étapes</text>
+    `,
+  }[slug] || "";
+
+  return `
+    <svg viewBox="0 0 330 210" role="img" aria-label="Plan schématique ${escapeHtml(slug)}">
+      <rect x="18" y="18" width="294" height="174" class="plan-bg"/>
+      <rect x="36" y="36" width="86" height="62" class="room"/>
+      <rect x="122" y="36" width="86" height="62" class="room"/>
+      <rect x="36" y="98" width="106" height="48" class="room living"/>
+      <rect x="142" y="98" width="66" height="48" class="room"/>
+      <rect x="208" y="36" width="46" height="110" class="room service"/>
+      <path d="M36 98 H208 M122 36 V98 M142 98 V146 M208 36 V146" class="wall"/>
+      <path d="M74 98 q12 12 24 0 M166 98 q12 12 24 0 M208 84 q12 12 0 24" class="door"/>
+      <text x="79" y="72" class="tiny">Chambre</text>
+      <text x="164" y="72" class="tiny">Suite</text>
+      <text x="89" y="126" class="tiny">Séjour</text>
+      <text x="176" y="126" class="tiny">Cuisine</text>
+      <text x="231" y="91" class="tiny vertical">Services</text>
+      ${extra}
+      <path d="M48 184 C92 166, 126 200, 168 180 S246 162, 292 184" class="landscape"/>
+    </svg>
+  `;
+}
+
+function planCards() {
+  return site.plans
+    .map(
+      (plan) => `
+        <article class="plan-card">
+          <div class="plan-art">${plan.imageKey ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
+          <div class="plan-body">
+            <p class="card-eyebrow">${escapeHtml(plan.surface)}</p>
+            <h3>${escapeHtml(plan.title)}</h3>
+            <ul>
+              ${plan.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
+            </ul>
+            <a class="link-arrow" href="/contact?plan=${encodeURIComponent(plan.title)}">Demander ce plan</a>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function galleryCards() {
+  return site.gallery
+    .map(
+      (item, index) => `
+        <article class="gallery-card" data-category="${escapeHtml(item.category)}">
+          <button class="gallery-open" type="button" data-lightbox-src="${imageUrl(item.imageKey)}" data-lightbox-title="${escapeHtml(item.title)}" aria-label="Agrandir la photo: ${escapeHtml(item.title)}">
+            <img src="${imageUrl(item.imageKey)}" alt="${escapeHtml(item.title)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">
+            <span class="gallery-zoom">Agrandir</span>
+          </button>
+          <div class="gallery-caption">
+            <p>${escapeHtml(item.title)}</p>
+            <span>${escapeHtml(item.category.replaceAll("-", " "))}</span>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function processCards() {
+  return site.process
+    .map(
+      (item) => `
+        <article class="process-card">
+          <span>${escapeHtml(item.step)}</span>
+          <h3>${escapeHtml(item.title)}</h3>
+          <p>${escapeHtml(item.text)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function targetMarketCards() {
+  return site.targetMarkets
+    .map(
+      (market) => `
+        <article class="market-card">
+          <p class="card-eyebrow">${escapeHtml(market.scope)}</p>
+          <h3>${escapeHtml(market.title)}</h3>
+          <p>${escapeHtml(market.text)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function advantageCards() {
+  return site.advantages
+    .map(
+      (advantage) => `
+        <article class="advantage-card">
+          <h3>${escapeHtml(advantage.title)}</h3>
+          <p>${escapeHtml(advantage.text)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function offerCards() {
+  return site.offers
+    .map(
+      (offer) => `
+        <article class="offer-card">
+          <p class="card-eyebrow">${escapeHtml(offer.audience)}</p>
+          <h3>${escapeHtml(offer.title)}</h3>
+          <p>${escapeHtml(offer.text)}</p>
+          <a class="link-arrow" href="/contact?offre=${encodeURIComponent(offer.title)}">${escapeHtml(offer.cta)}</a>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function remoteBuildOfferCards() {
+  return site.remoteBuildOffers
+    .map(
+      (offer) => `
+        <article class="remote-offer-card">
+          <p class="card-eyebrow">${escapeHtml(offer.subtitle)}</p>
+          <h3>${escapeHtml(offer.title)}</h3>
+          <p>${escapeHtml(offer.text)}</p>
+          <ul>
+            ${offer.details.map((detail) => `<li>${escapeHtml(detail)}</li>`).join("")}
+          </ul>
+          <a class="link-arrow" href="/contact?offre=${encodeURIComponent(offer.title)}">${escapeHtml(offer.cta)}</a>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function remotePhotoCards() {
+  return site.remoteBuildPhotos
+    .map(
+      (photo) => `
+        <article class="remote-photo-card">
+          <img src="${imageUrl(photo.imageKey)}" alt="${escapeHtml(photo.title)}" loading="lazy">
+          <div>
+            <h3>${escapeHtml(photo.title)}</h3>
+            <p>${escapeHtml(photo.text)}</p>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function layout({ active, title, description, body, bodyClass = "" }) {
+  const nav = site.nav
+    .map(
+      (item) => `
+        <a class="${item.key === active ? "active" : ""}" href="${item.href}">${escapeHtml(item.label)}</a>
+      `,
+    )
+    .join("");
+
+  const schema = {
+    "@context": "https://schema.org",
+    "@type": "HomeAndConstructionBusiness",
+    name: site.company.name,
+    description,
+    address: site.company.location,
+    telephone: site.company.phone,
+    areaServed: ["Côte d'Ivoire", "Abidjan", "France", "Diaspora ivoirienne"],
+    founder: site.company.director,
+  };
+
+  return `<!doctype html>
+<html lang="fr">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>${escapeHtml(title)} | ${site.company.name}</title>
+    <meta name="description" content="${escapeHtml(description)}">
+    <meta name="theme-color" content="#123923">
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml">
+    <link rel="stylesheet" href="/styles.css?v=20260604-2">
+    <script type="application/ld+json">${JSON.stringify(schema)}</script>
+  </head>
+  <body class="${escapeHtml(bodyClass)}">
+    <header class="site-header">
+      <a class="brand" href="/" aria-label="Accueil ARASAKA">
+        <strong>ARASAKA</strong>
+        <span>${escapeHtml(site.company.baseline)}</span>
+      </a>
+      <button class="menu-toggle" type="button" data-menu-toggle aria-label="Ouvrir le menu">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+      <nav class="main-nav" data-main-nav aria-label="Navigation principale">
+        ${nav}
+      </nav>
+      <a class="phone-link" href="${site.company.telHref}">
+        <span aria-hidden="true">Tel</span>
+        ${escapeHtml(site.company.phone)}
+      </a>
+    </header>
+    <main>
+      ${body}
+    </main>
+    <a class="floating-contact" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">
+      WhatsApp
+    </a>
+    <footer class="site-footer">
+      <div>
+        <strong>ARASAKA</strong>
+        <p>${escapeHtml(site.company.baseline)}</p>
+      </div>
+      <div>
+        <span>Côte d'Ivoire</span>
+        <p>${escapeHtml(site.company.location)}</p>
+      </div>
+      <div>
+        <span>France</span>
+        <p>${escapeHtml(site.company.ermanciaLocation)}</p>
+      </div>
+      <div>
+        <span>Direction</span>
+        <p>${escapeHtml(site.company.director)}</p>
+      </div>
+      <div>
+        <span>Contact</span>
+        <p><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br>${escapeHtml(site.company.email)}</p>
+      </div>
+    </footer>
+    <div class="lightbox" data-lightbox hidden aria-modal="true" role="dialog" aria-label="Photo agrandie">
+      <button class="lightbox-close" type="button" data-lightbox-close aria-label="Fermer la photo">Fermer</button>
+      <img class="lightbox-image" data-lightbox-image alt="">
+      <p class="lightbox-title" data-lightbox-title></p>
+    </div>
+    <script src="/app.js?v=20260604-1" defer></script>
+  </body>
+</html>`;
+}
+
+function renderHome() {
+  const message =
+    "Bonjour ARASAKA, je souhaite demander une étude pour un projet de villa ou rénovation en Côte d'Ivoire.";
+
+  return layout({
+    active: "home",
+    title: "Accueil",
+    description:
+      "ARASAKA construit et rénove des villas premium, maisons familiales, extensions et petits immeubles locatifs en Côte d'Ivoire avec suivi transparent pour clients locaux et diaspora.",
+    bodyClass: "page-home",
+    body: `
+      <section class="hero hero-home" style="--hero-image: url('${imageUrl("hero")}')">
+        <div class="hero-content">
+          <p class="kicker">Construction & rénovation premium</p>
+          <h1>Construire en harmonie avec le climat tropical.</h1>
+          <p class="hero-copy">Villas, rénovations et espaces extérieurs haut de gamme: BTC, béton, bois africain, jardins tropicaux, piscines lagon et finitions aux standards internationaux.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/contact">Demander une étude</a>
+            <a class="button ghost" href="/fiche-arasaka">Voir la fiche complète</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="proof-band">
+        ${site.proofPoints.map((point) => `<span>${escapeHtml(point)}</span>`).join("")}
+      </section>
+
+      <section class="split-feature">
+        <img src="${imageUrl("premiumVillaConcept")}" alt="Villa premium avec terrasse, piscine et matériaux naturels">
+        <div>
+          <p class="kicker">Positionnement premium</p>
+          <h2>Une architecture tropicale luxueuse, confortable et précise.</h2>
+          <p>${escapeHtml(site.positioning.text)}</p>
+          <p>${escapeHtml(site.company.finishPromise)}</p>
+          <div class="fact-grid">
+            <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
+            <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
+            <div><span>Architecture</span><strong>Partenariat avec cabinet d'architecte</strong></div>
+            <div><span>Diaspora</span><strong>Collaboration Ermancia en France</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band compact-band">
+        ${sectionIntro("Ambiances premium", "Plus de matières, plus de lumière, plus d'espaces extérieurs", "Villas blanches, BTC, terrasses en teck, piscines lagon, jardins et intérieurs ouverts donnent une lecture concrète du niveau recherché.")}
+        <div class="home-photo-grid">
+          ${["hero", "premiumVillaConcept", "bricks", "whiteDuplexPool02", "tropicalPool", "teakTerrace", "interiorWood", "coveredTerrace"].map((key) => `<img src="${imageUrl(key)}" alt="Ambiance premium ARASAKA" loading="lazy">`).join("")}
+        </div>
+      </section>
+
+      <section class="process-section">
+        ${sectionIntro("Marchés prioritaires", "Des offres pour les clients qui veulent de la visibilité", "ARASAKA vise les projets où la qualité du suivi, la transparence, les délais et la maîtrise du chantier comptent autant que le prix.")}
+        <div class="market-grid">${targetMarketCards()}</div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Offres commerciales", "Des offres lisibles pour décider plus vite", "Chaque offre peut être adaptée au terrain, au budget et au niveau de finition attendu.")}
+        <div class="offer-grid">${offerCards()}</div>
+      </section>
+
+      <section class="split-feature reverse">
+        <img src="${imageUrl("diasporaSite")}" alt="Techniciens et artisans qualifiés sur chantier premium">
+        <div>
+          <p class="kicker">Exécution</p>
+          <h2>Artisans, techniciens qualifiés et culture des standards internationaux.</h2>
+          <p>${escapeHtml(site.company.standards)}</p>
+          <p>${escapeHtml(site.company.finishPromise)}</p>
+          <a class="link-arrow" href="/diaspora">Découvrir l'offre diaspora</a>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Services", "Des prestations complètes pour villas, rénovations et investissements locatifs", "Construction, rénovation, architecture tropicale, piscines lagon, pergolas, jardins, petits immeubles et accompagnement à distance.")}
+        <div class="service-grid">${serviceCards(8)}</div>
+        <div class="center-action"><a class="button secondary" href="/services">Explorer tous les services</a></div>
+      </section>
+
+      <section class="dark-cta">
+        <div>
+          <p class="kicker">Confort thermique</p>
+          <h2>Moins de climatisation en journée, plus d'air, plus d'ombre, plus de calme.</h2>
+          <p>Les matériaux naturels, les baies vitrées bien protégées, les vérandas et la ventilation croisée permettent de créer des maisons respirantes, adaptées aux usages tropicaux.</p>
+        </div>
+        <a class="button light" href="${whatsappLink(message)}" target="_blank" rel="noreferrer">Parler du projet</a>
+      </section>
+    `,
+  });
+}
+
+function renderFicheArasaka() {
+  return layout({
+    active: "fiche",
+    title: "Fiche complète",
+    description:
+      "Fiche commerciale complète ARASAKA: bâtiment, rénovation, matériaux naturels, plans de villas, galerie et engagements qualité.",
+    bodyClass: "page-fiche",
+    body: `
+      <section class="hero hero-fiche" style="--hero-image: url('${imageUrl("hero")}')">
+        <div class="hero-content">
+          <p class="kicker">Fiche complète</p>
+          <h1>ARASAKA, bâtiment, rénovation et architecture tropicale premium.</h1>
+          <p class="hero-copy">Une approche commerciale claire, haut de gamme et structurée: villas, rénovations, matériaux naturels, piscines lagon, pergolas, jardins et suivi à distance.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/contact">Demander une étude</a>
+            <a class="button ghost" href="/galerie">Voir les réalisations</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="proof-band">
+        ${site.proofPoints.map((point) => `<span>${escapeHtml(point)}</span>`).join("")}
+      </section>
+
+      <section class="split-feature">
+        <img src="${imageUrl("premiumVillaConcept")}" alt="Villa blanche premium avec terrasse et piscine naturelle">
+        <div>
+          <p class="kicker">Excellence constructive</p>
+          <h2>Du cadrage du projet aux finitions, chaque détail doit être maîtrisé.</h2>
+          <p>${escapeHtml(site.company.standards)}</p>
+          <p>${escapeHtml(site.company.finishPromise)}</p>
+          <div class="fact-grid">
+            <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
+            <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
+            <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
+            <div><span>Études</span><strong>Cabinet d'architecte partenaire</strong></div>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Nos services", "Des prestations lisibles pour décider vite", "Construction de villas, rénovation, architecture tropicale, aménagements extérieurs, piscines lagon, pergolas, petits immeubles et suivi diaspora.")}
+        <div class="service-grid">${serviceCards(8)}</div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Matériaux, performance et confort", "Béton, BTC, bois africain, bambou, pisé et végétalisation", "Les matériaux sont choisis pour leur rendu, leur durabilité, leur confort thermique et leur cohérence avec le climat tropical.")}
+        <div class="materials-grid">${materialCards()}</div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Plans de villas & concepts", "Des bases premium à adapter au terrain", "Villa blanche avec terrasse et piscine, villa patio, grande véranda, résidence suivie à distance: chaque concept sert à cadrer un projet précis.")}
+        <div class="plans-grid">${planCards()}</div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Galerie réalisations", "Villas blanches, BTC, jardins, piscines et terrasses", "Une sélection d'ambiances pour visualiser le niveau de finition, les matériaux et les espaces extérieurs.")}
+        <div class="gallery-grid">${galleryCards()}</div>
+        <div class="center-action"><a class="button ghost-dark" href="/galerie">Voir toute la galerie</a></div>
+      </section>
+
+      <section class="dark-cta">
+        <div>
+          <p class="kicker">Engagement qualité</p>
+          <h2>Délais, normes internationales, finitions soignées et définition précise du projet.</h2>
+          <p>ARASAKA met en avant un chantier documenté, des décisions claires et une finition alignée avec les standards internationaux les plus exigeants.</p>
+        </div>
+        <a class="button light" href="/contact">Planifier une étude</a>
+      </section>
+    `,
+  });
+}
+
+function renderDiaspora() {
+  const message =
+    "Bonjour ARASAKA, je souhaite une offre premium de suivi diaspora pour construire ou rénover en Côte d'Ivoire.";
+
+  return layout({
+    active: "diaspora",
+    title: "Diaspora",
+    description:
+      "Offre diaspora ARASAKA: construction et rénovation premium en Côte d'Ivoire avec rencontre possible à Paris, paiement sur compte en France, WhatsApp dédié, reporting et garantie décennale selon contrat.",
+    bodyClass: "page-diaspora",
+    body: `
+      <section class="page-hero remote-hero diaspora-hero" style="--hero-image: url('${imageUrl("diasporaClients")}')">
+        <div>
+          <p class="kicker">Offre diaspora premium</p>
+          <h1>Construire au pays avec un interlocuteur fiable, des preuves et un suivi haut de gamme.</h1>
+          <p class="page-hero-copy">ARASAKA crée un pont entre la France, la diaspora et la Côte d'Ivoire: rencontre possible à Paris, paiement sur compte en France, fil WhatsApp dédié, planning, reporting photos/vidéos et contrôle qualité par étapes.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/contact?offre=Suivi%20diaspora%20premium">Demander l'offre diaspora</a>
+            <a class="button ghost" href="${whatsappLink(message)}" target="_blank" rel="noreferrer">WhatsApp</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Pour qui ?", "Clients exigeants vivant hors de Côte d'Ivoire", "L'offre s'adresse aux familles, investisseurs et propriétaires qui veulent construire, rénover ou suivre un chantier à distance sans perdre le contrôle du projet.")}
+        <div class="offer-grid">
+          <article class="offer-card"><p class="card-eyebrow">Villa clé en main</p><h3>Études, budget, planning, chantier et livraison</h3><p>Un parcours complet pour passer d'une intention à une villa livrée avec validations par étapes.</p><a class="link-arrow" href="/contact?offre=Villa%20cle%20en%20main%20diaspora">Demander cette offre</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Rénovation premium</p><h3>Moderniser une maison existante à Abidjan</h3><p>Façade, extension, cuisine, terrasse, jardin, piscine, clôture et finitions documentées.</p><a class="link-arrow" href="/contact?offre=Renovation%20premium%20diaspora">Demander cette offre</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Suivi à distance</p><h3>Reporting mensuel et contrôle qualité</h3><p>Photos, vidéos WhatsApp, réunions visio, avancement, points bloquants et appels de fonds par étapes.</p><a class="link-arrow" href="/contact?offre=Suivi%20a%20distance">Demander cette offre</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Options France</p><h3>Paris, compte France, WhatsApp dédié</h3><p>Rencontre possible à Paris, paiement sur compte en France, fil WhatsApp projet et garantie décennale à cadrer selon les lots et contrats.</p><a class="link-arrow" href="/contact?offre=Options%20France%20diaspora">Demander ces options</a></article>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Sécurisation France", "Des options pensées pour rassurer la diaspora", "Les modalités sont précisées au contrat selon le projet, les lots concernés et les intervenants mobilisés.")}
+        <div class="fact-grid">
+          <div><span>Rencontre</span><strong>Rendez-vous possible à Paris pour cadrer le besoin.</strong></div>
+          <div><span>Paiement</span><strong>Paiement possible sur compte en France selon les modalités contractuelles.</strong></div>
+          <div><span>WhatsApp</span><strong>Fil WhatsApp dédié au projet pour photos, vidéos et décisions rapides.</strong></div>
+          <div><span>Garantie</span><strong>Garantie décennale prévue lorsque applicable, selon lots, contrats et assurances mobilisées.</strong></div>
+        </div>
+      </section>
+
+      <section class="split-feature">
+        <img src="${imageUrl("diasporaSite")}" alt="Techniciens et suivi de chantier premium">
+        <div>
+          <p class="kicker">Méthode</p>
+          <h2>Un chantier rendu visible même lorsque vous êtes loin.</h2>
+          <p>Chaque étape importante est documentée: études, devis, choix matériaux, démarrage, gros oeuvre, second oeuvre, finitions et réception.</p>
+          <ul class="check-list">
+            <li>Compte rendu d'avancement avec photos et vidéos</li>
+            <li>Réunions visio aux étapes clés</li>
+            <li>Budget sécurisé et arbitrages formalisés</li>
+            <li>Coordination avec cabinet d'architecte et techniciens qualifiés</li>
+            <li>Finitions suivies selon les standards internationaux</li>
+          </ul>
+        </div>
+      </section>
+
+      <section class="remote-trust">
+        <div>
+          <p class="kicker">Pont France - Côte d'Ivoire</p>
+          <h2>Une relation premium pour une clientèle qui demande de la transparence.</h2>
+          <p>La collaboration avec Ermancia à Savigny-le-Temple facilite le dialogue avec les clients installés en France. Une rencontre à Paris peut être organisée pour cadrer les attentes, le niveau de finition, les modalités de paiement sur compte en France et le mode de reporting souhaité.</p>
+        </div>
+        <div class="trust-list">
+          <span>Contrat clair</span>
+          <span>Compte France</span>
+          <span>WhatsApp dédié</span>
+          <span>Rencontre Paris</span>
+          <span>Garantie décennale</span>
+          <span>Contrôle qualité</span>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Inspirations", "Villas, piscines, jardins et finitions premium", "Quelques ambiances pour cadrer le projet avant les études détaillées.")}
+        <div class="home-photo-grid">
+          ${["premiumVillaConcept", "poolSun01", "poolCourtyard02", "interiorCourtyardLiving", "suiteCourtyard", "vegetalFence02", "bambooWall", "teakTerrace"].map((key) => `<img src="${imageUrl(key)}" alt="Inspiration diaspora ARASAKA" loading="lazy">`).join("")}
+        </div>
+      </section>
+
+      <section class="dark-cta">
+        <div>
+          <p class="kicker">Démarrer</p>
+          <h2>Envoyez le terrain, le budget indicatif et le niveau de finition attendu.</h2>
+          <p>ARASAKA vous répond avec une première lecture du projet et les étapes nécessaires pour le cadrer correctement.</p>
+        </div>
+        <a class="button light" href="/contact?offre=Suivi%20diaspora%20premium">Demander une étude diaspora</a>
+      </section>
+    `,
+  });
+}
+
+function renderAbout() {
+  return layout({
+    active: "about",
+    title: "À propos",
+    description:
+      "Présentation d'ARASAKA, société de bâtiment et rénovation dirigée par M. Tchotchoe Maixent à Abidjan.",
+    body: `
+      <section class="page-hero compact" style="--hero-image: url('${imageUrl("materialsHeroNatural")}')">
+        <div>
+          <p class="kicker">À propos</p>
+          <h1>Une entreprise ivoirienne pour des projets durables, précis et haut de gamme.</h1>
+        </div>
+      </section>
+
+      <section class="two-column">
+        <div>
+          ${sectionIntro("Notre vision", "Bâtir avec le climat, pas contre lui", "ARASAKA privilégie une architecture tropicale qui tient compte de la vie extérieure, des jardins, de l'ombre, de la ventilation et de la qualité des finitions.")}
+          <p>Les projets sont abordés avec une exigence simple: comprendre exactement le besoin du client avant de construire. Cette précision permet de mieux gérer les délais, le budget, les choix techniques et le niveau de finition attendu.</p>
+          <p>La société travaille selon des standards internationaux du bâtiment et s'adresse aux Ivoiriens, aux investisseurs locaux et à la diaspora souhaitant construire ou rénover en Côte d'Ivoire avec un interlocuteur structuré.</p>
+        </div>
+        <aside class="identity-panel">
+          <h2>Informations clés</h2>
+          <dl>
+            <dt>Société</dt>
+            <dd>ARASAKA</dd>
+            <dt>Implantation</dt>
+            <dd>${escapeHtml(site.company.location)}</dd>
+            <dt>Direction</dt>
+            <dd>${escapeHtml(site.company.director)}</dd>
+            <dt>Pont diaspora</dt>
+            <dd>${escapeHtml(site.company.partner)}</dd>
+            <dt>Architecture</dt>
+            <dd>${escapeHtml(site.company.architectPartner)}</dd>
+          </dl>
+        </aside>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Engagements", "Ce qui doit être clair avant le chantier", "ARASAKA met l'accent sur la définition du projet, le suivi, les délais et les finitions.")}
+        <div class="commitment-grid">
+          <article><h3>Respect des délais</h3><p>Planning par étapes, points d'avancement et priorisation des decisions critiques.</p></article>
+          <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
+          <article><h3>Finitions soignées</h3><p>Attention portee aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
+          <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
+          <article><h3>Suivi architectural</h3><p>Partenariat avec un cabinet d'architecte pour des études cohérentes et des délais mieux maîtrisés.</p></article>
+        </div>
+      </section>
+    `,
+  });
+}
+
+function renderServices() {
+  return layout({
+    active: "services",
+    title: "Services",
+    description:
+      "Services ARASAKA: construction de villas, rénovation haut de gamme, architecture tropicale, piscines lagon, pergolas et accompagnement diaspora.",
+    body: `
+      <section class="page-hero compact" style="--hero-image: url('${imageUrl("tropicalPool")}')">
+        <div>
+          <p class="kicker">Services</p>
+          <h1>Construire, rénover et aménager avec une vision complète du cadre de vie.</h1>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Prestations", "Des services pour chaque étape du projet", "Du cadrage initial aux finitions, chaque prestation peut être mobilisée seule ou dans une mission complète.")}
+        <div class="service-grid expanded">${serviceCards()}</div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Offres", "Trois portes d'entrée commerciales", "Ces offres répondent aux besoins les plus fréquents: construire à distance, améliorer une villa existante ou créer un actif locatif.")}
+        <div class="offer-grid">${offerCards()}</div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Avantages", "La confiance comme vraie valeur du projet", "Le prix compte, mais la fiabilité, la transparence et le contrôle du chantier évitent les pertes de temps, les reprises et les mauvaises surprises.")}
+        <div class="advantage-grid">${advantageCards()}</div>
+      </section>
+
+      <section class="process-section">
+        ${sectionIntro("Méthode", "Un parcours de projet lisible", "Chaque projet est structuré pour réduire les approximations et protéger la qualité finale.")}
+        <div class="process-grid">${processCards()}</div>
+      </section>
+    `,
+  });
+}
+
+function renderRemoteBuild() {
+  const message =
+    "Bonjour ARASAKA, je souhaite construire ou rénover depuis l'extérieur avec un suivi à distance.";
+
+  return layout({
+    active: "remote",
+    title: "Construire depuis l'extérieur",
+    description:
+      "Construire depuis l'extérieur avec ARASAKA: rénovation, villa clé en main et suivi diaspora pour projets en Côte d'Ivoire.",
+    bodyClass: "page-remote-build",
+    body: `
+      <section class="page-hero remote-hero" style="--hero-image: url('${imageUrl("remoteHero")}')">
+        <div>
+          <p class="kicker">Clients locaux et projets suivis à distance</p>
+          <h1>Construire avec méthode, même lorsque le projet se pilote à distance.</h1>
+          <p class="page-hero-copy">ARASAKA accompagne les clients en Côte d'Ivoire et à l'extérieur avec un cadre clair: études, budget, planning, photos, vidéos et validations par étapes.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/contact?offre=Suivi%20diaspora">Demander un suivi diaspora</a>
+            <a class="button ghost" href="/plans">Voir les concepts de villas</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("3 offres", "Rénovation, villa clé en main, suivi diaspora", "Choisissez une entrée simple, puis ARASAKA affine le programme, les matériaux, le budget et les étapes avec vous.")}
+        <div class="remote-offer-grid">${remoteBuildOfferCards()}</div>
+      </section>
+
+      <section class="remote-trust">
+        <div>
+          <p class="kicker">Ce qui est sécurisé</p>
+          <h2>Un projet visible, documenté et validé à distance.</h2>
+          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec un cabinet d'architecte aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
+        </div>
+        <div class="trust-list">
+          <span>Devis détaillé</span>
+          <span>Photos et vidéos</span>
+          <span>Réunions visio</span>
+          <span>Planning travaux</span>
+          <span>Contrôle qualité</span>
+          <span>Livraison cadrée</span>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Photos d'inspiration", "Villas tropicales, matériaux locaux et vie extérieure", "Bois, bambou, BTC, pisé, jardins tropicaux, pergolas et terrasses couvertes composent une architecture adaptée au climat tropical.")}
+        <div class="remote-photo-grid">${remotePhotoCards()}</div>
+      </section>
+
+      <section class="dark-cta">
+        <div>
+          <p class="kicker">Premier échange</p>
+          <h2>Vous êtes à l'extérieur et vous avez un terrain ou une maison à rénover ?</h2>
+          <p>Envoyez la localisation, les photos disponibles, le budget indicatif et le type de projet. ARASAKA vous aide à cadrer la suite.</p>
+        </div>
+        <a class="button light" href="${whatsappLink(message)}" target="_blank" rel="noreferrer">Écrire sur WhatsApp</a>
+      </section>
+    `,
+  });
+}
+
+function renderMaterials() {
+  return layout({
+    active: "materials",
+    title: "Matériaux",
+    description:
+      "Matériaux pour architecture tropicale: béton, BTC, bois, bambou, pisé et toitures végétalisées.",
+    body: `
+      <section class="page-hero compact" style="--hero-image: url('${imageUrl("materialsHeroNatural")}')">
+        <div>
+          <p class="kicker">Matériaux de construction</p>
+          <h1>Béton, BTC, bois, bambou, pisé et toitures végétalisées.</h1>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Performance et confort", "Des choix constructifs adaptés au climat tropical", "L'objectif est de réduire la surchauffe, favoriser la ventilation naturelle et créer un confort quotidien sans dépendance excessive à la climatisation.")}
+        <div class="materials-grid">${materialCards()}</div>
+      </section>
+
+      <section class="comfort-panel">
+        <img src="${imageUrl("interiorWood")}" alt="Intérieur en bois avec baies vitrées et ventilation naturelle">
+        <div>
+          <p class="kicker">Confort intérieur</p>
+          <h2>Ventilation croisée, ombrage et fluidité des pièces.</h2>
+          <p>ARASAKA travaille les volumes, les ouvertures, les baies vitrées protégées, les patios et les vérandas pour organiser la circulation de l'air. Le résultat attendu: une maison plus fraîche, agréable en journée et confortable le soir.</p>
+          <ul class="check-list">
+            <li>Pièces orientées pour capter les vents dominants</li>
+            <li>Protections solaires: pergolas, débords, végétation</li>
+            <li>Matériaux à inertie thermique pour stabiliser la température</li>
+            <li>Liens directs entre intérieur, véranda, jardin et piscine</li>
+          </ul>
+        </div>
+      </section>
+    `,
+  });
+}
+
+function renderPlans() {
+  return layout({
+    active: "plans",
+    title: "Plans de villas",
+    description:
+      "Plans de villas et concepts premium ARASAKA: villa blanche, terrasse, piscine, patio, véranda et résidence suivie à distance.",
+    body: `
+      <section class="page-hero compact" style="--hero-image: url('${imageUrl("premiumVillaConcept")}')">
+        <div>
+          <p class="kicker">Plans de villas</p>
+          <h1>Des concepts de villas premium adaptés au terrain, au climat tropical et au niveau de finition attendu.</h1>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Concepts", "Choisir une base, puis l'adapter précisément", "Ces plans servent de point de départ pour discuter surfaces, circulation, ventilation, jardin, véranda, piscine, budget et finitions premium.")}
+        <div class="plans-grid">${planCards()}</div>
+      </section>
+
+      <section class="dark-cta">
+        <div>
+          <p class="kicker">Plans sur mesure</p>
+          <h2>Chaque villa doit être ajustee au terrain et aux habitudes de vie.</h2>
+          <p>ARASAKA peut partir d'un concept, d'une inspiration, d'un terrain familial ou d'un projet diaspora pour construire un cahier des charges propre.</p>
+        </div>
+        <a class="button light" href="/contact">Demander un rendez-vous</a>
+      </section>
+    `,
+  });
+}
+
+function renderGallery() {
+  return layout({
+    active: "gallery",
+    title: "Galerie",
+    description:
+      "Galerie d'inspiration ARASAKA: villas blanches, matériaux naturels, jardins, piscines lagon et intérieurs ventilés.",
+    body: `
+      <section class="page-hero compact" style="--hero-image: url('${imageUrl("whiteVilla")}')">
+        <div>
+          <p class="kicker">Galerie</p>
+          <h1>Villas blanches, matériaux naturels, jardins, intérieurs et piscines lagon.</h1>
+        </div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Réalisations et inspirations", "Filtrer la galerie par ambiance", "Les images servent d'illustrations pour cadrer le style, les matériaux et les espaces a developper avec ARASAKA.")}
+        <div class="filter-tabs" role="tablist" aria-label="Filtres galerie">
+          <button class="active" type="button" data-filter="all">Tout</button>
+          <button type="button" data-filter="villas-blanches">Villas blanches</button>
+          <button type="button" data-filter="materiaux-naturels">Matériaux naturels</button>
+          <button type="button" data-filter="jardins">Jardins</button>
+          <button type="button" data-filter="interieurs">Intérieurs</button>
+          <button type="button" data-filter="terrasses">Terrasses</button>
+          <button type="button" data-filter="piscines">Piscines lagon</button>
+        </div>
+        <div class="gallery-grid" data-gallery-grid>${galleryCards()}</div>
+      </section>
+    `,
+  });
+}
+
+function renderContact() {
+  return layout({
+    active: "contact",
+    title: "Contact",
+    description:
+      "Contact ARASAKA pour une étude de projet de construction, rénovation ou amenagement extérieur en Côte d'Ivoire.",
+    body: `
+      <section class="page-hero compact contact-hero" style="--hero-image: url('${imageUrl("contactParcel")}')">
+        <div>
+          <p class="kicker">Contact</p>
+          <h1>Parlez-nous de votre terrain, de votre villa ou de votre rénovation.</h1>
+        </div>
+      </section>
+
+      <section class="contact-layout">
+        <div class="contact-panel">
+          <div class="contact-tabs" role="tablist" aria-label="Types de demande">
+            <button class="active" type="button" data-contact-tab="etude">Demande d'étude</button>
+            <button type="button" data-contact-tab="diaspora">Diaspora</button>
+            <button type="button" data-contact-tab="rdv">Rendez-vous</button>
+          </div>
+          <div class="tab-copy active" data-tab-copy="etude">
+            <h2>Étude personnalisée</h2>
+            <p>Envoyez les informations principales. Le formulaire enregistre la demande et prépare aussi un message WhatsApp.</p>
+          </div>
+          <div class="tab-copy" data-tab-copy="diaspora">
+            <h2>Projet depuis la France ou l'étranger</h2>
+            <p>Précisez votre situation, le terrain, les documents disponibles et le niveau de suivi attendu à distance.</p>
+          </div>
+          <div class="tab-copy" data-tab-copy="rdv">
+            <h2>Rendez-vous à Abidjan</h2>
+            <p>Indiquez vos disponibilités et le type de visite souhaitée: terrain, rénovation, villa existante ou première discussion.</p>
+          </div>
+
+          <form class="contact-form" data-contact-form method="post" action="/api/contact">
+            <input type="hidden" name="requestType" value="Demande d'étude" data-request-type>
+            <label>
+              Nom complet
+              <input name="name" type="text" autocomplete="name" required placeholder="Votre nom">
+            </label>
+            <label>
+              Téléphone
+              <input name="phone" type="tel" autocomplete="tel" required placeholder="+225 ou +33">
+            </label>
+            <label>
+              Email
+              <input name="email" type="email" autocomplete="email" placeholder="votre@email.com">
+            </label>
+            <label>
+              Adresse du projet
+              <input name="projectAddress" type="text" autocomplete="street-address" placeholder="Ville, quartier, pays">
+            </label>
+            <label>
+              Messagerie
+              <input name="messaging" type="text" placeholder="WhatsApp, email, lien ou préférence">
+            </label>
+            <label>
+              Type de projet
+              <select name="projectType">
+                <option>Construction de villa</option>
+                <option>Rénovation haut de gamme</option>
+                <option>Villa clé en main</option>
+                <option>Suivi diaspora</option>
+                <option>Aménagement extérieur</option>
+                <option>Piscine lagon</option>
+                <option>Petit immeuble locatif clé en main</option>
+                <option>Accompagnement diaspora</option>
+              </select>
+            </label>
+            <label>
+              Budget indicatif
+              <select name="budget">
+                <option>À définir</option>
+                <option>Moins de 50 M FCFA</option>
+                <option>50 - 100 M FCFA</option>
+                <option>100 - 200 M FCFA</option>
+                <option>Plus de 200 M FCFA</option>
+              </select>
+            </label>
+            <label class="wide">
+              Message
+              <textarea name="message" rows="5" placeholder="Terrain, localisation, délai souhaité, inspirations, matériaux..."></textarea>
+            </label>
+            <button class="button primary wide" type="submit">Envoyer la demande</button>
+            <p class="form-status" data-form-status aria-live="polite"></p>
+          </form>
+        </div>
+
+        <aside class="contact-aside">
+          <h2>Contact direct</h2>
+          <p>Pour un premier échange rapide, appelez ou envoyez un message WhatsApp.</p>
+          <a class="button secondary full" href="${site.company.telHref}">Appeler ${escapeHtml(site.company.phone)}</a>
+          <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">Écrire sur WhatsApp</a>
+          <div class="contact-details">
+            <span>Adresse</span>
+            <strong>${escapeHtml(site.company.location)}</strong>
+            <span>France</span>
+            <strong>${escapeHtml(site.company.franceLocation)}</strong>
+            <span>Direction</span>
+            <strong>${escapeHtml(site.company.director)}</strong>
+            <span>Ermancia</span>
+            <strong>${escapeHtml(site.company.ermanciaLocation)}</strong>
+            <span>Email</span>
+            <strong>${escapeHtml(site.company.email)}</strong>
+          </div>
+        </aside>
+      </section>
+    `,
+  });
+}
+
+const routes = new Map([
+  ["/", renderHome],
+  ["/fiche-arasaka", renderFicheArasaka],
+  ["/diaspora", renderDiaspora],
+  ["/a-propos", renderAbout],
+  ["/services", renderServices],
+  ["/construire-depuis-exterieur", renderRemoteBuild],
+  ["/materiaux", renderMaterials],
+  ["/plans", renderPlans],
+  ["/galerie", renderGallery],
+  ["/contact", renderContact],
+]);
+
+function send(res, status, body, type = "text/html; charset=utf-8") {
+  res.writeHead(status, { "Content-Type": type });
+  res.end(body);
+}
+
+function sendJson(res, status, payload) {
+  send(res, status, JSON.stringify(payload), "application/json; charset=utf-8");
+}
+
+async function serveStatic(req, res, pathname) {
+  const requested = path.normalize(path.join(PUBLIC_DIR, pathname.replace(/^\/+/, "")));
+  if (!requested.startsWith(PUBLIC_DIR)) {
+    send(res, 403, "Forbidden", "text/plain; charset=utf-8");
+    return true;
+  }
+
+  try {
+    const stats = await fs.promises.stat(requested);
+    if (!stats.isFile()) return false;
+    const ext = path.extname(requested).toLowerCase();
+    const body = await fs.promises.readFile(requested);
+    res.writeHead(200, {
+      "Content-Type": mimeTypes[ext] || "application/octet-stream",
+      "Cache-Control": "no-cache",
+    });
+    res.end(body);
+    return true;
+  } catch {
+    return false;
+  }
+}
+
+function readRequestBody(req) {
+  return new Promise((resolve, reject) => {
+    let raw = "";
+    req.setEncoding("utf8");
+    req.on("data", (chunk) => {
+      raw += chunk;
+      if (raw.length > 1_000_000) {
+        reject(new Error("Payload too large"));
+        req.destroy();
+      }
+    });
+    req.on("end", () => resolve(raw));
+    req.on("error", reject);
+  });
+}
+
+async function handleContact(req, res) {
+  try {
+    const raw = await readRequestBody(req);
+    const contentType = req.headers["content-type"] || "";
+    const fields = contentType.includes("application/json")
+      ? JSON.parse(raw || "{}")
+      : Object.fromEntries(new URLSearchParams(raw));
+
+    const lead = {
+      id: crypto.randomUUID(),
+      createdAt: new Date().toISOString(),
+      requestType: String(fields.requestType || "Demande d'étude").slice(0, 80),
+      name: String(fields.name || "").trim().slice(0, 120),
+      phone: String(fields.phone || "").trim().slice(0, 80),
+      email: String(fields.email || "").trim().slice(0, 120),
+      projectAddress: String(fields.projectAddress || "").trim().slice(0, 180),
+      messaging: String(fields.messaging || "").trim().slice(0, 180),
+      projectType: String(fields.projectType || "").trim().slice(0, 120),
+      budget: String(fields.budget || "").trim().slice(0, 80),
+      message: String(fields.message || "").trim().slice(0, 1500),
+    };
+
+    if (!lead.name || !lead.phone) {
+      sendJson(res, 400, { ok: false, message: "Le nom et le telephone sont obligatoires." });
+      return;
+    }
+
+    await fs.promises.mkdir(path.dirname(LEADS_FILE), { recursive: true });
+    await fs.promises.appendFile(LEADS_FILE, `${JSON.stringify(lead)}\n`, "utf8");
+
+    const waText = [
+      "Bonjour ARASAKA, je souhaite être contacté pour un projet.",
+      `Nom: ${lead.name}`,
+      `Téléphone: ${lead.phone}`,
+      lead.email ? `Email: ${lead.email}` : "",
+      lead.projectAddress ? `Adresse du projet: ${lead.projectAddress}` : "",
+      lead.messaging ? `Messagerie: ${lead.messaging}` : "",
+      lead.projectType ? `Projet: ${lead.projectType}` : "",
+      lead.budget ? `Budget: ${lead.budget}` : "",
+      lead.message ? `Message: ${lead.message}` : "",
+    ]
+      .filter(Boolean)
+      .join("\n");
+
+    sendJson(res, 200, {
+      ok: true,
+      message: "Demande enregistrée. Un message WhatsApp est prêt à être envoyé.",
+      whatsappUrl: whatsappLink(waText),
+    });
+  } catch (error) {
+    sendJson(res, 500, {
+      ok: false,
+      message: "Impossible d'enregistrer la demande pour le moment.",
+    });
+  }
+}
+
+const server = http.createServer(async (req, res) => {
+  const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
+  const pathname = url.pathname.endsWith("/") && url.pathname !== "/" ? url.pathname.slice(0, -1) : url.pathname;
+
+  if (req.method === "POST" && pathname === "/api/contact") {
+    await handleContact(req, res);
+    return;
+  }
+
+  if (req.method !== "GET") {
+    send(res, 405, "Method not allowed", "text/plain; charset=utf-8");
+    return;
+  }
+
+  if (pathname !== "/" && (await serveStatic(req, res, pathname))) {
+    return;
+  }
+
+  const render = routes.get(pathname);
+  if (render) {
+    send(res, 200, render());
+    return;
+  }
+
+  send(
+    res,
+    404,
+    layout({
+      active: "",
+      title: "Page introuvable",
+      description: "Page introuvable sur le site ARASAKA.",
+      body: `
+        <section class="not-found">
+          <p class="kicker">404</p>
+          <h1>Cette page n'existe pas encore.</h1>
+          <p>Retournez à l'accueil ou contactez ARASAKA pour votre projet.</p>
+          <a class="button primary" href="/">Retour accueil</a>
+        </section>
+      `,
+    }),
+  );
+});
+
+server.listen(PORT, () => {
+  console.log(`ARASAKA site dynamique: http://localhost:${PORT}`);
+});
+
+module.exports = server;
