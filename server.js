@@ -6,6 +6,8 @@ const { URL } = require("node:url");
 const site = require("./data/site-data");
 
 const PORT = Number(process.env.PORT || 4321);
+const SITE_USERNAME = process.env.SITE_USERNAME || "arasaka";
+const SITE_PASSWORD = process.env.SITE_PASSWORD || "test123";
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const LEADS_FILE = path.join(ROOT, "data", "leads.jsonl");
@@ -28,6 +30,49 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function secureEqual(value, expected) {
+  const valueBuffer = Buffer.from(String(value));
+  const expectedBuffer = Buffer.from(String(expected));
+
+  return (
+    valueBuffer.length === expectedBuffer.length &&
+    crypto.timingSafeEqual(valueBuffer, expectedBuffer)
+  );
+}
+
+function isAuthorized(req) {
+  const authorization = req.headers.authorization || "";
+
+  if (!authorization.startsWith("Basic ")) {
+    return false;
+  }
+
+  try {
+    const credentials = Buffer.from(authorization.slice(6), "base64").toString("utf8");
+    const separatorIndex = credentials.indexOf(":");
+
+    if (separatorIndex === -1) {
+      return false;
+    }
+
+    const username = credentials.slice(0, separatorIndex);
+    const password = credentials.slice(separatorIndex + 1);
+
+    return secureEqual(username, SITE_USERNAME) && secureEqual(password, SITE_PASSWORD);
+  } catch {
+    return false;
+  }
+}
+
+function requestAuthentication(res) {
+  res.writeHead(401, {
+    "Cache-Control": "no-store",
+    "Content-Type": "text/plain; charset=utf-8",
+    "WWW-Authenticate": 'Basic realm="ARASAKA", charset="UTF-8"',
+  });
+  res.end("Authentification requise.");
 }
 
 function imageUrl(key) {
@@ -1088,6 +1133,11 @@ async function handleContact(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
+  if (!isAuthorized(req)) {
+    requestAuthentication(res);
+    return;
+  }
+
   const url = new URL(req.url || "/", `http://${req.headers.host || "localhost"}`);
   const pathname = url.pathname.endsWith("/") && url.pathname !== "/" ? url.pathname.slice(0, -1) : url.pathname;
 
