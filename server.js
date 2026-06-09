@@ -612,13 +612,13 @@ function renderDiaspora() {
         </div>
       </section>
 
-      <section class="content-band">
-        ${sectionIntro("Services France", "Un point de contact pour préparer le projet avant le chantier", "Les modalités sont définies dans le contrat selon la nature du projet, les lots et les intervenants mobilisés.")}
-        <div class="fact-grid">
-          <div><span>Rencontre</span><strong>Rendez-vous possible à Paris pour cadrer le projet.</strong></div>
-          <div><span>Paiement</span><strong>Paiement possible sur compte en France selon contrat.</strong></div>
-          <div><span>Communication</span><strong>WhatsApp dédié et réunions visio aux étapes utiles.</strong></div>
-          <div><span>Garanties</span><strong>Garantie décennale lorsque applicable selon lots et assurances.</strong></div>
+      <section class="split-feature reverse">
+        <img src="${imageUrl("diasporaClients")}" alt="Échange avec des clients de la diaspora">
+        <div>
+          <p class="kicker">Une expérience partagée</p>
+          <h2>Comprendre les attentes de la diaspora pour construire avec confiance.</h2>
+          <p>Étant moi-même issu de la diaspora et professionnel du bâtiment, je comprends les attentes de ceux qui souhaitent construire en Côte d'Ivoire avec confiance. Mon ambition avec ARASAKA est de proposer une approche équilibrée : valoriser les matériaux locaux, respecter le climat tropical, affirmer une architecture africaine contemporaine et apporter une méthode de travail rigoureuse, transparente et soignée.</p>
+          <p>ARASAKA est un pont entre l'identité architecturale africaine et les exigences contemporaines du bâtiment. Nous concevons et réalisons des villas, rénovations et espaces extérieurs qui valorisent les matériaux locaux, le confort tropical et les finitions haut de gamme.</p>
         </div>
       </section>
 
@@ -644,25 +644,27 @@ function renderDiaspora() {
 function renderAbout() {
   return layout({
     active: "about",
-    title: "À propos",
+    title: "Qui sommes-nous",
     description:
-      "Présentation d'ARASAKA, société de bâtiment et rénovation dirigée par M. Tchotchoe Maixent à Abidjan.",
+      "ARASAKA, un pont entre architecture africaine contemporaine et exigences modernes en Côte d'Ivoire.",
     body: `
       <section class="page-hero compact" style="--hero-image: url('${imageUrl("materialsHeroNatural")}')">
         <div>
-          <p class="kicker">À propos</p>
-          <h1>Une entreprise ivoirienne pour des projets durables, précis et haut de gamme.</h1>
+          <p class="kicker">Qui sommes-nous</p>
+          <h1>ARASAKA — Un pont entre architecture africaine contemporaine et exigences modernes.</h1>
         </div>
       </section>
 
       <section class="two-column">
         <div>
-          ${sectionIntro("Notre vision", "Bâtir avec le climat, pas contre lui", "ARASAKA privilégie une architecture tropicale qui tient compte de la vie extérieure, des jardins, de l'ombre, de la ventilation et de la qualité des finitions.")}
-          <p>Les projets sont abordés avec une exigence simple: comprendre exactement le besoin du client avant de construire. Cette précision permet de mieux gérer les délais, le budget, les choix techniques et le niveau de finition attendu.</p>
-          <p>La société travaille selon des standards internationaux du bâtiment et s'adresse aux Ivoiriens, aux investisseurs locaux et à la diaspora souhaitant construire ou rénover en Côte d'Ivoire avec un interlocuteur structuré.</p>
+          ${sectionIntro("Notre conviction", "Construire avec identité, confort et exigence", "ARASAKA est née d'une conviction simple : il est possible de construire en Côte d'Ivoire des maisons élégantes, durables et confortables, en respectant le climat tropical, les matériaux locaux et l'identité architecturale africaine.")}
+          <p>Notre approche ne consiste pas à importer un modèle extérieur, mais à créer un équilibre entre tradition, modernité et exigence. Nous valorisons les matériaux naturels disponibles sur le sol ivoirien — BTC, terre, bois, bambou, pierre, végétation tropicale — tout en intégrant les standards actuels de confort, de fonctionnalité, de rigueur et de finition.</p>
+          <p>ARASAKA s'adresse particulièrement à la diaspora ivoirienne, parce que nous comprenons ses attentes : construire à distance, sécuriser son investissement, suivre les travaux avec transparence et obtenir un résultat à la hauteur de ses ambitions.</p>
+          <p>Notre vision est celle d'une architecture africaine moderne, enracinée dans son environnement, ouverte sur le monde, mais profondément adaptée au mode de vie ivoirien : maisons ventilées, espaces fluides, grandes terrasses, jardins tropicaux, pergolas, patios, piscines lagon et finitions soignées.</p>
+          <p><strong>Avec ARASAKA, construire en Côte d'Ivoire devient un projet clair, maîtrisé et élégant.</strong></p>
         </div>
         <aside class="identity-panel">
-          <h2>Informations clés</h2>
+          <h2>ARASAKA en bref</h2>
           <dl>
             <dt>Société</dt>
             <dd>ARASAKA</dd>
@@ -670,16 +672,16 @@ function renderAbout() {
             <dd>${escapeHtml(site.company.location)}</dd>
             <dt>Direction</dt>
             <dd>${escapeHtml(site.company.director)}</dd>
-            <dt>Pont diaspora</dt>
-            <dd>${escapeHtml(site.company.partner)}</dd>
             <dt>Architecture</dt>
             <dd>${escapeHtml(site.company.architectPartner)}</dd>
+            <dt>Approche</dt>
+            <dd>Architecture africaine contemporaine, confort tropical et finitions haut de gamme.</dd>
           </dl>
         </aside>
       </section>
 
       <section class="content-band">
-        ${sectionIntro("Engagements", "Ce qui doit être clair avant le chantier", "ARASAKA met l'accent sur la définition du projet, le suivi, les délais et les finitions.")}
+        ${sectionIntro("Notre méthode", "Une exigence moderne au service d'une architecture enracinée", "Chaque projet associe une définition précise du besoin, des études cohérentes, un suivi transparent et une attention constante portée aux finitions.")}
         <div class="commitment-grid">
           <article><h3>Respect des délais</h3><p>Planning par étapes, points d'avancement et priorisation des decisions critiques.</p></article>
           <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
@@ -848,9 +850,9 @@ function renderPlans() {
 
       <section class="dark-cta">
         <div>
-          <p class="kicker">Plans sur mesure</p>
-          <h2>Chaque villa doit être ajustee au terrain et aux habitudes de vie.</h2>
-          <p>ARASAKA peut partir d'un concept, d'une inspiration, d'un terrain familial ou d'un projet diaspora pour construire un cahier des charges propre.</p>
+          <p class="kicker">Du concept au projet</p>
+          <h2>Chaque villa est étudiée selon le terrain, le climat et les habitudes de vie.</h2>
+          <p>Choisissez une inspiration pour engager la discussion sur les surfaces, la circulation, les matériaux, les espaces extérieurs et le niveau de finition.</p>
         </div>
         <a class="button light" href="/contact">Demander un rendez-vous</a>
       </section>
@@ -1002,6 +1004,7 @@ function renderContact() {
 const routes = new Map([
   ["/", renderHome],
   ["/diaspora", renderDiaspora],
+  ["/qui-sommes-nous", renderAbout],
   ["/a-propos", renderAbout],
   ["/services", renderServices],
   ["/materiaux", renderMaterials],
