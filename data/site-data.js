@@ -16,7 +16,7 @@ module.exports = {
     director: "M. Tchotchoe Maixent",
     partner: "En collaboration avec l'entreprise Ermancia en France",
     architectPartner:
-      "Partenariat avec un cabinet d'architecte pour des études cohérentes, un suivi coordonné et de meilleurs délais.",
+      "Partenariat avec le cabinet d'architecture GEAP pour assurer la cohérence des études, la qualité des choix architecturaux, la coordination du projet et une meilleure maîtrise des délais.",
     standards:
       "ARASAKA travaille avec des artisans et techniciens formés dans les meilleurs lycées techniques du pays, dans une culture de chantier alignée sur les normes internationales.",
     finishPromise:
@@ -86,7 +86,7 @@ module.exports = {
     "Ventilation naturelle et confort thermique",
     "Chantier contrôlé, devis clair et reporting",
       "Pont France - Côte d'Ivoire pour la diaspora",
-      "Coordination avec cabinet d'architecte",
+      "Coordination avec le cabinet d'architecture GEAP",
       "Finitions aux standards internationaux",
   ],
   positioning: {
@@ -165,6 +165,13 @@ module.exports = {
       text:
         "Modernisation, extension, reprise des finitions et amélioration du confort pour révéler tout le potentiel d'un bien existant.",
       cta: "Étudier une rénovation",
+    },
+    {
+      title: "Finalisation d'appartement en promotion immobilière",
+      audience: "Acquéreurs et investisseurs",
+      text:
+        "État des lieux, définition des finitions, achèvement des lots, coordination des intervenants, contrôle qualité et livraison d'un appartement prêt à vivre ou à louer.",
+      cta: "Finaliser un appartement",
     },
     {
       title: "Jardins et espaces de vie extérieurs",
@@ -296,7 +303,7 @@ module.exports = {
     {
       title: "Coordination architecturale",
       short:
-        "Travail en partenariat avec un cabinet d'architecte pour assurer la cohérence des études, du suivi et des délais.",
+        "Travail en partenariat avec le cabinet d'architecture GEAP pour assurer la cohérence des études, du suivi et des délais.",
     },
   ],
   materials: [
@@ -424,7 +431,7 @@ module.exports = {
       step: "02",
       title: "Avant-projet",
       text:
-        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination avec le cabinet d'architecte.",
+        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination avec le cabinet d'architecture GEAP.",
     },
     {
       step: "03",

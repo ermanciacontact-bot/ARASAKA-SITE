@@ -414,8 +414,6 @@ function renderHome() {
         <div class="hero-content">
           <p class="kicker">Construction & rénovation premium</p>
           <h1>Construire en harmonie avec le climat tropical.</h1>
-          <p class="hero-copy">Vous avez un projet, une villa, un appartement à finaliser dans le cadre d'une promotion immobilière, un bien à rénover ou un espace extérieur à sublimer ? ARASAKA vous accompagne de la conception à la réalisation.</p>
-          <p class="hero-copy">Construction, rénovation, agrandissement, finitions haut de gamme, jardins tropicaux, piscines lagon, pergolas et espaces de vie extérieurs : nous donnons forme à votre vision avec exigence, élégance et respect des standards internationaux.</p>
           <div class="hero-actions">
             <a class="button primary" href="/contact">Demander une étude</a>
             <a class="button ghost" href="/galerie">Voir nos réalisations</a>
@@ -433,9 +431,19 @@ function renderHome() {
           <div class="fact-grid">
             <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
             <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
-            <div><span>Architecture</span><strong>Partenariat avec cabinet d'architecte</strong></div>
+            <div><span>Architecture</span><strong>Partenariat avec le cabinet GEAP</strong></div>
             <div><span>Diaspora</span><strong>Collaboration Ermancia en France</strong></div>
           </div>
+        </div>
+      </section>
+
+      <section class="content-band muted-band">
+        ${sectionIntro("Partenariat architectural", "ARASAKA travaille en partenariat avec le cabinet d'architecture GEAP", "Cette collaboration associe la maîtrise opérationnelle du chantier à une conception architecturale cohérente, adaptée au terrain, au climat tropical et au niveau de finition attendu.")}
+        <div class="fact-grid">
+          <div><span>Conception cohérente</span><strong>Plans, volumes, circulations et usages étudiés comme un ensemble.</strong></div>
+          <div><span>Choix maîtrisés</span><strong>Solutions architecturales et techniques définies avant l'exécution.</strong></div>
+          <div><span>Coordination</span><strong>Meilleur dialogue entre études, intervenants et réalisation du chantier.</strong></div>
+          <div><span>Délais et qualité</span><strong>Moins d'improvisations, moins de reprises et un suivi plus rigoureux.</strong></div>
         </div>
       </section>
 
@@ -447,7 +455,7 @@ function renderHome() {
       </section>
 
       <section class="content-band">
-        ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, investissement immobilier ou création d'un art de vivre tropical : chaque offre est cadrée selon le terrain, le budget et le niveau de finition attendu.")}
+        ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, finalisation d'un appartement en promotion immobilière, investissement ou création d'un art de vivre tropical : chaque offre est cadrée selon le bien, le budget et le niveau de finition attendu.")}
         <div class="offer-grid">${offerCards()}</div>
       </section>
 
@@ -515,7 +523,7 @@ function renderFicheArasaka() {
             <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
             <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
             <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
-            <div><span>Études</span><strong>Cabinet d'architecte partenaire</strong></div>
+            <div><span>Études</span><strong>Cabinet d'architecture GEAP</strong></div>
           </div>
         </div>
       </section>
@@ -687,7 +695,7 @@ function renderAbout() {
           <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
           <article><h3>Finitions soignées</h3><p>Attention portee aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
           <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
-          <article><h3>Suivi architectural</h3><p>Partenariat avec un cabinet d'architecte pour des études cohérentes et des délais mieux maîtrisés.</p></article>
+          <article><h3>Partenariat GEAP</h3><p>Le cabinet d'architecture GEAP renforce la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
         </div>
       </section>
     `,
@@ -763,7 +771,7 @@ function renderRemoteBuild() {
         <div>
           <p class="kicker">Ce qui est sécurisé</p>
           <h2>Un projet visible, documenté et validé à distance.</h2>
-          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec un cabinet d'architecte aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
+          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec le cabinet d'architecture GEAP aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
         </div>
         <div class="trust-list">
           <span>Devis détaillé</span>
@@ -952,6 +960,7 @@ function renderContact() {
               <select name="projectType">
                 <option>Construction de villa</option>
                 <option>Rénovation haut de gamme</option>
+                <option>Finalisation d'appartement en promotion immobilière</option>
                 <option>Villa clé en main</option>
                 <option>Projet diaspora</option>
                 <option>Aménagement extérieur</option>
