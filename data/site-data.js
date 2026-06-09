@@ -29,9 +29,7 @@ module.exports = {
   },
   nav: [
     { href: "/", key: "home", label: "Accueil" },
-    { href: "/fiche-arasaka", key: "fiche", label: "Fiche" },
     { href: "/diaspora", key: "diaspora", label: "Diaspora" },
-    { href: "/construire-depuis-exterieur", key: "remote", label: "Construire" },
     { href: "/plans", key: "plans", label: "Villas" },
     { href: "/materiaux", key: "materials", label: "Matériaux" },
     { href: "/galerie", key: "gallery", label: "Galerie" },
@@ -146,25 +144,33 @@ module.exports = {
   ],
   offers: [
     {
-      title: "Construction suivie à distance",
-      audience: "Diaspora ivoirienne",
+      title: "Construction, rénovation et extension",
+      audience: "Offre diaspora",
       text:
-        "Plans, estimation, choix des matériaux, suivi administratif, photos de chantier, vidéos WhatsApp, réunions visio et rapport d'avancement.",
-      cta: "Demander un suivi diaspora",
+        "Un accompagnement complet pour créer ou transformer votre bien en Côte d'Ivoire et donner forme à un art de vivre moderne africain.",
+      cta: "Découvrir l'offre diaspora",
+      href: "/diaspora",
     },
     {
-      title: "Rénovation premium et extension de villas à Abidjan",
-      audience: "Propriétaires de villas",
+      title: "Immeuble et mini-cité clé en main",
+      audience: "Investisseurs immobiliers",
       text:
-        "Modernisation, façade, extension, pergola, terrasse, cuisine extérieure, clôture, piscine, jardin et amélioration du confort thermique.",
+        "Optimisation du terrain, conception, estimation, planning, suivi de chantier, contrôle qualité et livraison d'un bien prêt à louer.",
+      cta: "Étudier un investissement",
+    },
+    {
+      title: "Rénovation et agrandissement",
+      audience: "Propriétaires",
+      text:
+        "Modernisation, extension, reprise des finitions et amélioration du confort pour révéler tout le potentiel d'un bien existant.",
       cta: "Étudier une rénovation",
     },
     {
-      title: "Petit immeuble locatif clé en main",
-      audience: "Investisseurs locaux et diaspora",
+      title: "Jardins et espaces de vie extérieurs",
+      audience: "Art de vivre tropical",
       text:
-        "Optimisation du terrain, conception, estimation, planning, suivi de chantier, contrôle qualité et livraison d'un bien prêt à louer.",
-      cta: "Parler d'un immeuble locatif",
+        "Jardins tropicaux, piscines lagon, pergolas, terrasses couvertes et espaces extérieurs pensés comme de véritables pièces à vivre.",
+      cta: "Imaginer un espace extérieur",
     },
   ],
   remoteBuildOffers: [
@@ -326,12 +332,12 @@ module.exports = {
       eco: "Croissance rapide, faible poids et intégration naturelle dans les jardins tropicaux.",
     },
     {
-      title: "Pise",
-      subtitle: "Terre crue et parois massives",
+      title: "Pisé",
+      subtitle: "Ravalement et enduits intérieurs",
       imageKey: "mudWall",
-      text: "La terre crue participe au confort thermique et crée une atmosphère calme, minérale et élégante.",
-      thermal: "Apporte de l'inertie, une sensation de paroi fraîche et une meilleure régulation de l'humidité.",
-      eco: "Faible transformation, matière locale, esthétique durable et réparable.",
+      text: "Le pisé est utilisé en ravalement ou en enduit intérieur pour apporter une finition naturelle, minérale et élégante.",
+      thermal: "En enduit, il améliore la sensation de confort et participe à la régulation naturelle de l'humidité.",
+      eco: "Matière peu transformée, locale et réparable, adaptée aux finitions sobres et durables.",
     },
     {
       title: "Toitures végétalisées",

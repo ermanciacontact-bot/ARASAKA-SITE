@@ -269,7 +269,7 @@ function offerCards() {
           <p class="card-eyebrow">${escapeHtml(offer.audience)}</p>
           <h3>${escapeHtml(offer.title)}</h3>
           <p>${escapeHtml(offer.text)}</p>
-          <a class="link-arrow" href="/contact?offre=${encodeURIComponent(offer.title)}">${escapeHtml(offer.cta)}</a>
+          <a class="link-arrow" href="${offer.href || `/contact?offre=${encodeURIComponent(offer.title)}`}">${escapeHtml(offer.cta)}</a>
         </article>
       `,
     )
@@ -407,23 +407,20 @@ function renderHome() {
     active: "home",
     title: "Accueil",
     description:
-      "ARASAKA construit et rénove des villas premium, maisons familiales, extensions et petits immeubles locatifs en Côte d'Ivoire avec suivi transparent pour clients locaux et diaspora.",
+      "ARASAKA accompagne les projets de construction, rénovation, agrandissement, finitions et aménagements extérieurs en Côte d'Ivoire.",
     bodyClass: "page-home",
     body: `
       <section class="hero hero-home" style="--hero-image: url('${imageUrl("hero")}')">
         <div class="hero-content">
           <p class="kicker">Construction & rénovation premium</p>
           <h1>Construire en harmonie avec le climat tropical.</h1>
-          <p class="hero-copy">Villas, rénovations et espaces extérieurs haut de gamme: BTC, béton, bois africain, jardins tropicaux, piscines lagon et finitions aux standards internationaux.</p>
+          <p class="hero-copy">Vous avez un projet, une villa, un appartement à finaliser dans le cadre d'une promotion immobilière, un bien à rénover ou un espace extérieur à sublimer ? ARASAKA vous accompagne de la conception à la réalisation.</p>
+          <p class="hero-copy">Construction, rénovation, agrandissement, finitions haut de gamme, jardins tropicaux, piscines lagon, pergolas et espaces de vie extérieurs : nous donnons forme à votre vision avec exigence, élégance et respect des standards internationaux.</p>
           <div class="hero-actions">
             <a class="button primary" href="/contact">Demander une étude</a>
-            <a class="button ghost" href="/fiche-arasaka">Voir la fiche complète</a>
+            <a class="button ghost" href="/galerie">Voir nos réalisations</a>
           </div>
         </div>
-      </section>
-
-      <section class="proof-band">
-        ${site.proofPoints.map((point) => `<span>${escapeHtml(point)}</span>`).join("")}
       </section>
 
       <section class="split-feature">
@@ -449,13 +446,8 @@ function renderHome() {
         </div>
       </section>
 
-      <section class="process-section">
-        ${sectionIntro("Marchés prioritaires", "Des offres pour les clients qui veulent de la visibilité", "ARASAKA vise les projets où la qualité du suivi, la transparence, les délais et la maîtrise du chantier comptent autant que le prix.")}
-        <div class="market-grid">${targetMarketCards()}</div>
-      </section>
-
       <section class="content-band">
-        ${sectionIntro("Offres commerciales", "Des offres lisibles pour décider plus vite", "Chaque offre peut être adaptée au terrain, au budget et au niveau de finition attendu.")}
+        ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, investissement immobilier ou création d'un art de vivre tropical : chaque offre est cadrée selon le terrain, le budget et le niveau de finition attendu.")}
         <div class="offer-grid">${offerCards()}</div>
       </section>
 
@@ -466,7 +458,7 @@ function renderHome() {
           <h2>Artisans, techniciens qualifiés et culture des standards internationaux.</h2>
           <p>${escapeHtml(site.company.standards)}</p>
           <p>${escapeHtml(site.company.finishPromise)}</p>
-          <a class="link-arrow" href="/diaspora">Découvrir l'offre diaspora</a>
+          <a class="link-arrow" href="/services">Découvrir notre méthode</a>
         </div>
       </section>
 
@@ -563,76 +555,70 @@ function renderFicheArasaka() {
 
 function renderDiaspora() {
   const message =
-    "Bonjour ARASAKA, je souhaite une offre premium de suivi diaspora pour construire ou rénover en Côte d'Ivoire.";
+    "Bonjour ARASAKA, je souhaite étudier un projet de construction, rénovation ou extension en Côte d'Ivoire depuis l'étranger.";
 
   return layout({
     active: "diaspora",
     title: "Diaspora",
     description:
-      "Offre diaspora ARASAKA: construction et rénovation premium en Côte d'Ivoire avec rencontre possible à Paris, paiement sur compte en France, WhatsApp dédié, reporting et garantie décennale selon contrat.",
+      "Offre diaspora ARASAKA pour construire, rénover, agrandir ou aménager un bien en Côte d'Ivoire avec un suivi clair depuis l'étranger.",
     bodyClass: "page-diaspora",
     body: `
       <section class="page-hero remote-hero diaspora-hero" style="--hero-image: url('${imageUrl("diasporaClients")}')">
         <div>
-          <p class="kicker">Offre diaspora premium</p>
-          <h1>Construire au pays avec un interlocuteur fiable, des preuves et un suivi haut de gamme.</h1>
-          <p class="page-hero-copy">ARASAKA crée un pont entre la France, la diaspora et la Côte d'Ivoire: rencontre possible à Paris, paiement sur compte en France, fil WhatsApp dédié, planning, reporting photos/vidéos et contrôle qualité par étapes.</p>
+          <p class="kicker">Offre diaspora</p>
+          <h1>Construire, rénover ou agrandir en Côte d'Ivoire depuis l'étranger.</h1>
+          <p class="page-hero-copy">ARASAKA transforme votre projet en un cadre de vie moderne africain, avec un interlocuteur unique, un budget cadré et un suivi documenté jusqu'à la livraison.</p>
           <div class="hero-actions">
-            <a class="button primary" href="/contact?offre=Suivi%20diaspora%20premium">Demander l'offre diaspora</a>
+            <a class="button primary" href="/contact?offre=Projet%20diaspora">Présenter mon projet</a>
             <a class="button ghost" href="${whatsappLink(message)}" target="_blank" rel="noreferrer">WhatsApp</a>
           </div>
         </div>
       </section>
 
       <section class="content-band">
-        ${sectionIntro("Pour qui ?", "Clients exigeants vivant hors de Côte d'Ivoire", "L'offre s'adresse aux familles, investisseurs et propriétaires qui veulent construire, rénover ou suivre un chantier à distance sans perdre le contrôle du projet.")}
+        ${sectionIntro("Offre diaspora", "Quatre façons de concrétiser votre projet", "Choisissez votre besoin principal. ARASAKA définit ensuite le programme, les études, le budget, le planning et le niveau de finition.")}
         <div class="offer-grid">
-          <article class="offer-card"><p class="card-eyebrow">Villa clé en main</p><h3>Études, budget, planning, chantier et livraison</h3><p>Un parcours complet pour passer d'une intention à une villa livrée avec validations par étapes.</p><a class="link-arrow" href="/contact?offre=Villa%20cle%20en%20main%20diaspora">Demander cette offre</a></article>
-          <article class="offer-card"><p class="card-eyebrow">Rénovation premium</p><h3>Moderniser une maison existante à Abidjan</h3><p>Façade, extension, cuisine, terrasse, jardin, piscine, clôture et finitions documentées.</p><a class="link-arrow" href="/contact?offre=Renovation%20premium%20diaspora">Demander cette offre</a></article>
-          <article class="offer-card"><p class="card-eyebrow">Suivi à distance</p><h3>Reporting mensuel et contrôle qualité</h3><p>Photos, vidéos WhatsApp, réunions visio, avancement, points bloquants et appels de fonds par étapes.</p><a class="link-arrow" href="/contact?offre=Suivi%20a%20distance">Demander cette offre</a></article>
-          <article class="offer-card"><p class="card-eyebrow">Options France</p><h3>Paris, compte France, WhatsApp dédié</h3><p>Rencontre possible à Paris, paiement sur compte en France, fil WhatsApp projet et garantie décennale à cadrer selon les lots et contrats.</p><a class="link-arrow" href="/contact?offre=Options%20France%20diaspora">Demander ces options</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Construction</p><h3>Villa ou maison familiale clé en main</h3><p>Conception, estimation, études, chantier, finitions et livraison d'un bien adapté au climat tropical.</p><a class="link-arrow" href="/contact?offre=Construction%20diaspora">Étudier une construction</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Transformation</p><h3>Rénovation et extension</h3><p>Modernisation d'un bien, agrandissement, reprise des finitions et amélioration du confort intérieur et extérieur.</p><a class="link-arrow" href="/contact?offre=Renovation%20et%20extension%20diaspora">Étudier une transformation</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Cadre de vie</p><h3>Un art de vivre moderne africain</h3><p>Jardin tropical, terrasse couverte, pergola, piscine lagon, cuisine ouverte et espaces pensés pour vivre dedans comme dehors.</p><a class="link-arrow" href="/contact?offre=Art%20de%20vivre%20moderne%20africain">Composer mon cadre de vie</a></article>
+          <article class="offer-card"><p class="card-eyebrow">Pilotage</p><h3>Suivi et réception à distance</h3><p>Planning, points de validation, photos, vidéos, réunions visio, contrôle qualité et réception documentée.</p><a class="link-arrow" href="/contact?offre=Suivi%20et%20reception%20a%20distance">Organiser le suivi</a></article>
         </div>
       </section>
 
       <section class="content-band muted-band">
-        ${sectionIntro("Sécurisation France", "Des options pensées pour rassurer la diaspora", "Les modalités sont précisées au contrat selon le projet, les lots concernés et les intervenants mobilisés.")}
+        ${sectionIntro("Parcours projet", "Une méthode simple, de la première discussion à la réception", "Chaque étape produit des décisions et documents clairs avant de passer à la suivante.")}
         <div class="fact-grid">
-          <div><span>Rencontre</span><strong>Rendez-vous possible à Paris pour cadrer le besoin.</strong></div>
-          <div><span>Paiement</span><strong>Paiement possible sur compte en France selon les modalités contractuelles.</strong></div>
-          <div><span>WhatsApp</span><strong>Fil WhatsApp dédié au projet pour photos, vidéos et décisions rapides.</strong></div>
-          <div><span>Garantie</span><strong>Garantie décennale prévue lorsque applicable, selon lots, contrats et assurances mobilisées.</strong></div>
+          <div><span>01. Cadrage</span><strong>Terrain, besoins, style, budget indicatif et niveau de finition.</strong></div>
+          <div><span>02. Études</span><strong>Programme, conception, estimation, devis et planning prévisionnel.</strong></div>
+          <div><span>03. Réalisation</span><strong>Chantier coordonné, validations par étapes et contrôle qualité.</strong></div>
+          <div><span>04. Livraison</span><strong>Réception documentée, réserves suivies et remise du bien.</strong></div>
         </div>
       </section>
 
       <section class="split-feature">
         <img src="${imageUrl("diasporaSite")}" alt="Techniciens et suivi de chantier premium">
         <div>
-          <p class="kicker">Méthode</p>
-          <h2>Un chantier rendu visible même lorsque vous êtes loin.</h2>
-          <p>Chaque étape importante est documentée: études, devis, choix matériaux, démarrage, gros oeuvre, second oeuvre, finitions et réception.</p>
+          <p class="kicker">Pilotage à distance</p>
+          <h2>Vous gardez une vision claire du projet et des décisions à prendre.</h2>
+          <p>Le suivi rassemble les informations utiles au même endroit et distingue l'avancement, les arbitrages, le budget et les prochaines étapes.</p>
           <ul class="check-list">
-            <li>Compte rendu d'avancement avec photos et vidéos</li>
-            <li>Réunions visio aux étapes clés</li>
-            <li>Budget sécurisé et arbitrages formalisés</li>
-            <li>Coordination avec cabinet d'architecte et techniciens qualifiés</li>
-            <li>Finitions suivies selon les standards internationaux</li>
+            <li>Interlocuteur projet et fil WhatsApp dédié</li>
+            <li>Comptes rendus avec photos et vidéos</li>
+            <li>Validations et appels de fonds par étapes</li>
+            <li>Coordination des études et du chantier</li>
+            <li>Contrôle des finitions avant réception</li>
           </ul>
         </div>
       </section>
 
-      <section class="remote-trust">
-        <div>
-          <p class="kicker">Pont France - Côte d'Ivoire</p>
-          <h2>Une relation premium pour une clientèle qui demande de la transparence.</h2>
-          <p>La collaboration avec Ermancia à Savigny-le-Temple facilite le dialogue avec les clients installés en France. Une rencontre à Paris peut être organisée pour cadrer les attentes, le niveau de finition, les modalités de paiement sur compte en France et le mode de reporting souhaité.</p>
-        </div>
-        <div class="trust-list">
-          <span>Contrat clair</span>
-          <span>Compte France</span>
-          <span>WhatsApp dédié</span>
-          <span>Rencontre Paris</span>
-          <span>Garantie décennale</span>
-          <span>Contrôle qualité</span>
+      <section class="content-band">
+        ${sectionIntro("Services France", "Un point de contact pour préparer le projet avant le chantier", "Les modalités sont définies dans le contrat selon la nature du projet, les lots et les intervenants mobilisés.")}
+        <div class="fact-grid">
+          <div><span>Rencontre</span><strong>Rendez-vous possible à Paris pour cadrer le projet.</strong></div>
+          <div><span>Paiement</span><strong>Paiement possible sur compte en France selon contrat.</strong></div>
+          <div><span>Communication</span><strong>WhatsApp dédié et réunions visio aux étapes utiles.</strong></div>
+          <div><span>Garanties</span><strong>Garantie décennale lorsque applicable selon lots et assurances.</strong></div>
         </div>
       </section>
 
@@ -645,11 +631,11 @@ function renderDiaspora() {
 
       <section class="dark-cta">
         <div>
-          <p class="kicker">Démarrer</p>
-          <h2>Envoyez le terrain, le budget indicatif et le niveau de finition attendu.</h2>
-          <p>ARASAKA vous répond avec une première lecture du projet et les étapes nécessaires pour le cadrer correctement.</p>
+          <p class="kicker">Première étude</p>
+          <h2>Présentez votre terrain, votre bien ou votre projet.</h2>
+          <p>Indiquez la localisation, les documents disponibles, le budget indicatif et le résultat recherché pour recevoir une première orientation.</p>
         </div>
-        <a class="button light" href="/contact?offre=Suivi%20diaspora%20premium">Demander une étude diaspora</a>
+        <a class="button light" href="/contact?offre=Projet%20diaspora">Demander une étude diaspora</a>
       </section>
     `,
   });
@@ -809,12 +795,12 @@ function renderMaterials() {
     active: "materials",
     title: "Matériaux",
     description:
-      "Matériaux pour architecture tropicale: béton, BTC, bois, bambou, pisé et toitures végétalisées.",
+      "Matériaux pour architecture tropicale: béton, BTC, bois, bambou, enduits en pisé et toitures végétalisées.",
     body: `
       <section class="page-hero compact" style="--hero-image: url('${imageUrl("materialsHeroNatural")}')">
         <div>
           <p class="kicker">Matériaux de construction</p>
-          <h1>Béton, BTC, bois, bambou, pisé et toitures végétalisées.</h1>
+          <h1>Béton, BTC, bois, bambou, enduits en pisé et toitures végétalisées.</h1>
         </div>
       </section>
 
@@ -965,11 +951,10 @@ function renderContact() {
                 <option>Construction de villa</option>
                 <option>Rénovation haut de gamme</option>
                 <option>Villa clé en main</option>
-                <option>Suivi diaspora</option>
+                <option>Projet diaspora</option>
                 <option>Aménagement extérieur</option>
                 <option>Piscine lagon</option>
                 <option>Petit immeuble locatif clé en main</option>
-                <option>Accompagnement diaspora</option>
               </select>
             </label>
             <label>
@@ -1016,11 +1001,9 @@ function renderContact() {
 
 const routes = new Map([
   ["/", renderHome],
-  ["/fiche-arasaka", renderFicheArasaka],
   ["/diaspora", renderDiaspora],
   ["/a-propos", renderAbout],
   ["/services", renderServices],
-  ["/construire-depuis-exterieur", renderRemoteBuild],
   ["/materiaux", renderMaterials],
   ["/plans", renderPlans],
   ["/galerie", renderGallery],
