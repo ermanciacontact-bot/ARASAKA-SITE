@@ -2,12 +2,18 @@
 const fs = require("node:fs");
 const path = require("node:path");
 const crypto = require("node:crypto");
+const tls = require("node:tls");
 const { URL } = require("node:url");
 const site = require("./data/site-data");
 
 const PORT = Number(process.env.PORT || 4321);
+const SITE_AUTH_ENABLED = process.env.SITE_AUTH === "1" || process.env.SITE_AUTH === "true";
 const SITE_USERNAME = process.env.SITE_USERNAME || "arasaka";
 const SITE_PASSWORD = process.env.SITE_PASSWORD || "test123";
+const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
+const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
+const SMTP_USER = process.env.SMTP_USER || "";
+const SMTP_PASS = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD || "";
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const LEADS_FILE = path.join(ROOT, "data", "leads.jsonl");
@@ -21,6 +27,7 @@ const mimeTypes = {
   ".jpeg": "image/jpeg",
   ".webp": "image/webp",
   ".ico": "image/x-icon",
+  ".pdf": "application/pdf",
 };
 
 function escapeHtml(value) {
@@ -30,6 +37,13 @@ function escapeHtml(value) {
     .replaceAll(">", "&gt;")
     .replaceAll('"', "&quot;")
     .replaceAll("'", "&#039;");
+}
+
+function jsonScript(value) {
+  return JSON.stringify(value)
+    .replaceAll("&", "\\u0026")
+    .replaceAll("<", "\\u003c")
+    .replaceAll(">", "\\u003e");
 }
 
 function secureEqual(value, expected) {
@@ -43,6 +57,10 @@ function secureEqual(value, expected) {
 }
 
 function isAuthorized(req) {
+  if (!SITE_AUTH_ENABLED) {
+    return true;
+  }
+
   const authorization = req.headers.authorization || "";
 
   if (!authorization.startsWith("Basic ")) {
@@ -79,9 +97,128 @@ function imageUrl(key) {
   return site.images[key] || "";
 }
 
+const transparentPixel =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+
 function whatsappLink(message) {
   const encoded = encodeURIComponent(message);
   return `${site.company.whatsappHref}?text=${encoded}`;
+}
+
+function gmailLink(subject, message) {
+  return `${site.company.gmailHref}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
+}
+
+function smtpConfigured() {
+  return Boolean(SMTP_USER && SMTP_PASS);
+}
+
+function smtpResponse(socket) {
+  return new Promise((resolve, reject) => {
+    let response = "";
+
+    const cleanup = () => {
+      socket.off("data", onData);
+      socket.off("error", onError);
+      socket.off("timeout", onTimeout);
+    };
+    const onError = (error) => {
+      cleanup();
+      reject(error);
+    };
+    const onTimeout = () => {
+      cleanup();
+      reject(new Error("SMTP timeout"));
+    };
+    const onData = (chunk) => {
+      response += chunk.toString("utf8");
+      const lines = response.split(/\r?\n/).filter(Boolean);
+      const lastLine = lines.at(-1) || "";
+
+      if (/^\d{3} /.test(lastLine)) {
+        cleanup();
+        resolve({ code: Number(lastLine.slice(0, 3)), response });
+      }
+    };
+
+    socket.on("data", onData);
+    socket.on("error", onError);
+    socket.on("timeout", onTimeout);
+  });
+}
+
+async function smtpCommand(socket, command, expectedCodes) {
+  const responsePromise = smtpResponse(socket);
+  socket.write(`${command}\r\n`);
+  const result = await responsePromise;
+
+  if (!expectedCodes.includes(result.code)) {
+    throw new Error(`SMTP ${result.code}`);
+  }
+
+  return result;
+}
+
+function safeHeader(value) {
+  return String(value || "").replace(/[\r\n]+/g, " ").trim();
+}
+
+function encodeHeader(value) {
+  return `=?UTF-8?B?${Buffer.from(safeHeader(value), "utf8").toString("base64")}?=`;
+}
+
+async function sendContactEmail(lead, contactText) {
+  if (!smtpConfigured()) {
+    return { sent: false, reason: "SMTP_NOT_CONFIGURED" };
+  }
+
+  const socket = tls.connect({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    servername: SMTP_HOST,
+  });
+  socket.setTimeout(15_000);
+
+  try {
+    const greeting = await smtpResponse(socket);
+    if (greeting.code !== 220) throw new Error(`SMTP ${greeting.code}`);
+
+    await smtpCommand(socket, "EHLO arasaka.local", [250]);
+    await smtpCommand(socket, "AUTH LOGIN", [334]);
+    await smtpCommand(socket, Buffer.from(SMTP_USER).toString("base64"), [334]);
+    await smtpCommand(socket, Buffer.from(SMTP_PASS).toString("base64"), [235]);
+    await smtpCommand(socket, `MAIL FROM:<${safeHeader(SMTP_USER)}>`, [250]);
+    await smtpCommand(socket, `RCPT TO:<${safeHeader(site.company.email)}>`, [250, 251]);
+    await smtpCommand(socket, "DATA", [354]);
+
+    const headers = [
+      `From: ARASAKA Site <${safeHeader(SMTP_USER)}>`,
+      `To: ${safeHeader(site.company.email)}`,
+      lead.email ? `Reply-To: ${safeHeader(lead.email)}` : "",
+      `Subject: ${encodeHeader(`Nouvelle demande ARASAKA - ${lead.name}`)}`,
+      "MIME-Version: 1.0",
+      "Content-Type: text/plain; charset=UTF-8",
+      "Content-Transfer-Encoding: 8bit",
+    ].filter(Boolean);
+    const body = contactText
+      .replace(/\r?\n/g, "\r\n")
+      .split("\r\n")
+      .map((line) => (line.startsWith(".") ? `.${line}` : line))
+      .join("\r\n");
+
+    const responsePromise = smtpResponse(socket);
+    socket.write(`${headers.join("\r\n")}\r\n\r\n${body}\r\n.\r\n`);
+    const result = await responsePromise;
+    if (result.code !== 250) throw new Error(`SMTP ${result.code}`);
+    await smtpCommand(socket, "QUIT", [221]);
+
+    return { sent: true };
+  } catch (error) {
+    console.error(`Envoi email impossible: ${error.message}`);
+    return { sent: false, reason: "SMTP_SEND_FAILED" };
+  } finally {
+    socket.destroy();
+  }
 }
 
 function sectionIntro(kicker, title, text) {
@@ -133,6 +270,35 @@ function materialCards() {
 }
 
 function planSvg(slug) {
+  const specialLayout = {
+    "premium-pool": `
+      <image href="${imageUrl("premiumVillaPlan")}" x="8" y="8" width="314" height="194" preserveAspectRatio="xMidYMid slice"/>
+      <path d="M50 112 C88 112, 112 100, 148 102 S204 116, 260 104" class="circulation-line" marker-end="url(#circulation-${escapeHtml(slug)})"/>
+      <path d="M50 150 C92 142, 128 142, 168 146 S226 154, 280 146" class="circulation-line" marker-end="url(#circulation-${escapeHtml(slug)})"/>
+      <path d="M70 42 C78 74, 78 104, 76 136" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M162 34 C158 70, 158 106, 160 142" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M256 40 C246 74, 246 106, 250 138" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+    `,
+    compact: `
+      <rect x="18" y="18" width="294" height="174" class="plan-bg"/>
+      <rect x="30" y="48" width="270" height="86" class="room"/>
+      <path d="M92 48 V134 M154 48 V134 M230 48 V134" class="wall"/>
+      <path d="M52 134 q12 -12 24 0 M114 134 q12 -12 24 0 M184 134 q12 -12 24 0 M252 134 q12 -12 24 0" class="door"/>
+      <text x="61" y="92" class="tiny">Chambre</text>
+      <text x="123" y="92" class="tiny">Chambre</text>
+      <text x="192" y="92" class="tiny">Séjour traversant</text>
+      <text x="265" y="92" class="tiny">Suite</text>
+      <rect x="30" y="134" width="270" height="26" class="veranda"/>
+      <text x="165" y="151" class="tiny">Véranda linéaire sur jardin</text>
+      <path d="M38 147 C94 147, 144 147, 194 147 S252 147, 290 147" class="circulation-line" marker-end="url(#circulation-${escapeHtml(slug)})"/>
+      <path d="M61 34 V126" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M123 34 V126" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M192 34 V126" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M265 34 V126" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+      <path d="M40 178 C86 164, 126 184, 170 172 S250 164, 292 178" class="landscape"/>
+    `,
+  }[slug];
+
   const extra = {
     compact: `
       <rect x="236" y="66" width="62" height="76" class="pool"/>
@@ -161,22 +327,38 @@ function planSvg(slug) {
   }[slug] || "";
 
   return `
-    <svg viewBox="0 0 330 210" role="img" aria-label="Plan schématique ${escapeHtml(slug)}">
-      <rect x="18" y="18" width="294" height="174" class="plan-bg"/>
-      <rect x="36" y="36" width="86" height="62" class="room"/>
-      <rect x="122" y="36" width="86" height="62" class="room"/>
-      <rect x="36" y="98" width="106" height="48" class="room living"/>
-      <rect x="142" y="98" width="66" height="48" class="room"/>
-      <rect x="208" y="36" width="46" height="110" class="room service"/>
-      <path d="M36 98 H208 M122 36 V98 M142 98 V146 M208 36 V146" class="wall"/>
-      <path d="M74 98 q12 12 24 0 M166 98 q12 12 24 0 M208 84 q12 12 0 24" class="door"/>
-      <text x="79" y="72" class="tiny">Chambre</text>
-      <text x="164" y="72" class="tiny">Suite</text>
-      <text x="89" y="126" class="tiny">Séjour</text>
-      <text x="176" y="126" class="tiny">Cuisine</text>
-      <text x="231" y="91" class="tiny vertical">Services</text>
-      ${extra}
-      <path d="M48 184 C92 166, 126 200, 168 180 S246 162, 292 184" class="landscape"/>
+    <svg viewBox="0 0 330 210" role="img" aria-label="Plan de circulation et ventilation croisée ${escapeHtml(slug)}">
+      <defs>
+        <marker id="circulation-${escapeHtml(slug)}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" class="circulation-marker"/>
+        </marker>
+        <marker id="air-${escapeHtml(slug)}" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" class="air-marker"/>
+        </marker>
+      </defs>
+      ${
+        specialLayout ||
+        `
+          <rect x="18" y="18" width="294" height="174" class="plan-bg"/>
+          <rect x="36" y="36" width="86" height="62" class="room"/>
+          <rect x="122" y="36" width="86" height="62" class="room"/>
+          <rect x="36" y="98" width="106" height="48" class="room living"/>
+          <rect x="142" y="98" width="66" height="48" class="room"/>
+          <rect x="208" y="36" width="46" height="110" class="room service"/>
+          <path d="M36 98 H208 M122 36 V98 M142 98 V146 M208 36 V146" class="wall"/>
+          <path d="M74 98 q12 12 24 0 M166 98 q12 12 24 0 M208 84 q12 12 0 24" class="door"/>
+          <text x="79" y="72" class="tiny">Chambre</text>
+          <text x="164" y="72" class="tiny">Suite</text>
+          <text x="89" y="126" class="tiny">Séjour</text>
+          <text x="176" y="126" class="tiny">Cuisine</text>
+          <text x="231" y="91" class="tiny vertical">Services</text>
+          ${extra}
+          <path d="M26 122 C62 122, 86 118, 112 118 S162 118, 198 92 S244 76, 282 76" class="circulation-line" marker-end="url(#circulation-${escapeHtml(slug)})"/>
+          <path d="M26 58 C84 42, 134 52, 188 60 S254 72, 300 54" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+          <path d="M28 144 C88 158, 138 150, 190 138 S252 122, 300 140" class="airflow-line" marker-end="url(#air-${escapeHtml(slug)})"/>
+          <path d="M48 184 C92 166, 126 200, 168 180 S246 162, 292 184" class="landscape"/>
+        `
+      }
     </svg>
   `;
 }
@@ -187,6 +369,14 @@ function planCards() {
       (plan) => `
         <article class="plan-card">
           <div class="plan-art">${plan.imageKey ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
+          <div class="plan-analysis">
+            <h4>Plan de circulation et ventilation croisée</h4>
+            ${planSvg(plan.slug)}
+            <div class="plan-legend">
+              <span class="circulation-key">Circulation fluide</span>
+              <span class="airflow-key">Ventilation croisée</span>
+            </div>
+          </div>
           <div class="plan-body">
             <p class="card-eyebrow">${escapeHtml(plan.surface)}</p>
             <h3>${escapeHtml(plan.title)}</h3>
@@ -217,6 +407,53 @@ function galleryCards() {
         </article>
       `,
     )
+    .join("");
+}
+
+function portfolioCards(items = site.portfolioItems) {
+  return items
+    .map(
+      (item, index) => `
+        <article class="portfolio-card" data-category="${escapeHtml(item.category)}">
+          <button class="portfolio-open" type="button" data-lightbox-src="${escapeHtml(item.src)}" data-lightbox-title="${escapeHtml(`${item.title} — ${item.caption}`)}" aria-label="Agrandir: ${escapeHtml(item.title)}">
+            <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.title)}" loading="${index < 4 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">
+            <span class="gallery-zoom">Agrandir</span>
+          </button>
+          <div class="portfolio-card-body">
+            <p class="card-eyebrow">${escapeHtml(item.label)}</p>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.caption)}</p>
+            <span>${escapeHtml(item.usage)}</span>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function portfolioVirtualTourCards() {
+  return site.portfolioVirtualTours
+    .map(
+      (tour, index) => `
+        <article class="virtual-tour-card">
+          <button class="virtual-tour-open" type="button" data-tour-index="${index}" aria-label="Lancer le diaporama: ${escapeHtml(tour.title)}">
+            <img src="${escapeHtml(tour.cover)}" alt="${escapeHtml(tour.title)}" loading="lazy" decoding="async">
+            <span>Diaporama</span>
+          </button>
+          <div class="virtual-tour-body">
+            <p class="card-eyebrow">Visite virtuelle photo</p>
+            <h3>${escapeHtml(tour.title)}</h3>
+            <p>${escapeHtml(tour.subtitle)}</p>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function portfolioCapabilityCards() {
+  return site.portfolioCapabilities
+    .map((capability) => `<span>${escapeHtml(capability)}</span>`)
     .join("");
 }
 
@@ -326,6 +563,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     description,
     address: site.company.location,
     telephone: site.company.phone,
+    email: site.company.email,
     areaServed: ["Côte d'Ivoire", "Abidjan", "France", "Diaspora ivoirienne"],
     founder: site.company.director,
   };
@@ -339,7 +577,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260604-2">
+    <link rel="stylesheet" href="/styles.css?v=20260703-6">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -348,12 +586,12 @@ function layout({ active, title, description, body, bodyClass = "" }) {
         <strong>ARASAKA</strong>
         <span>${escapeHtml(site.company.baseline)}</span>
       </a>
-      <button class="menu-toggle" type="button" data-menu-toggle aria-label="Ouvrir le menu">
+      <button class="menu-toggle" type="button" data-menu-toggle aria-label="Ouvrir le menu" aria-expanded="false" aria-controls="main-nav">
         <span></span>
         <span></span>
         <span></span>
       </button>
-      <nav class="main-nav" data-main-nav aria-label="Navigation principale">
+      <nav class="main-nav" id="main-nav" data-main-nav aria-label="Navigation principale">
         ${nav}
       </nav>
       <a class="phone-link" href="${site.company.telHref}">
@@ -386,15 +624,20 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       </div>
       <div>
         <span>Contact</span>
-        <p><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br>${escapeHtml(site.company.email)}</p>
+        <p><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br><a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a></p>
       </div>
     </footer>
     <div class="lightbox" data-lightbox hidden aria-modal="true" role="dialog" aria-label="Photo agrandie">
       <button class="lightbox-close" type="button" data-lightbox-close aria-label="Fermer la photo">Fermer</button>
-      <img class="lightbox-image" data-lightbox-image alt="">
+      <img class="lightbox-image" data-lightbox-image src="${transparentPixel}" alt="Photo agrandie">
       <p class="lightbox-title" data-lightbox-title></p>
+      <div class="lightbox-controls" data-tour-controls hidden>
+        <button type="button" data-tour-prev>Précédent</button>
+        <span data-tour-count></span>
+        <button type="button" data-tour-next>Suivant</button>
+      </div>
     </div>
-    <script src="/app.js?v=20260604-1" defer></script>
+    <script src="/app.js?v=20260703-2" defer></script>
   </body>
 </html>`;
 }
@@ -416,34 +659,8 @@ function renderHome() {
           <h1>Construire en harmonie avec le climat tropical.</h1>
           <div class="hero-actions">
             <a class="button primary" href="/contact">Demander une étude</a>
-            <a class="button ghost" href="/galerie">Voir nos réalisations</a>
+            <a class="button ghost" href="/realisations">Voir nos réalisations</a>
           </div>
-        </div>
-      </section>
-
-      <section class="split-feature">
-        <img src="${imageUrl("premiumVillaConcept")}" alt="Villa premium avec terrasse, piscine et matériaux naturels">
-        <div>
-          <p class="kicker">Positionnement premium</p>
-          <h2>Une architecture tropicale luxueuse, confortable et précise.</h2>
-          <p>${escapeHtml(site.positioning.text)}</p>
-          <p>${escapeHtml(site.company.finishPromise)}</p>
-          <div class="fact-grid">
-            <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
-            <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
-            <div><span>Architecture</span><strong>Partenariat avec le cabinet GEAP</strong></div>
-            <div><span>Diaspora</span><strong>Collaboration Ermancia en France</strong></div>
-          </div>
-        </div>
-      </section>
-
-      <section class="content-band muted-band">
-        ${sectionIntro("Partenariat architectural", "ARASAKA travaille en partenariat avec le cabinet d'architecture GEAP", "Cette collaboration associe la maîtrise opérationnelle du chantier à une conception architecturale cohérente, adaptée au terrain, au climat tropical et au niveau de finition attendu.")}
-        <div class="fact-grid">
-          <div><span>Conception cohérente</span><strong>Plans, volumes, circulations et usages étudiés comme un ensemble.</strong></div>
-          <div><span>Choix maîtrisés</span><strong>Solutions architecturales et techniques définies avant l'exécution.</strong></div>
-          <div><span>Coordination</span><strong>Meilleur dialogue entre études, intervenants et réalisation du chantier.</strong></div>
-          <div><span>Délais et qualité</span><strong>Moins d'improvisations, moins de reprises et un suivi plus rigoureux.</strong></div>
         </div>
       </section>
 
@@ -459,21 +676,34 @@ function renderHome() {
         <div class="offer-grid">${offerCards()}</div>
       </section>
 
-      <section class="split-feature reverse">
-        <img src="${imageUrl("diasporaSite")}" alt="Techniciens et artisans qualifiés sur chantier premium">
-        <div>
-          <p class="kicker">Exécution</p>
-          <h2>Artisans, techniciens qualifiés et culture des standards internationaux.</h2>
-          <p>${escapeHtml(site.company.standards)}</p>
-          <p>${escapeHtml(site.company.finishPromise)}</p>
-          <a class="link-arrow" href="/services">Découvrir notre méthode</a>
-        </div>
-      </section>
-
       <section class="content-band muted-band">
         ${sectionIntro("Services", "Des prestations complètes pour villas, rénovations et investissements locatifs", "Construction, rénovation, architecture tropicale, piscines lagon, pergolas, jardins, petits immeubles et accompagnement à distance.")}
         <div class="service-grid">${serviceCards(8)}</div>
         <div class="center-action"><a class="button secondary" href="/services">Explorer tous les services</a></div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Partenariat architectural", "ARASAKA s'appuie sur GE Architectes & Partenaires (GEAP)", "Ce partenariat renforce ARASAKA par une structure d'architecture confirmée: études préalables, conception, urbanisme, ingénierie, maîtrise d'oeuvre complète et coordination de projets d'envergure.")}
+        <div class="geap-showcase">
+          <a class="geap-preview" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer" aria-label="Ouvrir le pressbook GE Architectes & Partenaires">
+            <img src="/assets/geap-architectes-pressbook-apercu.png" alt="Extrait du pressbook GE Architectes & Partenaires">
+          </a>
+          <div class="geap-copy">
+            <p class="kicker">Cabinet partenaire</p>
+            <h3>GE Architectes & Partenaires apporte la force d'un cabinet expérimenté aux projets ARASAKA.</h3>
+            <p>Le pressbook présente une expertise en architecture, urbanisme, ingénierie, études préalables, programmes, planification et assistance à maîtrise d'ouvrage. Pour ARASAKA, cela signifie des projets mieux cadrés, des choix architecturaux plus solides et une coordination renforcée entre conception et réalisation.</p>
+            <div class="geap-proof-grid">
+              <div><span>Architecture</span><strong>Equipements urbains, bureaux, logements, rénovation, réhabilitation et habitat planifié.</strong></div>
+              <div><span>Urbanisme</span><strong>Schémas directeurs, restructuration, projets littoraux, réseaux et équipements urbains.</strong></div>
+              <div><span>Références</span><strong>Togo, Bénin, Gabon, Côte d'Ivoire, Sénégal et Burkina Faso.</strong></div>
+              <div><span>Maîtrise d'oeuvre</span><strong>Missions complètes, conduite d'opération et suivi structuré de projets.</strong></div>
+            </div>
+            <div class="hero-actions">
+              <a class="button secondary" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer">Consulter la fiche GEAP</a>
+              <a class="button ghost-dark" href="/qui-sommes-nous">Comprendre le partenariat</a>
+            </div>
+          </div>
+        </div>
       </section>
 
       <section class="dark-cta">
@@ -503,7 +733,7 @@ function renderFicheArasaka() {
           <p class="hero-copy">Une approche commerciale claire, haut de gamme et structurée: villas, rénovations, matériaux naturels, piscines lagon, pergolas, jardins et suivi à distance.</p>
           <div class="hero-actions">
             <a class="button primary" href="/contact">Demander une étude</a>
-            <a class="button ghost" href="/galerie">Voir les réalisations</a>
+            <a class="button ghost" href="/realisations">Voir les réalisations</a>
           </div>
         </div>
       </section>
@@ -523,7 +753,7 @@ function renderFicheArasaka() {
             <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
             <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
             <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
-            <div><span>Études</span><strong>Cabinet d'architecture GEAP</strong></div>
+            <div><span>Études</span><strong>GE Architectes & Partenaires (GEAP)</strong></div>
           </div>
         </div>
       </section>
@@ -546,7 +776,7 @@ function renderFicheArasaka() {
       <section class="content-band">
         ${sectionIntro("Galerie réalisations", "Villas blanches, BTC, jardins, piscines et terrasses", "Une sélection d'ambiances pour visualiser le niveau de finition, les matériaux et les espaces extérieurs.")}
         <div class="gallery-grid">${galleryCards()}</div>
-        <div class="center-action"><a class="button ghost-dark" href="/galerie">Voir toute la galerie</a></div>
+        <div class="center-action"><a class="button ghost-dark" href="/realisations">Voir toute la galerie</a></div>
       </section>
 
       <section class="dark-cta">
@@ -695,7 +925,7 @@ function renderAbout() {
           <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
           <article><h3>Finitions soignées</h3><p>Attention portee aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
           <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
-          <article><h3>Partenariat GEAP</h3><p>Le cabinet d'architecture GEAP renforce la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
+          <article><h3>Partenariat GEAP</h3><p>GE Architectes & Partenaires renforce la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
         </div>
       </section>
     `,
@@ -705,30 +935,21 @@ function renderAbout() {
 function renderServices() {
   return layout({
     active: "services",
-    title: "Services",
+    title: "Nos offres de prestations",
     description:
       "Services ARASAKA: construction de villas, rénovation haut de gamme, architecture tropicale, piscines lagon, pergolas et accompagnement diaspora.",
     body: `
       <section class="page-hero compact" style="--hero-image: url('${imageUrl("tropicalPool")}')">
         <div>
-          <p class="kicker">Services</p>
-          <h1>Construire, rénover et aménager avec une vision complète du cadre de vie.</h1>
+          <p class="kicker">ARASAKA</p>
+          <h1>Nos offres de prestations</h1>
+          <p class="page-hero-copy">Construire, rénover et aménager avec une vision complète du cadre de vie.</p>
         </div>
       </section>
 
       <section class="content-band">
         ${sectionIntro("Prestations", "Des services pour chaque étape du projet", "Du cadrage initial aux finitions, chaque prestation peut être mobilisée seule ou dans une mission complète.")}
         <div class="service-grid expanded">${serviceCards()}</div>
-      </section>
-
-      <section class="content-band muted-band">
-        ${sectionIntro("Offres", "Trois portes d'entrée commerciales", "Ces offres répondent aux besoins les plus fréquents: construire à distance, améliorer une villa existante ou créer un actif locatif.")}
-        <div class="offer-grid">${offerCards()}</div>
-      </section>
-
-      <section class="content-band">
-        ${sectionIntro("Avantages", "La confiance comme vraie valeur du projet", "Le prix compte, mais la fiabilité, la transparence et le contrôle du chantier évitent les pertes de temps, les reprises et les mauvaises surprises.")}
-        <div class="advantage-grid">${advantageCards()}</div>
       </section>
 
       <section class="process-section">
@@ -771,7 +992,7 @@ function renderRemoteBuild() {
         <div>
           <p class="kicker">Ce qui est sécurisé</p>
           <h2>Un projet visible, documenté et validé à distance.</h2>
-          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec le cabinet d'architecture GEAP aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
+          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec GE Architectes & Partenaires (GEAP) aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
         </div>
         <div class="trust-list">
           <span>Devis détaillé</span>
@@ -840,20 +1061,35 @@ function renderMaterials() {
 function renderPlans() {
   return layout({
     active: "plans",
-    title: "Plans de villas",
+    title: "Inspirations",
     description:
-      "Plans de villas et concepts premium ARASAKA: villa blanche, terrasse, piscine, patio, véranda et résidence suivie à distance.",
+      "Inspirations, plans et galerie ARASAKA: circulation fluide, ventilation croisée, matériaux naturels, jardins et piscines.",
     body: `
       <section class="page-hero compact" style="--hero-image: url('${imageUrl("premiumVillaConcept")}')">
         <div>
-          <p class="kicker">Plans de villas</p>
-          <h1>Des concepts de villas premium adaptés au terrain, au climat tropical et au niveau de finition attendu.</h1>
+          <p class="kicker">Architecture tropicale</p>
+          <h1>Inspirations</h1>
+          <p class="page-hero-copy">Des concepts de villas premium adaptés au terrain, au climat tropical et au niveau de finition attendu.</p>
         </div>
       </section>
 
       <section class="content-band">
         ${sectionIntro("Concepts", "Choisir une base, puis l'adapter précisément", "Ces plans servent de point de départ pour discuter surfaces, circulation, ventilation, jardin, véranda, piscine, budget et finitions premium.")}
         <div class="plans-grid">${planCards()}</div>
+      </section>
+
+      <section class="content-band muted-band" id="galerie">
+        ${sectionIntro("Galerie", "Réalisations et inspirations pour votre villa", "Explorez les ambiances, matériaux et espaces extérieurs réunis avec les concepts de villas.")}
+        <div class="filter-tabs" role="tablist" aria-label="Filtres galerie">
+          <button class="active" type="button" data-filter="all">Tout</button>
+          <button type="button" data-filter="villas-blanches">Villas blanches</button>
+          <button type="button" data-filter="materiaux-naturels">Matériaux naturels</button>
+          <button type="button" data-filter="jardins">Jardins</button>
+          <button type="button" data-filter="interieurs">Intérieurs</button>
+          <button type="button" data-filter="terrasses">Terrasses</button>
+          <button type="button" data-filter="piscines">Piscines lagon</button>
+        </div>
+        <div class="gallery-grid" data-gallery-grid>${galleryCards()}</div>
       </section>
 
       <section class="dark-cta">
@@ -863,6 +1099,56 @@ function renderPlans() {
           <p>Choisissez une inspiration pour engager la discussion sur les surfaces, la circulation, les matériaux, les espaces extérieurs et le niveau de finition.</p>
         </div>
         <a class="button light" href="/contact">Demander un rendez-vous</a>
+      </section>
+    `,
+  });
+}
+
+function renderPortfolio() {
+  return layout({
+    active: "portfolio",
+    title: "Nos réalisations",
+    description:
+      "Portfolio ARASAKA: conception, visualisation, cuisines, décoration, appartements prêts pour Airbnb et valorisation immobilière.",
+    bodyClass: "page-portfolio",
+    body: `
+      <section class="page-hero portfolio-hero" style="--hero-image: url('${site.images.portfolioHero}')">
+        <div>
+          <p class="kicker">Nos réalisations</p>
+          <h1>Des espaces conçus, décorés et prêts à vivre.</h1>
+          <p class="page-hero-copy">Une sélection resserrée autour des études, cuisines, ambiances décoratives et logements prêts à exploiter.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="#portfolio">Explorer les réalisations</a>
+            <a class="button ghost" href="/contact">Parler d'un projet</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="turnkey-panel">
+        <div>
+          <p class="kicker">Livraison clé en main</p>
+          <h2>Un logement immédiatement habitable ou prêt à exploiter.</h2>
+          <p>Après les travaux, nous pouvons accompagner l'aménagement, la décoration et la mise en valeur du logement afin qu'il soit immédiatement habitable ou prêt à exploiter en location courte durée.</p>
+        </div>
+        <div class="turnkey-steps">
+          <span>Travaux</span>
+          <span>Finitions</span>
+          <span>Ameublement</span>
+          <span>Décoration</span>
+          <span>Photos</span>
+          <span>Exploitation</span>
+        </div>
+      </section>
+
+      <section class="content-band muted-band" id="visites-virtuelles">
+        ${sectionIntro("Visites virtuelles", "Parcours photo des appartements", "Chaque parcours présente un appartement sans mélanger les images afin de lire le logement comme une visite photo fluide.")}
+        <div class="virtual-tour-grid">${portfolioVirtualTourCards()}</div>
+        <script type="application/json" id="portfolio-tours-data">${jsonScript(site.portfolioVirtualTours)}</script>
+      </section>
+
+      <section class="content-band muted-band" id="portfolio">
+        ${sectionIntro("Galerie", "Exemples d'appartements réalisés pour Airbnb", "Ces réalisations sélectionnées présentent des appartements aménagés, décorés et mis en valeur pour la location courte durée, notamment Airbnb.")}
+        <div class="portfolio-grid" data-gallery-grid>${portfolioCards()}</div>
       </section>
     `,
   });
@@ -917,23 +1203,18 @@ function renderContact() {
         <div class="contact-panel">
           <div class="contact-tabs" role="tablist" aria-label="Types de demande">
             <button class="active" type="button" data-contact-tab="etude">Demande d'étude</button>
-            <button type="button" data-contact-tab="diaspora">Diaspora</button>
             <button type="button" data-contact-tab="rdv">Rendez-vous</button>
           </div>
           <div class="tab-copy active" data-tab-copy="etude">
             <h2>Étude personnalisée</h2>
-            <p>Envoyez les informations principales. Le formulaire enregistre la demande et prépare aussi un message WhatsApp.</p>
-          </div>
-          <div class="tab-copy" data-tab-copy="diaspora">
-            <h2>Projet depuis la France ou l'étranger</h2>
-            <p>Précisez votre situation, le terrain, les documents disponibles et le niveau de suivi attendu à distance.</p>
+            <p>Envoyez les informations principales. Si le serveur Gmail est connecté, la demande part par email; sinon elle est enregistrée et un message Gmail prêt à envoyer s'affiche.</p>
           </div>
           <div class="tab-copy" data-tab-copy="rdv">
             <h2>Rendez-vous à Abidjan</h2>
             <p>Indiquez vos disponibilités et le type de visite souhaitée: terrain, rénovation, villa existante ou première discussion.</p>
           </div>
 
-          <form class="contact-form" data-contact-form method="post" action="/api/contact">
+          <form class="contact-form" data-contact-form data-contact-email="${escapeHtml(site.company.email)}" method="post" action="/api/contact">
             <input type="hidden" name="requestType" value="Demande d'étude" data-request-type>
             <label>
               Nom complet
@@ -989,9 +1270,10 @@ function renderContact() {
 
         <aside class="contact-aside">
           <h2>Contact direct</h2>
-          <p>Pour un premier échange rapide, appelez ou envoyez un message WhatsApp.</p>
+          <p>Pour un premier échange rapide, appelez ou écrivez-nous par Gmail ou WhatsApp.</p>
           <a class="button secondary full" href="${site.company.telHref}">Appeler ${escapeHtml(site.company.phone)}</a>
           <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">Écrire sur WhatsApp</a>
+          <a class="button ghost-dark full" href="${site.company.gmailHref}" target="_blank" rel="noreferrer">Écrire par Gmail</a>
           <div class="contact-details">
             <span>Adresse</span>
             <strong>${escapeHtml(site.company.location)}</strong>
@@ -1002,7 +1284,7 @@ function renderContact() {
             <span>Ermancia</span>
             <strong>${escapeHtml(site.company.ermanciaLocation)}</strong>
             <span>Email</span>
-            <strong>${escapeHtml(site.company.email)}</strong>
+            <strong><a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a></strong>
           </div>
         </aside>
       </section>
@@ -1017,8 +1299,9 @@ const routes = new Map([
   ["/a-propos", renderAbout],
   ["/services", renderServices],
   ["/materiaux", renderMaterials],
+  ["/realisations", renderPortfolio],
   ["/plans", renderPlans],
-  ["/galerie", renderGallery],
+  ["/galerie", renderPortfolio],
   ["/contact", renderContact],
 ]);
 
@@ -1114,9 +1397,17 @@ async function handleContact(req, res) {
       .filter(Boolean)
       .join("\n");
 
+    const subject = `Nouvelle demande ARASAKA - ${lead.name}`;
+    const emailResult = await sendContactEmail(lead, waText);
+
     sendJson(res, 200, {
       ok: true,
-      message: "Demande enregistrée. Un message WhatsApp est prêt à être envoyé.",
+      message: emailResult.sent
+        ? "Demande enregistrée et transmise par email. Les messages Gmail et WhatsApp restent prêts à envoyer."
+        : "Email automatique non configuré sur ce serveur. La demande est enregistrée localement; ouvrez Gmail puis cliquez sur Envoyer pour la transmettre à ARASAKA CI.",
+      emailSent: emailResult.sent,
+      emailStatus: emailResult.reason || "SENT",
+      gmailUrl: gmailLink(subject, waText),
       whatsappUrl: whatsappLink(waText),
     });
   } catch (error) {

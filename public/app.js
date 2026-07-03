@@ -6,12 +6,14 @@ if (menuToggle && mainNav) {
   menuToggle.addEventListener("click", () => {
     const open = body.classList.toggle("menu-open");
     menuToggle.setAttribute("aria-label", open ? "Fermer le menu" : "Ouvrir le menu");
+    menuToggle.setAttribute("aria-expanded", String(open));
   });
 
   mainNav.addEventListener("click", (event) => {
     if (event.target.matches("a")) {
       body.classList.remove("menu-open");
       menuToggle.setAttribute("aria-label", "Ouvrir le menu");
+      menuToggle.setAttribute("aria-expanded", "false");
     }
   });
 }
@@ -27,19 +29,52 @@ const lightbox = document.querySelector("[data-lightbox]");
 const lightboxImage = document.querySelector("[data-lightbox-image]");
 const lightboxTitle = document.querySelector("[data-lightbox-title]");
 const lightboxClose = document.querySelector("[data-lightbox-close]");
+const tourControls = document.querySelector("[data-tour-controls]");
+const tourPrev = document.querySelector("[data-tour-prev]");
+const tourNext = document.querySelector("[data-tour-next]");
+const tourCount = document.querySelector("[data-tour-count]");
+const toursData = document.querySelector("#portfolio-tours-data");
+const lightboxPlaceholder =
+  "data:image/gif;base64,R0lGODlhAQABAIAAAAAAAP///ywAAAAAAQABAAACAUwAOw==";
+let activeTour = null;
+let activeTourIndex = 0;
+
+function setTourControlsVisible(visible) {
+  if (!tourControls) return;
+  tourControls.hidden = !visible;
+}
 
 function closeLightbox() {
   if (!lightbox || !lightboxImage) return;
   lightbox.hidden = true;
   body.classList.remove("lightbox-open");
-  lightboxImage.removeAttribute("src");
-  lightboxImage.alt = "";
+  lightboxImage.src = lightboxPlaceholder;
+  lightboxImage.alt = "Photo agrandie";
   if (lightboxTitle) lightboxTitle.textContent = "";
+  activeTour = null;
+  activeTourIndex = 0;
+  setTourControlsVisible(false);
+}
+
+function renderTourSlide() {
+  if (!activeTour || !lightbox || !lightboxImage) return;
+  const slide = activeTour.slides[activeTourIndex];
+  if (!slide) return;
+  lightboxImage.src = slide.src;
+  lightboxImage.alt = slide.title || activeTour.title;
+  if (lightboxTitle) lightboxTitle.textContent = slide.title || activeTour.title;
+  if (tourCount) tourCount.textContent = `${activeTourIndex + 1} / ${activeTour.slides.length}`;
+  lightbox.hidden = false;
+  body.classList.add("lightbox-open");
+  setTourControlsVisible(activeTour.slides.length > 1);
 }
 
 document.querySelectorAll("[data-lightbox-src]").forEach((button) => {
   button.addEventListener("click", () => {
     if (!lightbox || !lightboxImage) return;
+    activeTour = null;
+    activeTourIndex = 0;
+    setTourControlsVisible(false);
     const title = button.dataset.lightboxTitle || "";
     lightboxImage.src = button.dataset.lightboxSrc;
     lightboxImage.alt = title;
@@ -60,9 +95,51 @@ if (lightboxClose) {
   lightboxClose.addEventListener("click", closeLightbox);
 }
 
+if (tourPrev) {
+  tourPrev.addEventListener("click", () => {
+    if (!activeTour) return;
+    activeTourIndex = (activeTourIndex - 1 + activeTour.slides.length) % activeTour.slides.length;
+    renderTourSlide();
+  });
+}
+
+if (tourNext) {
+  tourNext.addEventListener("click", () => {
+    if (!activeTour) return;
+    activeTourIndex = (activeTourIndex + 1) % activeTour.slides.length;
+    renderTourSlide();
+  });
+}
+
+if (toursData) {
+  try {
+    const virtualTours = JSON.parse(toursData.textContent || "[]");
+    document.querySelectorAll("[data-tour-index]").forEach((button) => {
+      button.addEventListener("click", () => {
+        activeTour = virtualTours[Number(button.dataset.tourIndex)];
+        activeTourIndex = 0;
+        renderTourSlide();
+        if (lightboxClose) lightboxClose.focus();
+      });
+    });
+  } catch {
+    document.querySelectorAll("[data-tour-index]").forEach((button) => {
+      button.hidden = true;
+    });
+  }
+}
+
 document.addEventListener("keydown", (event) => {
   if (event.key === "Escape" && lightbox && !lightbox.hidden) {
     closeLightbox();
+  }
+  if (event.key === "ArrowLeft" && activeTour) {
+    activeTourIndex = (activeTourIndex - 1 + activeTour.slides.length) % activeTour.slides.length;
+    renderTourSlide();
+  }
+  if (event.key === "ArrowRight" && activeTour) {
+    activeTourIndex = (activeTourIndex + 1) % activeTour.slides.length;
+    renderTourSlide();
   }
 });
 
@@ -122,13 +199,14 @@ if (selectedOffer && projectTypeField) {
 
 const form = document.querySelector("[data-contact-form]");
 const statusBox = document.querySelector("[data-form-status]");
+const contactEmail = form?.dataset.contactEmail || "arasakaci.contact@gmail.com";
 
 function formToObject(formElement) {
   return Object.fromEntries(new FormData(formElement).entries());
 }
 
-function buildWhatsappUrl(fields) {
-  const parts = [
+function buildContactText(fields) {
+  return [
     "Bonjour ARASAKA, je souhaite être contacté pour un projet.",
     fields.name ? `Nom: ${fields.name}` : "",
     fields.phone ? `Téléphone: ${fields.phone}` : "",
@@ -138,9 +216,32 @@ function buildWhatsappUrl(fields) {
     fields.projectType ? `Projet: ${fields.projectType}` : "",
     fields.budget ? `Budget: ${fields.budget}` : "",
     fields.message ? `Message: ${fields.message}` : "",
-  ].filter(Boolean);
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
 
-  return `https://wa.me/33652831160?text=${encodeURIComponent(parts.join("\n"))}`;
+function buildWhatsappUrl(fields) {
+  return `https://wa.me/33652831160?text=${encodeURIComponent(buildContactText(fields))}`;
+}
+
+function buildGmailUrl(fields) {
+  const subject = fields.name ? `Demande ARASAKA - ${fields.name}` : "Demande ARASAKA";
+  return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildContactText(fields))}`;
+}
+
+function renderStatus(message, links) {
+  statusBox.textContent = message;
+  links.forEach(({ href, label }) => {
+    if (!href) return;
+    statusBox.append(" ");
+    const link = document.createElement("a");
+    link.href = href;
+    link.target = "_blank";
+    link.rel = "noreferrer";
+    link.textContent = label;
+    statusBox.append(link, ".");
+  });
 }
 
 if (form && statusBox) {
@@ -160,12 +261,24 @@ if (form && statusBox) {
         throw new Error(result.message || "Erreur d'envoi");
       }
 
-      statusBox.innerHTML = `Demande enregistrée. <a href="${result.whatsappUrl}" target="_blank" rel="noreferrer">Envoyer aussi sur WhatsApp</a>.`;
+      if (result.emailSent) {
+        renderStatus(result.message || "Demande transmise par email.", [
+          { href: result.gmailUrl, label: "Ouvrir une copie Gmail" },
+          { href: result.whatsappUrl, label: "Envoyer aussi sur WhatsApp" },
+        ]);
+      } else {
+        renderStatus(result.message || "Email automatique non configuré sur ce serveur. La demande est enregistrée localement; ouvrez Gmail puis cliquez sur Envoyer pour la transmettre à ARASAKA CI.", [
+          { href: result.gmailUrl, label: "Ouvrir Gmail" },
+          { href: result.whatsappUrl, label: "Envoyer par WhatsApp" },
+        ]);
+      }
       form.reset();
       if (requestTypeInput) requestTypeInput.value = "Demande d'étude";
     } catch (error) {
-      const fallback = buildWhatsappUrl(fields);
-      statusBox.innerHTML = `Le serveur n'a pas pu confirmer l'envoi. <a href="${fallback}" target="_blank" rel="noreferrer">Envoyer par WhatsApp</a>.`;
+      renderStatus("Le serveur n'a pas pu confirmer l'envoi.", [
+        { href: buildGmailUrl(fields), label: "Ouvrir Gmail" },
+        { href: buildWhatsappUrl(fields), label: "Envoyer par WhatsApp" },
+      ]);
     }
   });
 }

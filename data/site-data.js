@@ -2,9 +2,131 @@
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 
 const asset = (name) => `/assets/${name}`;
+const portfolioAsset = (name) => asset(`images/portfolio/${name}`);
+const portfolioImage = (number) => portfolioAsset(`portfolio-source-${String(number).padStart(3, "0")}.jpg`);
+const portfolioItemsFrom = (numbers, item) =>
+  numbers.map((number, index) => ({
+    ...item,
+    number,
+    src: portfolioImage(number),
+    title: numbers.length > 1 ? `${item.title} ${String(index + 1).padStart(2, "0")}` : item.title,
+  }));
+const portfolioItemsFromSources = (sources, item) =>
+  sources.map((src, index) => ({
+    ...item,
+    src,
+    title: sources.length > 1 ? `${item.title} ${String(index + 1).padStart(2, "0")}` : item.title,
+  }));
 
 const contactPhone = "+33 6 52 83 11 60";
 const whatsappNumber = "33652831160";
+const contactEmail = "arasakaci.contact@gmail.com";
+const portfolioAfricanManagerImage = asset("portfolio-african-project-manager.png");
+
+const portfolioCategories = [
+  { key: "all", label: "Tous" },
+  { key: "conception", label: "Conception" },
+  { key: "visualisation-3d", label: "Visualisation 3D" },
+  { key: "cuisines", label: "Cuisines" },
+  { key: "decoration", label: "Décoration" },
+  { key: "airbnb", label: "Airbnb" },
+];
+
+const portfolioItems = [
+  ...portfolioItemsFrom([1], {
+    category: "conception",
+    label: "Conception",
+    title: "Plan 2D et optimisation des espaces",
+    caption: "Avant chaque chantier, ARASAKA structure circulation, implantation, volumes, usages et finitions.",
+    usage: "Étude, cadrage client et validation du programme.",
+  }),
+  ...portfolioItemsFromSources([asset("portfolio-projection-3d-afrique-naturelle.png")], {
+    category: "visualisation-3d",
+    label: "Visualisation 3D",
+    title: "Projection matériaux naturels et Afrique",
+    caption: "Une projection d'ambiance qui relie matériaux locaux, ventilation, lumière et style africain contemporain.",
+    usage: "Validation des ambiances, matières, volumes et intentions architecturales.",
+  }),
+  ...portfolioItemsFrom([32, 33, 35, 38, 40, 41, 46, 48, 52, 55, 57, 62, 63], {
+    category: "decoration",
+    label: "Décoration",
+    title: "Décoration et mise en ambiance",
+    caption: "Mobilier, luminaires, textiles et objets donnent au logement une identité immédiatement lisible.",
+    usage: "Décoration, ameublement, home staging et valorisation locative.",
+  }),
+  ...portfolioItemsFrom([34, 54, 61], {
+    category: "cuisines",
+    label: "Cuisines",
+    title: "Cuisine aménagée et intégrée",
+    caption: "Des cuisines fonctionnelles, élégantes et intégrées à l'ambiance générale du logement.",
+    usage: "Implantation, rangements, plans de travail, façades et finitions.",
+  }),
+  {
+    category: "cuisines",
+    label: "Cuisines",
+    title: "Pilotage d'un intérieur premium",
+    caption: "Un interlocuteur qualifié relie conception, chantier, finitions et mise en valeur du logement.",
+    usage: "Présentation client, coordination projet et valorisation immobilière.",
+    src: portfolioAfricanManagerImage,
+  },
+  ...portfolioItemsFrom([45, 47, 50, 53], {
+    category: "airbnb",
+    label: "Airbnb",
+    title: "Appartement prêt à exploiter en Airbnb",
+    caption: "Après les travaux, ARASAKA peut accompagner la mise en ambiance et la livraison d'un logement prêt à louer.",
+    usage: "Logement meublé, location courte durée et mise en valeur immobilière.",
+  }),
+  ...portfolioItemsFromSources(
+    [
+      asset("portfolio-airbnb-salle-bain-avant-apres.png"),
+      asset("portfolio-airbnb-combles-travaux.png"),
+      asset("portfolio-airbnb-chambre-combles-finale.png"),
+    ],
+    {
+      category: "airbnb",
+      label: "Airbnb",
+      title: "Transformation Airbnb",
+      caption: "Exemples d'interventions et de mises en valeur réalisées pour un logement en location courte durée.",
+      usage: "Avant / après, aménagement, décoration et présentation Airbnb.",
+    },
+  ),
+];
+
+const portfolioVirtualTours = [
+  {
+    title: "Appartement meublé - parcours 01",
+    subtitle: "Séjour, cuisine, décoration et finitions",
+    cover: portfolioImage(45),
+    slides: [
+      { src: portfolioImage(45), title: "Séjour meublé et ambiance locative" },
+      { src: portfolioImage(47), title: "Espace décoré prêt à exploiter" },
+      { src: portfolioImage(50), title: "Ambiance finale du premier appartement" },
+      { src: portfolioImage(34), title: "Cuisine aménagée et coin repas" },
+      { src: portfolioImage(32), title: "Mise en ambiance décorative" },
+    ],
+  },
+  {
+    title: "Appartement meublé - parcours 02",
+    subtitle: "Ambiance naturelle, décoration et finitions",
+    cover: portfolioImage(53),
+    slides: [
+      { src: portfolioImage(53), title: "Appartement prêt à exploiter" },
+      { src: portfolioImage(54), title: "Cuisine intégrée" },
+      { src: portfolioImage(61), title: "Cuisine et rangements" },
+      { src: portfolioImage(52), title: "Détails de finition et confort" },
+      { src: portfolioImage(55), title: "Ambiance décorative du second appartement" },
+    ],
+  },
+];
+
+const portfolioCapabilities = [
+  "Conception et optimisation des espaces",
+  "Projection 3D et choix des matières",
+  "Cuisines intégrées",
+  "Décoration et mise en ambiance",
+  "Décoration, home staging et Airbnb",
+  "Pilotage et valorisation immobilière",
+];
 
 module.exports = {
   company: {
@@ -16,7 +138,7 @@ module.exports = {
     director: "M. Tchotchoe Maixent",
     partner: "En collaboration avec l'entreprise Ermancia en France",
     architectPartner:
-      "Partenariat avec le cabinet d'architecture GEAP pour assurer la cohérence des études, la qualité des choix architecturaux, la coordination du projet et une meilleure maîtrise des délais.",
+      "Partenariat avec GE Architectes & Partenaires (GEAP), cabinet d'architecture, d'urbanisme et d'ingénierie, pour renforcer les études, la qualité des choix architecturaux, la coordination du projet et la maîtrise des délais.",
     standards:
       "ARASAKA travaille avec des artisans et techniciens formés dans les meilleurs lycées techniques du pays, dans une culture de chantier alignée sur les normes internationales.",
     finishPromise:
@@ -25,20 +147,23 @@ module.exports = {
     telHref: "tel:+33652831160",
     whatsappNumber,
     whatsappHref: `https://wa.me/${whatsappNumber}`,
-    email: "contact@arasaka.ci",
+    email: contactEmail,
+    emailHref: `mailto:${contactEmail}`,
+    gmailHref: `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}`,
   },
   nav: [
     { href: "/", key: "home", label: "Accueil" },
     { href: "/qui-sommes-nous", key: "about", label: "Qui sommes-nous" },
     { href: "/diaspora", key: "diaspora", label: "Diaspora" },
-    { href: "/plans", key: "plans", label: "Villas" },
+    { href: "/realisations", key: "portfolio", label: "Réalisations" },
+    { href: "/plans", key: "plans", label: "Inspirations" },
     { href: "/materiaux", key: "materials", label: "Matériaux" },
-    { href: "/galerie", key: "gallery", label: "Galerie" },
-    { href: "/services", key: "services", label: "Services" },
+    { href: "/services", key: "services", label: "Prestations" },
     { href: "/contact", key: "contact", label: "Contact" },
   ],
   images: {
     hero: asset("hero-villa-btc-piscine-lagon.png"),
+    portfolioHero: portfolioAfricanManagerImage,
     rammedEarth: image("photo-1761367950537-14f834333ecc", 1400, 82),
     tropicalPool: asset("piscine-lagon-villa-tropicale.png"),
     bambooWall: asset("bambou-decoration-cloture.png"),
@@ -86,7 +211,7 @@ module.exports = {
     "Ventilation naturelle et confort thermique",
     "Chantier contrôlé, devis clair et reporting",
       "Pont France - Côte d'Ivoire pour la diaspora",
-      "Coordination avec le cabinet d'architecture GEAP",
+      "Coordination avec GE Architectes & Partenaires (GEAP)",
       "Finitions aux standards internationaux",
   ],
   positioning: {
@@ -269,6 +394,11 @@ module.exports = {
       short: "Modernisation de maisons, redistribution des pièces, finitions et valorisation patrimoniale.",
     },
     {
+      title: "Finalisation d'appartements et villas",
+      short:
+        "Achèvement, personnalisation et finitions d'appartements ou de villas acquis en promotion immobilière.",
+    },
+    {
       title: "Extensions de villas",
       short: "Agrandissements, nouvelles pièces, terrasses, cuisines extérieures, clôtures et façades modernisées.",
     },
@@ -303,7 +433,7 @@ module.exports = {
     {
       title: "Coordination architecturale",
       short:
-        "Travail en partenariat avec le cabinet d'architecture GEAP pour assurer la cohérence des études, du suivi et des délais.",
+        "Travail en partenariat avec GE Architectes & Partenaires (GEAP) pour assurer la cohérence des études, du suivi et des délais.",
     },
   ],
   materials: [
@@ -421,6 +551,10 @@ module.exports = {
     { title: "Clôture décorative en bambou", category: "jardins", imageKey: "bambooWall" },
     { title: "Terrasse en teck et iroko", category: "terrasses", imageKey: "teakTerrace" },
   ],
+  portfolioCategories,
+  portfolioItems,
+  portfolioVirtualTours,
+  portfolioCapabilities,
   process: [
     {
       step: "01",
@@ -431,7 +565,7 @@ module.exports = {
       step: "02",
       title: "Avant-projet",
       text:
-        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination avec le cabinet d'architecture GEAP.",
+        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination avec GE Architectes & Partenaires (GEAP).",
     },
     {
       step: "03",
