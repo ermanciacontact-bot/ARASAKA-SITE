@@ -2,6 +2,7 @@
   `https://images.unsplash.com/${id}?auto=format&fit=crop&w=${width}&q=${quality}`;
 
 const asset = (name) => `/assets/${name}`;
+const partnerRealisationAsset = (name) => asset(`realisations-partenaires/${name}`);
 const portfolioAsset = (name) => asset(`images/portfolio/${name}`);
 const portfolioImage = (number) => portfolioAsset(`portfolio-source-${String(number).padStart(3, "0")}.jpg`);
 const portfolioItemsFrom = (numbers, item) =>
@@ -283,6 +284,75 @@ const xgoneAdditionalReferences = [
   "Construction d'une église et d'une communauté à Sokodé.",
   "Construction d'une église pour les Soeurs du Cénacle Togo.",
   "Plusieurs duplex résidentiels privés réalisés à Lomé.",
+];
+
+const partnerPhotoItems = (items) =>
+  items.map(([title, category, location, filename]) => ({
+    title,
+    category,
+    location,
+    src: partnerRealisationAsset(filename),
+  }));
+
+const partnerRealisationPhotoGroups = [
+  {
+    partner: "X-GONE BTP",
+    source: "Plaquette X-GONE BTP",
+    title: "Réalisations X-GONE BTP",
+    intro:
+      "Photos de références partenaires issues de la plaquette X-GONE BTP : bureaux institutionnels, showrooms, sites industriels, équipements publics et résidentiel.",
+    items: partnerPhotoItems([
+      ["Institution de la République Togolaise - bureaux 01", "Institutionnel", "Lomé, Togo", "xgone-institution-republique-bureaux-01.jpg"],
+      ["Institution de la République Togolaise - bureaux 02", "Institutionnel", "Lomé, Togo", "xgone-institution-republique-bureaux-02.jpg"],
+      ["Institution de la République Togolaise - bureaux 03", "Institutionnel", "Lomé, Togo", "xgone-institution-republique-bureaux-03.jpg"],
+      ["Cabinet du Ministre de l'Urbanisme", "Institutionnel", "Lomé, Togo", "xgone-cabinet-ministre-urbanisme.jpg"],
+      ["CFAO Motors Togo - showrooms", "Tertiaire commercial", "Lomé, Togo", "xgone-cfao-motors-showrooms.jpg"],
+      ["Ancienne usine textile de Datcha", "Réhabilitation industrielle", "Datcha, Togo", "xgone-usine-textile-datcha.jpg"],
+      ["Duplex privé à Lomé", "Résidentiel haut standing", "Lomé, Togo", "xgone-duplex-prive-lome.jpg"],
+      ["Église des Soeurs du Cénacle", "Communautaire", "Lomé, Togo", "xgone-eglise-soeurs-cenacle.jpg"],
+      ["Duplex à Lomé", "Résidentiel", "Lomé, Togo", "xgone-duplex-lome.jpg"],
+      ["Consulat de Slovaquie à Lomé", "Diplomatie", "Lomé, Togo", "xgone-consulat-slovaquie-lome.jpg"],
+      ["Ministère du Commerce - bâtiment principal", "Bâtiment public", "Lomé, Togo", "xgone-ministere-commerce.jpg"],
+      ["Entrepôt CCT BATIMAT 01", "Logistique", "Lomé, Togo", "xgone-entrepot-cct-batimat-01.jpg"],
+      ["Église et communauté à Sokodé", "Communautaire", "Sokodé, Togo", "xgone-eglise-communaute-sokode.jpg"],
+      ["Stade municipal de Tsévié", "Équipement public", "Tsévié, Togo", "xgone-stade-municipal-tsevie.jpg"],
+      ["Entrepôt CCT BATIMAT 02", "Logistique", "Lomé, Togo", "xgone-entrepot-cct-batimat-02.jpg"],
+      ["Direction Générale de la CEET", "Bâtiment public", "Lomé, Togo", "xgone-direction-generale-ceet.jpg"],
+      ["Références résidentielles à Lomé", "Résidentiel", "Lomé, Togo", "xgone-references-residentielles-lome.jpg"],
+    ]),
+  },
+  {
+    partner: "GE Architectes & Partenaires (GEAP)",
+    source: "Pressbook GEAP",
+    title: "Réalisations et références GEAP",
+    intro:
+      "Sélection de références du pôle architecture, urbanisme et ingénierie GEAP, entité commune avec ARASAKA.",
+    items: partnerPhotoItems([
+      ["Berges lagunaires - Lomé Croisière", "Urbanisme", "Lomé, Togo", "geap-berges-lagunaires-lome-croisiere.jpg"],
+      ["Littoral de Lomé Plage", "Urbanisme", "Lomé, Togo", "geap-littoral-lome-plage.jpg"],
+      ["Immeuble de bureaux - Groupe Nana", "Bureaux", "Lomé, Togo", "geap-immeuble-bureaux-groupe-nana.jpg"],
+      ["25 mairies au Togo et commerce extérieur", "Bâtiments publics", "Togo", "geap-mairies-togo-commerce-exterieur.jpg"],
+      ["Complexe à Cotonou et siège Togo Telecom", "Bureaux", "Bénin / Togo", "geap-complexe-cotonou-togo-telecom.jpg"],
+      ["BGFI Bank - Libreville et Port-Gentil", "Bureaux", "Gabon", "geap-bgfi-bank-gabon.jpg"],
+      ["Bureaux bord de mer et Direction CEET", "Bureaux", "Gabon / Togo", "geap-bureaux-bord-mer-ceet.jpg"],
+      ["Village balnéaire Les Palétuviers", "Hôtellerie", "Assinie, Côte d'Ivoire", "geap-village-balneaire-assinie.jpg"],
+      ["Hôtel à Lomé et Blue Turtle", "Hôtellerie", "Lomé, Togo", "geap-hotel-lome-blue-turtle.jpg"],
+      ["Mall commercial à Lomé", "Commercial", "Lomé, Togo", "geap-mall-commercial-lome.jpg"],
+      ["Showrooms CFAO et CCT BATIMAT", "Commercial", "Togo", "geap-showrooms-cfao-cct-batimat.jpg"],
+      ["Port fluvial et lagunaire de Dabou", "Aménagement portuaire", "Dabou, Côte d'Ivoire", "geap-port-fluvial-lagunaire-dabou.jpg"],
+      ["Revalorisation des lagunes", "Urbanisme", "Lomé, Togo", "geap-revalorisation-lagunes.jpg"],
+      ["Église et communauté à Sokodé", "Communautaire", "Sokodé, Togo", "geap-eglise-communaute-sokode.jpg"],
+      ["École du Lycée Français de Lomé", "Écoles et universités", "Lomé, Togo", "geap-lycee-francais-lome.jpg"],
+      ["Cité Renaissance", "Résidentiel", "Lomé, Togo", "geap-cite-renaissance-lome.jpg"],
+      ["Projets résidentiels à Lomé 01", "Résidentiel", "Lomé, Togo", "geap-residentiel-lome-01.jpg"],
+      ["Mini-cité en bordure de mer à Baguida", "Résidentiel", "Baguida, Togo", "geap-mini-cite-baguida.jpg"],
+      ["Projets résidentiels à Lomé 02", "Résidentiel", "Lomé, Togo", "geap-residentiel-lome-02.jpg"],
+      ["Mini-cité de 4 villas haut standing", "Résidentiel haut standing", "Togo", "geap-mini-cite-villas-standing.jpg"],
+      ["Palais présidentiel secondaire 01", "Prestige", "Afrique de l'Ouest", "geap-palais-presidentiel-secondaire-01.jpg"],
+      ["Palais présidentiel secondaire 02", "Prestige", "Afrique de l'Ouest", "geap-palais-presidentiel-secondaire-02.jpg"],
+      ["Hôtel palace de prestige", "Prestige hôtelier", "Lomé, Togo", "geap-hotel-palace-prestige.jpg"],
+    ]),
+  },
 ];
 
 module.exports = {
@@ -726,6 +796,7 @@ module.exports = {
   portfolioCategories,
   portfolioItems,
   portfolioVirtualTours,
+  partnerRealisationPhotoGroups,
   xgoneInternationalProjects,
   xgoneAdditionalReferences,
   homeVillaVideo,

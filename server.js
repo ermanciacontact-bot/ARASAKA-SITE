@@ -431,6 +431,44 @@ function portfolioCards(items = site.portfolioItems) {
     .join("");
 }
 
+function partnerRealisationPhotoSections() {
+  return (site.partnerRealisationPhotoGroups || [])
+    .map(
+      (group) => `
+        <section class="partner-photo-group" aria-label="${escapeHtml(group.title)}">
+          <div class="partner-photo-heading">
+            <div>
+              <p class="kicker">${escapeHtml(group.partner)}</p>
+              <h3>${escapeHtml(group.title)}</h3>
+              <p>${escapeHtml(group.intro)}</p>
+            </div>
+            <span>${escapeHtml(group.source)}</span>
+          </div>
+          <div class="partner-photo-grid">
+            ${(group.items || [])
+              .map(
+                (item) => `
+                  <article class="partner-photo-card">
+                    <button class="partner-photo-open" type="button" data-lightbox-src="${escapeHtml(item.src)}" data-lightbox-title="${escapeHtml(`${item.title} - ${group.partner}`)}" aria-label="Agrandir: ${escapeHtml(item.title)}">
+                      <img src="${escapeHtml(item.src)}" alt="${escapeHtml(item.title)}" loading="lazy" decoding="async">
+                      <span>Agrandir</span>
+                    </button>
+                    <div class="partner-photo-body">
+                      <p class="card-eyebrow">${escapeHtml(item.category)}</p>
+                      <h4>${escapeHtml(item.title)}</h4>
+                      <p>${escapeHtml(item.location)}</p>
+                    </div>
+                  </article>
+                `,
+              )
+              .join("")}
+          </div>
+        </section>
+      `,
+    )
+    .join("");
+}
+
 function xgoneReferenceCards() {
   return (site.xgoneInternationalProjects || [])
     .map((project) => {
@@ -1274,6 +1312,11 @@ function renderPortfolio() {
       <section class="content-band muted-band" id="portfolio">
         ${sectionIntro("Galerie", "Exemples d'appartements réalisés pour Airbnb", "Ces réalisations sélectionnées présentent des appartements aménagés, décorés et mis en valeur pour la location courte durée, notamment Airbnb.")}
         <div class="portfolio-grid" data-gallery-grid>${portfolioCards()}</div>
+      </section>
+
+      <section class="content-band partner-photo-section" id="realisations-partenaires">
+        ${sectionIntro("Réalisations partenaires", "Photos X-GONE BTP et GEAP", "À la suite des photos Airbnb, cette sélection présente les références photo des partenaires X-GONE BTP et GE Architectes & Partenaires, pour montrer l'étendue des réalisations publiques, privées, tertiaires, résidentielles et institutionnelles.")}
+        ${partnerRealisationPhotoSections()}
       </section>
     `,
   });
