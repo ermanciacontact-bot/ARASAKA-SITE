@@ -120,17 +120,20 @@ const portfolioVirtualTours = [
 ];
 
 const homeVillaVideo = {
-  title: "Villa base équipée, piscine en option",
+  title: "Villa basse premium 3 chambres",
   price: "79,9 M FCFA",
   video: asset("visite-guidee-vente-villa-equipee-79m9.webp"),
   poster: asset("visite-guidee-vente-villa-equipee-79m9-poster.jpg"),
   description:
-    "Visite guidée animée d'une villa proposée à 79,9 M FCFA: façade, terrasse, séjour, cuisine, suite et salle d'eau avec équipements sanitaires. Piscine présentée en option.",
+    "Villa basse premium de 3 chambres proposée à 79,9 M FCFA: suite parentale avec salle de bain et WC, salle de bain supplémentaire, toilette visiteur, cuisine ouverte avec îlot central, cuisine africaine, buanderie, cellier et véranda couverte finition bois.",
   features: [
-    "Équipements sanitaires inclus",
-    "Salle d'eau finie",
-    "Séjour à aménager",
-    "Cuisine à préciser au devis",
+    "Suite parentale avec salle de bain et WC",
+    "Salle de bain supplémentaire",
+    "Toilette visiteur",
+    "Cuisine ouverte meublée et équipée avec îlot central",
+    "Cuisine africaine, buanderie et cellier",
+    "Finitions haut de gamme aux standards internationaux",
+    "Véranda couverte finition bois",
     "Piscine en option",
   ],
 };
@@ -154,7 +157,11 @@ module.exports = {
     director: "M. Tchotchoe Maixent",
     partner: "En collaboration avec l'entreprise Ermancia en France",
     architectPartner:
-      "Partenariat avec GE Architectes & Partenaires (GEAP), cabinet d'architecture, d'urbanisme et d'ingénierie, pour renforcer les études, la qualité des choix architecturaux, la coordination du projet et la maîtrise des délais.",
+      "ARASAKA et GE Architectes & Partenaires (GEAP) forment une seule et même entité, réunissant bâtiment, architecture, urbanisme et ingénierie pour renforcer les études, la qualité des choix architecturaux, la coordination du projet et la maîtrise des délais.",
+    internationalPartner:
+      "X-GONE BTP, partenaire international basé à Lomé au Togo, entreprise générale de construction et de rénovation active sur projets publics et privés, bâtiments de prestige et infrastructures.",
+    legalOperationsPartner:
+      "GROUPE ROYAL CONSULTING (GR CONSULTING), cabinet de management juridique en Côte d'Ivoire, accompagne la création, la gestion, la formation, l'assistance juridique, le recouvrement et la régularité des opérations.",
     standards:
       "ARASAKA travaille avec des artisans et techniciens formés dans les meilleurs lycées techniques du pays, dans une culture de chantier alignée sur les normes internationales.",
     finishPromise:
@@ -227,7 +234,7 @@ module.exports = {
     "Ventilation naturelle et confort thermique",
     "Chantier contrôlé, devis clair et reporting",
       "Pont France - Côte d'Ivoire pour la diaspora",
-      "Coordination avec GE Architectes & Partenaires (GEAP)",
+      "ARASAKA et GEAP, une même entité",
       "Finitions aux standards internationaux",
   ],
   positioning: {
@@ -447,9 +454,9 @@ module.exports = {
       short: "Programme, plans, budget, planning et standards de finition verrouillés avant exécution.",
     },
     {
-      title: "Coordination architecturale",
+      title: "Pôle architecture GEAP",
       short:
-        "Travail en partenariat avec GE Architectes & Partenaires (GEAP) pour assurer la cohérence des études, du suivi et des délais.",
+        "ARASAKA et GE Architectes & Partenaires (GEAP) agissent comme une seule entité pour assurer la cohérence des études, du suivi et des délais.",
     },
   ],
   materials: [
@@ -511,11 +518,22 @@ module.exports = {
       features: ["Plan détaillé", "Terrasse couverte", "Piscine lagon", "Baies vitrées", "Suite parentale"],
     },
     {
-      title: "Villa basse 3 chambres",
+      title: "Villa basse premium 3 chambres",
       slug: "compact",
       surface: "150 - 190 m2",
       imageKey: "whiteVillaGarden01",
-      features: ["Séjour traversant", "Suite parentale", "Véranda ombragée", "Jardin tropical"],
+      features: [
+        "Suite parentale avec salle de bain et WC",
+        "2 chambres supplémentaires",
+        "Salle de bain supplémentaire",
+        "Toilette visiteur",
+        "Cuisine ouverte meublée et équipée avec îlot central",
+        "Cuisine africaine",
+        "Buanderie",
+        "Cellier",
+        "Finitions haut de gamme aux standards internationaux",
+        "Véranda couverte finition bois",
+      ],
     },
     {
       title: "Villa familiale avec patio",
@@ -582,7 +600,7 @@ module.exports = {
       step: "02",
       title: "Avant-projet",
       text:
-        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination avec GE Architectes & Partenaires (GEAP).",
+        "Plans, principes de ventilation, vues, choix des espaces extérieurs et coordination portée par l'entité ARASAKA - GEAP.",
     },
     {
       step: "03",

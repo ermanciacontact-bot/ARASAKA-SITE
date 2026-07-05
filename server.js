@@ -477,7 +477,7 @@ function villaGalleryVideoSection() {
           </div>
           <figure class="villa-video-player">
             <img src="${escapeHtml(video.video)}" alt="Visite guidée animée de ${escapeHtml(video.title)}" loading="eager" decoding="async">
-            <figcaption>Villa proposée avec équipements sanitaires; mobilier non inclus et piscine en option.</figcaption>
+            <figcaption>Villa basse premium 3 chambres avec cuisine meublée et équipée, cuisine africaine, buanderie, cellier et véranda bois.</figcaption>
           </figure>
         </div>
       </section>
@@ -712,15 +712,15 @@ function renderHome() {
       </section>
 
       <section class="content-band">
-        ${sectionIntro("Partenariat architectural", "ARASAKA s'appuie sur GE Architectes & Partenaires (GEAP)", "Ce partenariat renforce ARASAKA par une structure d'architecture confirmée: études préalables, conception, urbanisme, ingénierie, maîtrise d'oeuvre complète et coordination de projets d'envergure.")}
+        ${sectionIntro("Entité architecturale", "ARASAKA et GE Architectes & Partenaires (GEAP) forment une même entité", "Cette entité réunit bâtiment, architecture, urbanisme, ingénierie, maîtrise d'oeuvre complète et coordination de projets d'envergure.")}
         <div class="geap-showcase">
           <a class="geap-preview" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer" aria-label="Ouvrir le pressbook GE Architectes & Partenaires">
             <img src="/assets/geap-architectes-pressbook-apercu.png" alt="Extrait du pressbook GE Architectes & Partenaires">
           </a>
           <div class="geap-copy">
             <p class="kicker">Cabinet partenaire</p>
-            <h3>GE Architectes & Partenaires apporte la force d'un cabinet expérimenté aux projets ARASAKA.</h3>
-            <p>Le pressbook présente une expertise en architecture, urbanisme, ingénierie, études préalables, programmes, planification et assistance à maîtrise d'ouvrage. Pour ARASAKA, cela signifie des projets mieux cadrés, des choix architecturaux plus solides et une coordination renforcée entre conception et réalisation.</p>
+            <h3>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de l'entité ARASAKA.</h3>
+            <p>Le pressbook présente une expertise en architecture, urbanisme, ingénierie, études préalables, programmes, planification et assistance à maîtrise d'ouvrage. Pour les projets ARASAKA, cela signifie des projets mieux cadrés, des choix architecturaux plus solides et une coordination renforcée entre conception et réalisation.</p>
             <div class="geap-proof-grid">
               <div><span>Architecture</span><strong>Equipements urbains, bureaux, logements, rénovation, réhabilitation et habitat planifié.</strong></div>
               <div><span>Urbanisme</span><strong>Schémas directeurs, restructuration, projets littoraux, réseaux et équipements urbains.</strong></div>
@@ -729,7 +729,7 @@ function renderHome() {
             </div>
             <div class="hero-actions">
               <a class="button secondary" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer">Consulter la fiche GEAP</a>
-              <a class="button ghost-dark" href="/qui-sommes-nous">Comprendre le partenariat</a>
+              <a class="button ghost-dark" href="/qui-sommes-nous">Comprendre l'entité</a>
             </div>
           </div>
         </div>
@@ -941,6 +941,10 @@ function renderAbout() {
             <dd>${escapeHtml(site.company.director)}</dd>
             <dt>Architecture</dt>
             <dd>${escapeHtml(site.company.architectPartner)}</dd>
+            <dt>International</dt>
+            <dd>${escapeHtml(site.company.internationalPartner)}</dd>
+            <dt>Régularité des opérations</dt>
+            <dd>${escapeHtml(site.company.legalOperationsPartner)}</dd>
             <dt>Approche</dt>
             <dd>Architecture africaine contemporaine, confort tropical et finitions haut de gamme.</dd>
           </dl>
@@ -954,7 +958,9 @@ function renderAbout() {
           <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
           <article><h3>Finitions soignées</h3><p>Attention portee aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
           <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
-          <article><h3>Partenariat GEAP</h3><p>GE Architectes & Partenaires renforce la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
+          <article><h3>Entité ARASAKA - GEAP</h3><p>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de la même entité, pour renforcer la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
+          <article><h3>Partenaire international X-GONE BTP</h3><p>Basée à Lomé au Togo, X-GONE BTP apporte une expérience d'entreprise générale sur projets publics et privés, construction neuve, rénovation lourde, génie civil et bâtiments de prestige.</p></article>
+          <article><h3>Cabinet GR CONSULTING</h3><p>GROUPE ROYAL CONSULTING accompagne la régularité des opérations: management juridique, création, gestion, formation, assistance juridique, recouvrement et renforcement des capacités.</p></article>
         </div>
       </section>
     `,
@@ -1021,7 +1027,7 @@ function renderRemoteBuild() {
         <div>
           <p class="kicker">Ce qui est sécurisé</p>
           <h2>Un projet visible, documenté et validé à distance.</h2>
-          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. Le partenariat avec GE Architectes & Partenaires (GEAP) aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
+          <p>Le suivi à distance doit rassurer: devis détaillé, calendrier, compte rendu, photos, vidéos WhatsApp, réunions visio et appels de fonds par étapes. L'entité ARASAKA - GE Architectes & Partenaires (GEAP) aide à garder des études cohérentes et des délais mieux maîtrisés.</p>
         </div>
         <div class="trust-list">
           <span>Devis détaillé</span>
