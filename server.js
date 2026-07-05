@@ -1274,35 +1274,6 @@ function renderPortfolio() {
         </div>
       </section>
 
-      <section class="content-band xgone-reference-section" id="references-xgone">
-        ${sectionIntro(
-          "Références partenaires",
-          "X-GONE BTP, force d'exécution internationale",
-          "Partenaire international d'ARASAKA basé à Lomé, X-GONE BTP intervient sur des opérations publiques, privées, tertiaires, industrielles et résidentielles de haut niveau.",
-        )}
-        <div class="xgone-reference-lead">
-          <div>
-            <p class="kicker">Partenaire international</p>
-            <h2>Des références solides pour renforcer la capacité d'exécution du groupe.</h2>
-            <p>Ces réalisations partenaires illustrent une expérience de chantier confirmée : rénovation institutionnelle, bâtiments commerciaux, showrooms, entrepôts, sites industriels et résidences privées de standing.</p>
-          </div>
-          <div class="xgone-reference-stats" aria-label="Repères X-GONE BTP">
-            <span><strong>10 ans</strong> d'expérience environ</span>
-            <span><strong>Public & privé</strong> projets institutionnels, tertiaires et résidentiels</span>
-            <span><strong>Lomé</strong> base opérationnelle au Togo</span>
-          </div>
-        </div>
-        <div class="xgone-reference-grid">
-          ${xgoneReferenceCards()}
-        </div>
-        <div class="xgone-reference-list">
-          <h3>Autres références citées dans la plaquette</h3>
-          <ul>
-            ${xgoneAdditionalReferenceList()}
-          </ul>
-        </div>
-      </section>
-
       <section class="content-band muted-band" id="portfolio">
         ${sectionIntro("Galerie", "Exemples d'appartements réalisés pour Airbnb", "Ces réalisations sélectionnées présentent des appartements aménagés, décorés et mis en valeur pour la location courte durée, notamment Airbnb.")}
         <div class="portfolio-grid" data-gallery-grid>${portfolioCards()}</div>
