@@ -1303,19 +1303,12 @@ function renderPortfolio() {
         </div>
       </section>
 
-      <section class="content-band muted-band" id="visites-virtuelles">
-        ${sectionIntro("Visites virtuelles", "Parcours photo des appartements", "Chaque parcours présente un appartement sans mélanger les images afin de lire le logement comme une visite photo fluide.")}
-        <div class="virtual-tour-grid">${portfolioVirtualTourCards()}</div>
-        <script type="application/json" id="portfolio-tours-data">${jsonScript(site.portfolioVirtualTours)}</script>
-      </section>
-
       <section class="content-band muted-band" id="portfolio">
         ${sectionIntro("Galerie", "Exemples d'appartements réalisés pour Airbnb", "Ces réalisations sélectionnées présentent des appartements aménagés, décorés et mis en valeur pour la location courte durée, notamment Airbnb.")}
         <div class="portfolio-grid" data-gallery-grid>${portfolioCards()}</div>
       </section>
 
       <section class="content-band partner-photo-section" id="realisations-partenaires">
-        ${sectionIntro("Réalisations partenaires", "Photos X-GONE BTP et GEAP", "À la suite des photos Airbnb, cette sélection présente les références photo des partenaires X-GONE BTP et GE Architectes & Partenaires, pour montrer l'étendue des réalisations publiques, privées, tertiaires, résidentielles et institutionnelles.")}
         ${partnerRealisationPhotoSections()}
       </section>
     `,
