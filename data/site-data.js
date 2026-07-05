@@ -120,21 +120,52 @@ const portfolioVirtualTours = [
 ];
 
 const homeVillaVideo = {
+  label: "Villa à vendre",
   title: "Villa basse premium 3 chambres",
   price: "79,9 M FCFA",
   video: asset("visite-guidee-vente-villa-equipee-79m9.webp"),
   poster: asset("visite-guidee-vente-villa-equipee-79m9-poster.jpg"),
   description:
-    "Villa basse premium de 3 chambres proposée à 79,9 M FCFA: suite parentale avec salle de bain et WC, salle de bain supplémentaire, toilette visiteur, cuisine ouverte avec îlot central, cuisine africaine, buanderie, cellier et véranda couverte finition bois.",
+    "Une villa basse premium pensée pour une vie familiale élégante, fonctionnelle et immédiatement valorisante. Ses volumes fluides associent 3 chambres avec salle de bain privative, espaces de réception, cuisine ouverte avec îlot central, espaces techniques discrets et véranda couverte finition bois.",
+  commercialCopy:
+    "Le programme réunit une suite parentale avec salle de bain et WC privatifs, deux chambres supplémentaires avec salle de bain privative, un toilette visiteur, une cuisine africaine, une buanderie et un cellier. Les finitions sont prévues dans un esprit haut de gamme, aligné sur des standards internationaux.",
   features: [
-    "Suite parentale avec salle de bain et WC",
-    "Salle de bain supplémentaire",
-    "Toilette visiteur",
-    "Cuisine ouverte meublée et équipée avec îlot central",
-    "Cuisine africaine, buanderie et cellier",
-    "Finitions haut de gamme aux standards internationaux",
+    "3 chambres avec salles de bain privatives",
+    "Cuisine ouverte avec îlot central",
+    "Cuisine africaine",
+    "Buanderie et cellier",
     "Véranda couverte finition bois",
+    "Finitions haut de gamme",
+    "Standards internationaux",
     "Piscine en option",
+  ],
+  detailGroups: [
+    {
+      title: "Espace nuit",
+      items: [
+        "Suite parentale avec salle de bain et WC privatifs",
+        "Deux chambres supplémentaires avec salle de bain privative",
+        "Salle de bain dans chaque chambre",
+        "Toilette visiteur",
+      ],
+    },
+    {
+      title: "Cuisine et service",
+      items: [
+        "Cuisine ouverte meublée et équipée avec îlot central",
+        "Cuisine africaine",
+        "Buanderie",
+        "Cellier",
+      ],
+    },
+    {
+      title: "Finitions et extérieur",
+      items: [
+        "Finitions haut de gamme aux standards internationaux",
+        "Véranda couverte finition bois",
+        "Piscine disponible en option",
+      ],
+    },
   ],
 };
 
@@ -145,6 +176,113 @@ const portfolioCapabilities = [
   "Décoration et mise en ambiance",
   "Décoration, home staging et Airbnb",
   "Pilotage et valorisation immobilière",
+];
+
+const xgoneInternationalProjects = [
+  {
+    type: "Showrooms automobile",
+    title: "CFAO Motors Togo",
+    location: "Lomé, Togo",
+    client: "CFAO Motors Togo",
+    amount: "1,020 milliard FCFA",
+    period: "Livré en 2025",
+    status: "Livré",
+    summary:
+      "Construction de trois showrooms et rénovation de l'existant pour un acteur automobile de référence.",
+    highlights: ["Tertiaire premium", "Rénovation en site existant", "Image de marque"],
+  },
+  {
+    type: "Immeuble commercial",
+    title: "Grand Marché de Lomé",
+    location: "Lomé, Togo",
+    client: "Client privé",
+    amount: "1,100 milliard FCFA",
+    period: "En cours",
+    status: "En cours",
+    summary:
+      "Projet commercial d'envergure au coeur d'un pôle marchand stratégique de la capitale togolaise.",
+    highlights: ["Commerce", "Structure d'envergure", "Pilotage privé"],
+  },
+  {
+    type: "Institution publique",
+    title: "Institution de la République Togolaise",
+    location: "Lomé, Togo",
+    client: "État togolais",
+    amount: "300 millions FCFA HT",
+    period: "Livré en 2025",
+    status: "Livré",
+    summary:
+      "Rénovation de bureaux institutionnels avec une exigence élevée de discrétion, de finition et de continuité d'usage.",
+    highlights: ["Institutionnel", "Rénovation lourde", "Finitions soignées"],
+  },
+  {
+    type: "Ministère",
+    title: "Cabinet du Ministre de l'Urbanisme",
+    location: "Lomé, Togo",
+    client: "Ministère de l'Urbanisme, de l'Habitat et de la Réforme Foncière",
+    amount: "210 millions FCFA",
+    period: "Livré en 2025",
+    status: "Livré",
+    summary:
+      "Rénovation d'un espace ministériel sensible, pensé pour conjuguer représentation, fonctionnalité et qualité d'exécution.",
+    highlights: ["Administration", "Espace de représentation", "Exécution maîtrisée"],
+  },
+  {
+    type: "Réhabilitation industrielle",
+    title: "Ancienne usine textile de Datcha",
+    location: "Datcha, Togo",
+    client: "BENART Togo",
+    amount: "400 millions FCFA",
+    period: "Livré en 2024",
+    status: "Livré",
+    summary:
+      "Rénovation d'une partie d'un site industriel existant, avec reprise des volumes et requalification des espaces.",
+    highlights: ["Industrie", "Réhabilitation", "Requalification"],
+  },
+  {
+    type: "Entrepôts",
+    title: "Deux entrepôts à Lomé",
+    location: "Lomé, Togo",
+    client: "CCT BATIMAT",
+    amount: "1,300 milliard FCFA",
+    period: "Livré en 2019",
+    status: "Livré",
+    summary:
+      "Construction d'infrastructures logistiques pensées pour la fonctionnalité, la robustesse et la performance d'exploitation.",
+    highlights: ["Logistique", "Bâtiment industriel", "Grande capacité"],
+  },
+  {
+    type: "Diplomatie",
+    title: "Consulat de Slovaquie",
+    location: "Lomé, Togo",
+    client: "Consulat de Slovaquie",
+    amount: "220 millions FCFA",
+    period: "Livré en 2021",
+    status: "Livré",
+    summary:
+      "Rénovation et extension d'un siège consulaire avec une attention particulière portée à l'image institutionnelle.",
+    highlights: ["Extension", "Institution diplomatique", "Standing"],
+  },
+  {
+    type: "Résidentiel haut standing",
+    title: "Duplex privé à Lomé",
+    location: "Lomé, Togo",
+    client: "Client privé",
+    amount: "520 millions FCFA",
+    period: "Livré en 2023",
+    status: "Livré",
+    summary:
+      "Construction résidentielle premium illustrant le savoir-faire X-GONE sur les logements privés de standing.",
+    highlights: ["Villa duplex", "Client privé", "Finitions premium"],
+  },
+];
+
+const xgoneAdditionalReferences = [
+  "Rénovation du stade municipal de Tsévié pour l'État togolais.",
+  "Rénovation du bâtiment principal de la Direction Générale de la CEET à Lomé.",
+  "Construction d'une église et d'une communauté à Sokodé.",
+  "Construction d'une église pour les Soeurs du Cénacle Togo.",
+  "Plusieurs duplex résidentiels privés réalisés à Lomé.",
 ];
 
 module.exports = {
@@ -524,8 +662,8 @@ module.exports = {
       imageKey: "whiteVillaGarden01",
       features: [
         "Suite parentale avec salle de bain et WC",
-        "2 chambres supplémentaires",
-        "Salle de bain supplémentaire",
+        "2 chambres supplémentaires avec salle de bain privative",
+        "Salle de bain dans chaque chambre",
         "Toilette visiteur",
         "Cuisine ouverte meublée et équipée avec îlot central",
         "Cuisine africaine",
@@ -588,6 +726,8 @@ module.exports = {
   portfolioCategories,
   portfolioItems,
   portfolioVirtualTours,
+  xgoneInternationalProjects,
+  xgoneAdditionalReferences,
   homeVillaVideo,
   portfolioCapabilities,
   process: [

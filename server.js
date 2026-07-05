@@ -431,6 +431,53 @@ function portfolioCards(items = site.portfolioItems) {
     .join("");
 }
 
+function xgoneReferenceCards() {
+  return (site.xgoneInternationalProjects || [])
+    .map((project) => {
+      const meta = [
+        ["Lieu", project.location],
+        ["Client", project.client],
+        ["Montant", project.amount],
+        ["Période", project.period],
+      ].filter(([, value]) => Boolean(value));
+
+      return `
+        <article class="xgone-reference-card">
+          <div class="xgone-reference-topline">
+            <span>${escapeHtml(project.type)}</span>
+            <strong>${escapeHtml(project.status)}</strong>
+          </div>
+          <h3>${escapeHtml(project.title)}</h3>
+          <p>${escapeHtml(project.summary)}</p>
+          <dl class="xgone-reference-meta">
+            ${meta
+              .map(
+                ([label, value]) => `
+                  <div>
+                    <dt>${escapeHtml(label)}</dt>
+                    <dd>${escapeHtml(value)}</dd>
+                  </div>
+                `,
+              )
+              .join("")}
+          </dl>
+          <ul>
+            ${(project.highlights || [])
+              .map((highlight) => `<li>${escapeHtml(highlight)}</li>`)
+              .join("")}
+          </ul>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function xgoneAdditionalReferenceList() {
+  return (site.xgoneAdditionalReferences || [])
+    .map((reference) => `<li>${escapeHtml(reference)}</li>`)
+    .join("");
+}
+
 function portfolioVirtualTourCards() {
   return site.portfolioVirtualTours
     .map(
@@ -459,14 +506,27 @@ function portfolioCapabilityCards() {
 
 function villaGalleryVideoSection() {
   const video = site.homeVillaVideo;
+  const detailGroups = (video.detailGroups || [])
+    .map(
+      (group) => `
+            <article>
+              <h3>${escapeHtml(group.title)}</h3>
+              <ul>
+                ${group.items.map((item) => `<li>${escapeHtml(item)}</li>`).join("")}
+              </ul>
+            </article>
+      `,
+    )
+    .join("");
 
   return `
       <section class="villa-video-section" id="visite-video-villa">
         <div class="villa-video-inner">
           <div class="villa-video-copy">
-            <p class="kicker">Visite guidée</p>
+            <p class="kicker">${escapeHtml(video.label || "Visite guidée")}</p>
             <h2>${escapeHtml(video.title)}.</h2>
             <p>${escapeHtml(video.description)}</p>
+            ${video.commercialCopy ? `<p class="villa-video-sales-copy">${escapeHtml(video.commercialCopy)}</p>` : ""}
             <div class="villa-video-price">
               <span>Prix proposé</span>
               <strong>${escapeHtml(video.price)}</strong>
@@ -474,10 +534,11 @@ function villaGalleryVideoSection() {
             <ul class="villa-video-features">
               ${video.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
             </ul>
+            ${detailGroups ? `<div class="villa-video-details">${detailGroups}</div>` : ""}
           </div>
           <figure class="villa-video-player">
             <img src="${escapeHtml(video.video)}" alt="Visite guidée animée de ${escapeHtml(video.title)}" loading="eager" decoding="async">
-            <figcaption>Villa basse premium 3 chambres avec cuisine meublée et équipée, cuisine africaine, buanderie, cellier et véranda bois.</figcaption>
+            <figcaption>Villa basse premium 3 chambres, chacune avec salle de bain, cuisine meublée et équipée, cuisine africaine, buanderie, cellier et véranda bois.</figcaption>
           </figure>
         </div>
       </section>
@@ -1144,14 +1205,14 @@ function renderPortfolio() {
     active: "portfolio",
     title: "Nos réalisations",
     description:
-      "Portfolio ARASAKA: conception, visualisation, cuisines, décoration, appartements prêts pour Airbnb et valorisation immobilière.",
+      "Portfolio ARASAKA: conception, visualisation, cuisines, décoration, appartements prêts pour Airbnb, valorisation immobilière et références partenaires internationales.",
     bodyClass: "page-portfolio",
     body: `
       <section class="page-hero portfolio-hero" style="--hero-image: url('${site.images.portfolioHero}')">
         <div>
           <p class="kicker">Nos réalisations</p>
           <h1>Des espaces conçus, décorés et prêts à vivre.</h1>
-          <p class="page-hero-copy">Une sélection resserrée autour des études, cuisines, ambiances décoratives et logements prêts à exploiter.</p>
+          <p class="page-hero-copy">Une sélection resserrée autour des études, cuisines, ambiances décoratives, logements prêts à exploiter et références partenaires internationales.</p>
           <div class="hero-actions">
             <a class="button primary" href="#portfolio">Explorer les réalisations</a>
             <a class="button ghost" href="/contact">Parler d'un projet</a>
@@ -1172,6 +1233,35 @@ function renderPortfolio() {
           <span>Décoration</span>
           <span>Photos</span>
           <span>Exploitation</span>
+        </div>
+      </section>
+
+      <section class="content-band xgone-reference-section" id="references-xgone">
+        ${sectionIntro(
+          "Références partenaires",
+          "X-GONE BTP, force d'exécution internationale",
+          "Partenaire international d'ARASAKA basé à Lomé, X-GONE BTP intervient sur des opérations publiques, privées, tertiaires, industrielles et résidentielles de haut niveau.",
+        )}
+        <div class="xgone-reference-lead">
+          <div>
+            <p class="kicker">Partenaire international</p>
+            <h2>Des références solides pour renforcer la capacité d'exécution du groupe.</h2>
+            <p>Ces réalisations partenaires illustrent une expérience de chantier confirmée : rénovation institutionnelle, bâtiments commerciaux, showrooms, entrepôts, sites industriels et résidences privées de standing.</p>
+          </div>
+          <div class="xgone-reference-stats" aria-label="Repères X-GONE BTP">
+            <span><strong>10 ans</strong> d'expérience environ</span>
+            <span><strong>Public & privé</strong> projets institutionnels, tertiaires et résidentiels</span>
+            <span><strong>Lomé</strong> base opérationnelle au Togo</span>
+          </div>
+        </div>
+        <div class="xgone-reference-grid">
+          ${xgoneReferenceCards()}
+        </div>
+        <div class="xgone-reference-list">
+          <h3>Autres références citées dans la plaquette</h3>
+          <ul>
+            ${xgoneAdditionalReferenceList()}
+          </ul>
         </div>
       </section>
 
