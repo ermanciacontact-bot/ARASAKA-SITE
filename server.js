@@ -90,7 +90,7 @@ function requestAuthentication(res) {
     "Content-Type": "text/plain; charset=utf-8",
     "WWW-Authenticate": 'Basic realm="ARASAKA", charset="UTF-8"',
   });
-  res.end("Authentification requise.");
+  res.end(res.omitBody ? undefined : "Authentification requise.");
 }
 
 function imageUrl(key) {
@@ -384,7 +384,6 @@ function planCards() {
               ${plan.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
             </ul>
             <a class="link-arrow" href="/contact?plan=${encodeURIComponent(plan.title)}">Demander ce plan</a>
-            ${plan.slug === "compact" ? `<a class="link-arrow" href="/plans#visite-3d-villa">Visite 3D meublée</a>` : ""}
           </div>
         </article>
       `,
@@ -456,6 +455,33 @@ function portfolioCapabilityCards() {
   return site.portfolioCapabilities
     .map((capability) => `<span>${escapeHtml(capability)}</span>`)
     .join("");
+}
+
+function villaGalleryVideoSection() {
+  const video = site.homeVillaVideo;
+
+  return `
+      <section class="villa-video-section" id="visite-video-villa">
+        <div class="villa-video-inner">
+          <div class="villa-video-copy">
+            <p class="kicker">Visite guidée</p>
+            <h2>${escapeHtml(video.title)}.</h2>
+            <p>${escapeHtml(video.description)}</p>
+            <div class="villa-video-price">
+              <span>Prix proposé</span>
+              <strong>${escapeHtml(video.price)}</strong>
+            </div>
+            <ul class="villa-video-features">
+              ${video.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
+            </ul>
+          </div>
+          <figure class="villa-video-player">
+            <img src="${escapeHtml(video.video)}" alt="Visite guidée animée de ${escapeHtml(video.title)}" loading="eager" decoding="async">
+            <figcaption>Villa proposée avec équipements sanitaires; mobilier non inclus et piscine en option.</figcaption>
+          </figure>
+        </div>
+      </section>
+  `;
 }
 
 function processCards() {
@@ -578,7 +604,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260703-7">
+    <link rel="stylesheet" href="/styles.css?v=20260704-2">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -638,7 +664,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
         <button type="button" data-tour-next>Suivant</button>
       </div>
     </div>
-    <script src="/app.js?v=20260703-4" defer></script>
+    <script src="/app.js?v=20260704-2" defer></script>
   </body>
 </html>`;
 }
@@ -664,6 +690,8 @@ function renderHome() {
           </div>
         </div>
       </section>
+
+      ${villaGalleryVideoSection()}
 
       <section class="content-band compact-band">
         ${sectionIntro("Ambiances premium", "Plus de matières, plus de lumière, plus d'espaces extérieurs", "Villas blanches, BTC, terrasses en teck, piscines lagon, jardins et intérieurs ouverts donnent une lecture concrète du niveau recherché.")}
@@ -1079,46 +1107,6 @@ function renderPlans() {
         <div class="plans-grid">${planCards()}</div>
       </section>
 
-      <section class="villa-3d-section" id="visite-3d-villa">
-        <div class="villa-3d-stage" data-villa-tour aria-label="Visite virtuelle 3D de la villa basse 3 chambres meublée et équipée">
-          <canvas class="villa-3d-canvas" data-villa-canvas aria-label="Scène 3D interactive de la villa basse 3 chambres"></canvas>
-          <div class="villa-3d-overlay">
-            <p class="kicker">Visite virtuelle 3D</p>
-            <h2>Villa basse 3 chambres meublée et équipée haut de gamme.</h2>
-            <p>Une base compétitive pour présenter une villa tropicale prête à vivre: séjour, cuisine équipée, suite parentale, deux chambres, terrasse couverte, jardin et bassin compact.</p>
-          </div>
-          <div class="villa-3d-price">
-            <span>Prix de base</span>
-            <strong>À partir de 79,9 M FCFA</strong>
-            <small>Hors terrain, frais administratifs, raccordements, fondations spéciales et adaptations du terrain.</small>
-          </div>
-          <div class="villa-3d-controls" role="group" aria-label="Zones de visite">
-            <button type="button" class="active" data-villa-view="exterieur">Extérieur</button>
-            <button type="button" data-villa-view="salon">Salon</button>
-            <button type="button" data-villa-view="cuisine">Cuisine</button>
-            <button type="button" data-villa-view="suite">Suite</button>
-            <button type="button" data-villa-view="terrasse">Terrasse</button>
-          </div>
-        </div>
-
-        <div class="villa-3d-details">
-          <div>
-            <p class="kicker">Base commerciale</p>
-            <h2>Une villa clé en main positionnée pour rester très compétitive.</h2>
-            <p>Le prix de base correspond à une villa d'environ 150 m2 habitables, pensée comme première offre premium: architecture tropicale, matériaux maîtrisés, mobilier complet, électroménager haut de gamme et décoration prête à vivre.</p>
-          </div>
-          <div class="villa-package-grid">
-            <article><span>Mobilier inclus</span><p>Canapé, fauteuils, table basse, meuble TV, table à manger, lits, chevets, dressings, luminaires, rideaux, linge de maison et salon extérieur.</p></article>
-            <article><span>Électroménager premium</span><p>Réfrigérateur américain, four encastré, micro-ondes, plaque cuisson, hotte, lave-vaisselle, lave-linge, sèche-linge, TV grand format et climatisation des chambres.</p></article>
-            <article><span>Espaces de vie</span><p>Séjour traversant, cuisine ouverte avec îlot, suite parentale, deux chambres, salles d'eau équipées, terrasse ombragée, jardin tropical et bassin compact.</p></article>
-            <article><span>À préciser au devis</span><p>Terrain, VRD, branchements, clôture longue, piscine grand format, domotique avancée, variantes de marques et contraintes géotechniques.</p></article>
-          </div>
-          <div class="center-action">
-            <a class="button secondary" href="/contact?offre=Villa%20basse%203D%20meubl%C3%A9e%20%C3%A9quip%C3%A9e">Demander le chiffrage détaillé</a>
-          </div>
-        </div>
-      </section>
-
       <section class="content-band muted-band" id="galerie">
         ${sectionIntro("Galerie", "Réalisations et inspirations pour votre villa", "Explorez les ambiances, matériaux et espaces extérieurs réunis avec les concepts de villas.")}
         <div class="filter-tabs" role="tablist" aria-label="Filtres galerie">
@@ -1348,7 +1336,7 @@ const routes = new Map([
 
 function send(res, status, body, type = "text/html; charset=utf-8") {
   res.writeHead(status, { "Content-Type": type });
-  res.end(body);
+  res.end(res.omitBody ? undefined : body);
 }
 
 function sendJson(res, status, payload) {
@@ -1371,7 +1359,7 @@ async function serveStatic(req, res, pathname) {
       "Content-Type": mimeTypes[ext] || "application/octet-stream",
       "Cache-Control": "no-cache",
     });
-    res.end(body);
+    res.end(res.omitBody ? undefined : body);
     return true;
   } catch {
     return false;
@@ -1460,6 +1448,8 @@ async function handleContact(req, res) {
 }
 
 const server = http.createServer(async (req, res) => {
+  res.omitBody = req.method === "HEAD";
+
   if (!isAuthorized(req)) {
     requestAuthentication(res);
     return;
@@ -1473,7 +1463,7 @@ const server = http.createServer(async (req, res) => {
     return;
   }
 
-  if (req.method !== "GET") {
+  if (req.method !== "GET" && req.method !== "HEAD") {
     send(res, 405, "Method not allowed", "text/plain; charset=utf-8");
     return;
   }

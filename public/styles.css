@@ -1257,164 +1257,110 @@ dd {
   margin-left: 8px;
 }
 
-.villa-3d-section {
-  background:
-    linear-gradient(180deg, #efe7d8 0%, #f8f4ec 54%, var(--white) 100%);
-}
-
-.villa-3d-stage {
-  position: relative;
-  min-height: min(720px, calc(100svh - 58px));
-  overflow: hidden;
+.villa-video-section {
+  padding: clamp(46px, 7vw, 88px) 24px;
   color: var(--white);
   background:
-    linear-gradient(135deg, rgba(63, 59, 47, 0.9), rgba(111, 81, 56, 0.72)),
+    linear-gradient(135deg, rgba(28, 35, 30, 0.98), rgba(83, 63, 42, 0.94)),
     var(--green-900);
 }
 
-.villa-3d-canvas,
-.villa-3d-fallback {
-  display: block;
-  width: 100%;
-  height: min(720px, calc(100svh - 58px));
-  min-height: 520px;
-}
-
-.villa-3d-fallback {
+.villa-video-inner {
+  width: min(var(--max), 100%);
+  margin: 0 auto;
   display: grid;
-  place-items: center;
-  padding: 24px;
+  grid-template-columns: minmax(280px, 0.72fr) minmax(460px, 1.28fr);
+  gap: clamp(26px, 5vw, 68px);
+  align-items: center;
+}
+
+.villa-video-copy {
+  display: grid;
+  gap: 18px;
+}
+
+.villa-video-copy h2 {
   color: var(--white);
-  background: var(--green-900);
+  font-size: clamp(1.7rem, 3.2vw, 2.85rem);
 }
 
-.villa-3d-overlay,
-.villa-3d-price,
-.villa-3d-controls {
-  position: absolute;
-  z-index: 2;
+.villa-video-copy p:not(.kicker) {
+  max-width: 620px;
+  margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  line-height: 1.6;
 }
 
-.villa-3d-overlay {
-  left: max(24px, calc((100vw - var(--max)) / 2));
-  top: clamp(22px, 5vw, 58px);
-  width: min(520px, calc(100% - 48px));
-  text-shadow: 0 10px 30px rgba(16, 14, 12, 0.38);
-}
-
-.villa-3d-overlay h2 {
+.villa-video-price {
+  width: min(360px, 100%);
+  padding: 16px 18px;
   color: var(--white);
-  font-size: clamp(1.85rem, 4vw, 3.2rem);
-}
-
-.villa-3d-overlay p:not(.kicker) {
-  max-width: 500px;
-  margin: 18px 0 0;
-  color: rgba(255, 255, 255, 0.88);
-  line-height: 1.55;
-}
-
-.villa-3d-price {
-  right: max(24px, calc((100vw - var(--max)) / 2));
-  top: clamp(24px, 5vw, 58px);
-  width: min(360px, calc(100% - 48px));
-  padding: 18px 20px;
-  background: rgba(22, 28, 22, 0.72);
+  background: rgba(255, 255, 255, 0.1);
   border: 1px solid rgba(255, 255, 255, 0.16);
   border-radius: 8px;
-  backdrop-filter: blur(14px);
 }
 
-.villa-3d-price span,
-.villa-package-grid span {
+.villa-video-price span {
   display: block;
-  margin-bottom: 6px;
+  margin-bottom: 5px;
   color: #e8c08d;
   font-size: 0.76rem;
   font-weight: 900;
   text-transform: uppercase;
 }
 
-.villa-3d-price strong {
+.villa-video-price strong {
   display: block;
-  color: var(--white);
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.55rem, 3vw, 2.55rem);
+  font-size: clamp(1.7rem, 3vw, 2.65rem);
   font-weight: 500;
   line-height: 1;
 }
 
-.villa-3d-price small {
-  display: block;
-  margin-top: 10px;
-  color: rgba(255, 255, 255, 0.78);
-  line-height: 1.42;
-}
-
-.villa-3d-controls {
-  left: 50%;
-  bottom: 22px;
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  gap: 8px;
-  width: min(var(--max), calc(100% - 32px));
-  transform: translateX(-50%);
-}
-
-.villa-3d-controls button {
-  min-height: 40px;
-  padding: 0 14px;
-  color: var(--white);
-  font-weight: 850;
-  border: 1px solid rgba(255, 255, 255, 0.22);
-  border-radius: 6px;
-  background: rgba(22, 28, 22, 0.52);
-  backdrop-filter: blur(12px);
-  cursor: pointer;
-}
-
-.villa-3d-controls button.active {
-  color: var(--green-900);
-  background: #e8c08d;
-  border-color: #e8c08d;
-}
-
-.villa-3d-details {
-  width: min(var(--max), calc(100% - 48px));
-  margin: 0 auto;
-  padding: clamp(42px, 7vw, 84px) 0;
-}
-
-.villa-3d-details > div:first-child {
-  max-width: 790px;
-  margin: 0 auto 28px;
-  text-align: center;
-}
-
-.villa-3d-details p {
-  color: var(--muted);
-  line-height: 1.55;
-}
-
-.villa-package-grid {
+.villa-video-features {
   display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 14px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 10px;
+  margin: 6px 0 0;
+  padding: 0;
+  list-style: none;
 }
 
-.villa-package-grid article {
-  min-height: 190px;
-  padding: 20px;
-  border: 1px solid var(--line);
-  border-radius: 8px;
-  background:
-    linear-gradient(180deg, rgba(255, 255, 255, 0.86), rgba(233, 224, 208, 0.44)),
-    var(--white);
+.villa-video-features li {
+  min-height: 48px;
+  display: grid;
+  align-items: center;
+  padding: 11px 13px;
+  color: #fff8ec;
+  font-weight: 850;
+  background: rgba(255, 255, 255, 0.1);
+  border-left: 3px solid #e8c08d;
+  border-radius: 6px;
 }
 
-.villa-package-grid p {
+.villa-video-player {
+  overflow: hidden;
   margin: 0;
+  color: rgba(255, 255, 255, 0.84);
+  background: var(--wood);
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 30px 90px rgba(0, 0, 0, 0.28);
+}
+
+.villa-video-player img {
+  width: 100%;
+  min-height: 360px;
+  object-fit: cover;
+  filter: brightness(1.08) contrast(1.1) saturate(1.08);
+}
+
+.villa-video-player figcaption {
+  margin: 0;
+  padding: 14px 16px;
+  font-size: 0.84rem;
+  font-weight: 750;
+  line-height: 1.35;
 }
 
 .filter-tabs,
@@ -1997,6 +1943,21 @@ dd {
   padding: clamp(22px, 4vw, 34px);
 }
 
+.contact-panel > *,
+.contact-aside > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.contact-details > * {
+  min-width: 0;
+  max-width: 100%;
+}
+
+.contact-details a {
+  overflow-wrap: anywhere;
+}
+
 .tab-copy {
   display: none;
   max-width: 760px;
@@ -2201,7 +2162,6 @@ dd {
   .case-study-grid,
   .portfolio-grid,
   .portfolio-grid.featured,
-  .villa-package-grid,
   .process-grid,
   .commitment-grid {
     grid-template-columns: repeat(2, minmax(0, 1fr));
@@ -2218,8 +2178,13 @@ dd {
   .contact-layout,
   .two-column,
   .remote-trust,
-  .turnkey-panel {
+  .turnkey-panel,
+  .villa-video-inner {
     grid-template-columns: 1fr;
+  }
+
+  .villa-video-player img {
+    min-height: 420px;
   }
 
   .contact-aside {
@@ -2374,40 +2339,6 @@ dd {
     margin-bottom: 58px;
   }
 
-  .villa-3d-stage {
-    min-height: 720px;
-  }
-
-  .villa-3d-canvas,
-  .villa-3d-fallback {
-    height: 720px;
-    min-height: 720px;
-  }
-
-  .villa-3d-overlay {
-    left: 16px;
-    top: 22px;
-    width: calc(100% - 32px);
-  }
-
-  .villa-3d-price {
-    left: 16px;
-    right: auto;
-    top: auto;
-    bottom: 112px;
-    width: calc(100% - 32px);
-  }
-
-  .villa-3d-controls {
-    bottom: 18px;
-    display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
-  }
-
-  .villa-3d-controls button:first-child {
-    grid-column: 1 / -1;
-  }
-
   .button,
   .filter-tabs button,
   .contact-tabs button {
@@ -2428,7 +2359,6 @@ dd {
   .portfolio-capability-grid,
   .case-study-grid,
   .virtual-tour-grid,
-  .villa-package-grid,
   .portfolio-grid,
   .portfolio-grid.featured,
   .plans-grid,
@@ -2494,10 +2424,19 @@ dd {
     height: 230px;
   }
 
+  .villa-video-section,
   .content-band,
   .process-section {
     padding-left: 16px;
     padding-right: 16px;
+  }
+
+  .villa-video-features {
+    grid-template-columns: 1fr;
+  }
+
+  .villa-video-player img {
+    min-height: 360px;
   }
 
   .plan-art {

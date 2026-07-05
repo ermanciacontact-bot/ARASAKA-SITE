@@ -119,6 +119,22 @@ const portfolioVirtualTours = [
   },
 ];
 
+const homeVillaVideo = {
+  title: "Villa base équipée, piscine en option",
+  price: "79,9 M FCFA",
+  video: asset("visite-guidee-vente-villa-equipee-79m9.webp"),
+  poster: asset("visite-guidee-vente-villa-equipee-79m9-poster.jpg"),
+  description:
+    "Visite guidée animée d'une villa proposée à 79,9 M FCFA: façade, terrasse, séjour, cuisine, suite et salle d'eau avec équipements sanitaires. Piscine présentée en option.",
+  features: [
+    "Équipements sanitaires inclus",
+    "Salle d'eau finie",
+    "Séjour à aménager",
+    "Cuisine à préciser au devis",
+    "Piscine en option",
+  ],
+};
+
 const portfolioCapabilities = [
   "Conception et optimisation des espaces",
   "Projection 3D et choix des matières",
@@ -554,6 +570,7 @@ module.exports = {
   portfolioCategories,
   portfolioItems,
   portfolioVirtualTours,
+  homeVillaVideo,
   portfolioCapabilities,
   process: [
     {

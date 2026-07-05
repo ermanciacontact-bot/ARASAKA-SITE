@@ -1,0 +1,7 @@
+data/leads.jsonl
+tmp/
+*.zip
+.env
+.env.*
+server.stdout.log
+server.stderr.log
