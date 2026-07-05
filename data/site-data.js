@@ -19,7 +19,9 @@ const portfolioItemsFromSources = (sources, item) =>
     title: sources.length > 1 ? `${item.title} ${String(index + 1).padStart(2, "0")}` : item.title,
   }));
 
-const contactPhone = "+33 6 52 83 11 60";
+const contactPhone = "+225 05 74 04 34 76";
+const contactPhoneHref = "tel:+2250574043476";
+const whatsappPhone = "+33 06 52 83 11 60";
 const whatsappNumber = "33652831160";
 const contactEmail = "arasakaci.contact@gmail.com";
 const portfolioAfricanManagerImage = asset("portfolio-african-project-manager.png");
@@ -375,7 +377,8 @@ module.exports = {
     finishPromise:
       "ARASAKA met toute son expertise au service de finitions à la hauteur des standards internationaux les plus exigeants.",
     phone: contactPhone,
-    telHref: "tel:+33652831160",
+    telHref: contactPhoneHref,
+    whatsappPhone,
     whatsappNumber,
     whatsappHref: `https://wa.me/${whatsappNumber}`,
     email: contactEmail,

@@ -750,7 +750,11 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       </div>
       <div>
         <span>Contact</span>
-        <p><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br><a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a></p>
+        <p>
+          Côte d'Ivoire : <a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br>
+          WhatsApp : <a href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.whatsappPhone)}</a><br>
+          <a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a>
+        </p>
       </div>
     </footer>
     <div class="lightbox" data-lightbox hidden aria-modal="true" role="dialog" aria-label="Photo agrandie">
@@ -1403,12 +1407,16 @@ function renderContact() {
         <aside class="contact-aside">
           <h2>Contact direct</h2>
           <p>Pour un premier échange rapide, appelez ou écrivez-nous par Gmail ou WhatsApp.</p>
-          <a class="button secondary full" href="${site.company.telHref}">Appeler ${escapeHtml(site.company.phone)}</a>
-          <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">Écrire sur WhatsApp</a>
+          <a class="button secondary full" href="${site.company.telHref}">Appeler Côte d'Ivoire ${escapeHtml(site.company.phone)}</a>
+          <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">WhatsApp ${escapeHtml(site.company.whatsappPhone)}</a>
           <a class="button ghost-dark full" href="${site.company.gmailHref}" target="_blank" rel="noreferrer">Écrire par Gmail</a>
           <div class="contact-details">
             <span>Adresse</span>
             <strong>${escapeHtml(site.company.location)}</strong>
+            <span>Téléphone Côte d'Ivoire</span>
+            <strong><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a></strong>
+            <span>WhatsApp</span>
+            <strong><a href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.whatsappPhone)}</a></strong>
             <span>France</span>
             <strong>${escapeHtml(site.company.franceLocation)}</strong>
             <span>Direction</span>
