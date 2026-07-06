@@ -125,12 +125,12 @@ const portfolioVirtualTours = [
 const homeVillaVideo = {
   label: "Offre construction premium",
   title: "Construisez votre villa premium 3 chambres - 150 m²",
-  price: "79,9 M FCFA",
+  price: "120 M FCFA",
   priceLabel: "Offre terrain déjà acquis",
   video: asset("visite-guidee-vente-villa-equipee-79m9.webp"),
   poster: asset("visite-guidee-vente-villa-equipee-79m9-poster.jpg"),
   description:
-    "Vous possédez déjà votre terrain ? ARASAKA vous propose une villa basse premium de 150 m² habitables, pensée pour passer rapidement du foncier au projet concret. Pour 79,9 M FCFA, vous obtenez une base architecturale forte, un aménagement paysager compris et une maison conçue pour le climat tropical: matériaux naturels, BTC, bois, grandes baies vitrées, luminosité naturelle, ventilation croisée, ombrage et circulation fluide.",
+    "Vous possédez déjà votre terrain ? ARASAKA vous propose une villa basse premium de 150 m² habitables, pensée pour passer rapidement du foncier au projet concret. Pour 120 M FCFA, vous obtenez une base architecturale forte, un aménagement paysager compris et une maison conçue pour le climat tropical: matériaux naturels, BTC, bois, grandes baies vitrées, luminosité naturelle, ventilation croisée, ombrage et circulation fluide.",
   commercialCopy:
     "Cette offre s'adresse aux propriétaires de terrain qui veulent construire sans perdre de temps dans l'improvisation. Le plan est clair, les surfaces sont cadrées, le confort est complet: suite parentale, deux chambres avec salles de bain, grand séjour lumineux de 45 m², grandes surfaces de baies vitrées, cuisine ouverte avec îlot, cuisine africaine, buanderie, cellier, véranda bois et finitions haut de gamme.",
   features: [
