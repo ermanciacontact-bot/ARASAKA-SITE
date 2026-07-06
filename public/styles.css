@@ -226,53 +226,201 @@ textarea {
 .hero-home {
   min-height: min(720px, calc(100svh - 58px));
   align-items: center;
-  background-image:
-    linear-gradient(90deg, rgba(24, 22, 18, 0.84), rgba(24, 22, 18, 0.44) 44%, rgba(24, 22, 18, 0.12) 78%),
-    var(--hero-image);
-  background-position: center 56%;
+  background: #17140f;
 }
 
 .hero-home::before {
+  z-index: 1;
   background:
-    radial-gradient(circle at 78% 78%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 28%),
-    linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+    linear-gradient(90deg, rgba(16, 14, 12, 0.82), rgba(23, 20, 15, 0.56) 42%, rgba(23, 20, 15, 0.18) 72%),
+    linear-gradient(0deg, rgba(16, 14, 12, 0.38), rgba(16, 14, 12, 0.02) 58%),
+    radial-gradient(circle at 78% 78%, rgba(232, 192, 141, 0.18), rgba(232, 192, 141, 0) 30%);
+  mix-blend-mode: normal;
 }
 
 .hero-home-layout {
+  position: relative;
+  z-index: 2;
   width: min(var(--max), calc(100% - 48px));
   margin: 0 auto;
-  display: grid;
-  grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1.18fr);
-  gap: clamp(26px, 5vw, 66px);
-  align-items: center;
 }
 
 .hero-home .hero-content {
   width: auto;
-  max-width: 620px;
+  max-width: 720px;
   margin: 0;
   padding: 0;
+  text-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
 }
 
-.hero-villa-mosaic {
-  display: grid;
-  grid-template-columns: minmax(190px, 1.25fr) repeat(2, minmax(150px, 0.9fr));
-  grid-template-rows: repeat(2, minmax(170px, 1fr));
-  gap: 10px;
-  min-height: clamp(390px, 42vw, 520px);
+.hero-natural-video {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  background:
+    linear-gradient(135deg, rgba(23, 63, 43, 0.26), rgba(173, 103, 69, 0.16)),
+    var(--hero-image) center / cover no-repeat;
 }
 
-.hero-villa-mosaic img {
+.hero-video-slide {
+  position: absolute;
+  inset: 0;
+  margin: 0;
+  opacity: 0;
+  animation: hero-natural-fade 42s infinite;
+  animation-delay: calc(var(--slide-index) * 7s);
+}
+
+.hero-video-slide img {
   width: 100%;
   height: 100%;
   object-fit: cover;
-  border: 1px solid rgba(255, 255, 255, 0.18);
-  border-radius: 8px;
-  box-shadow: 0 22px 54px rgba(16, 14, 12, 0.28);
+  transform: scale(1.08);
+  animation: hero-natural-kenburns 42s infinite;
+  animation-delay: calc(var(--slide-index) * 7s);
 }
 
-.hero-villa-mosaic img:nth-child(1) {
-  grid-row: 1 / span 2;
+.hero-video-slide figcaption {
+  position: absolute;
+  right: max(24px, calc((100vw - var(--max)) / 2));
+  bottom: 34px;
+  max-width: 390px;
+  padding: 14px 16px;
+  color: var(--white);
+  background: rgba(24, 22, 18, 0.62);
+  border-left: 4px solid #e8c08d;
+  border-radius: 6px;
+  backdrop-filter: blur(10px);
+}
+
+.hero-video-slide figcaption span {
+  display: block;
+  margin-bottom: 5px;
+  color: #e8c08d;
+  font-size: 0.68rem;
+  font-weight: 850;
+  text-transform: uppercase;
+}
+
+.hero-video-slide figcaption strong {
+  display: block;
+  font-family: Georgia, "Times New Roman", serif;
+  font-size: clamp(1rem, 1.55vw, 1.34rem);
+  font-weight: 520;
+  line-height: 1.12;
+}
+
+.hero-video-progress {
+  position: absolute;
+  left: max(24px, calc((100vw - var(--max)) / 2));
+  right: max(24px, calc((100vw - var(--max)) / 2));
+  bottom: 18px;
+  z-index: 2;
+  display: grid;
+  grid-template-columns: repeat(6, minmax(0, 1fr));
+  gap: 10px;
+}
+
+.hero-video-progress span {
+  position: relative;
+  height: 3px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.28);
+  border-radius: 999px;
+}
+
+.hero-video-progress span::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  transform: scaleX(0);
+  transform-origin: left;
+  background: #e8c08d;
+  animation: hero-video-progress 42s infinite;
+  animation-delay: calc(var(--bar-index) * 7s);
+}
+
+.hero-natural-points {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 22px;
+}
+
+.hero-natural-points span {
+  min-height: 34px;
+  display: inline-flex;
+  align-items: center;
+  padding: 0 12px;
+  color: rgba(255, 255, 255, 0.94);
+  font-size: 0.78rem;
+  font-weight: 850;
+  background: rgba(255, 255, 255, 0.12);
+  border: 1px solid rgba(255, 255, 255, 0.24);
+  border-radius: 999px;
+  backdrop-filter: blur(8px);
+}
+
+@keyframes hero-natural-fade {
+  0%,
+  100% {
+    opacity: 0;
+  }
+
+  3%,
+  15% {
+    opacity: 1;
+  }
+
+  20% {
+    opacity: 0;
+  }
+}
+
+@keyframes hero-natural-kenburns {
+  0% {
+    transform: scale(1.08) translate3d(0, 0, 0);
+  }
+
+  20% {
+    transform: scale(1.16) translate3d(-1.4%, -0.8%, 0);
+  }
+
+  100% {
+    transform: scale(1.16) translate3d(-1.4%, -0.8%, 0);
+  }
+}
+
+@keyframes hero-video-progress {
+  0% {
+    transform: scaleX(0);
+  }
+
+  15% {
+    transform: scaleX(1);
+  }
+
+  16%,
+  100% {
+    transform: scaleX(0);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .hero-video-slide,
+  .hero-video-slide img,
+  .hero-video-progress span::after {
+    animation: none;
+  }
+
+  .hero-video-slide:first-child {
+    opacity: 1;
+  }
+
+  .hero-video-slide img {
+    transform: none;
+  }
 }
 
 .hero-fiche {
@@ -2605,17 +2753,13 @@ dd {
     font-size: 0.66rem;
   }
 
-  .hero-home-layout {
-    grid-template-columns: 1fr;
-    gap: 30px;
-  }
-
   .hero-home .hero-content {
     max-width: 720px;
   }
 
-  .hero-villa-mosaic {
-    min-height: 380px;
+  .hero-video-slide figcaption {
+    right: 24px;
+    bottom: 42px;
   }
 
   .proof-row,
@@ -2780,34 +2924,32 @@ dd {
   }
 
   .hero-home {
-    min-height: auto;
+    min-height: calc(100svh - 72px);
     padding-top: 42px;
-    padding-bottom: 30px;
+    padding-bottom: 58px;
   }
 
   .hero-home-layout {
     width: min(calc(100% - 32px), var(--max));
-    gap: 22px;
   }
 
   .hero-home .hero-actions {
     margin-bottom: 0;
   }
 
-  .hero-villa-mosaic {
-    grid-template-columns: repeat(5, minmax(210px, 70vw));
-    grid-template-rows: 220px;
-    min-height: 0;
-    overflow-x: auto;
-    padding-bottom: 4px;
-    scroll-snap-type: x mandatory;
-    scrollbar-width: thin;
+  .hero-video-slide figcaption {
+    display: none;
   }
 
-  .hero-villa-mosaic img,
-  .hero-villa-mosaic img:nth-child(1) {
-    grid-row: auto;
-    scroll-snap-align: start;
+  .hero-video-progress {
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    gap: 6px;
+  }
+
+  .hero-natural-points {
+    gap: 8px;
   }
 
   .page-hero {
@@ -3024,10 +3166,10 @@ dd {
     width: min(calc(100% - 24px), var(--max));
   }
 
-  .hero-villa-mosaic {
-    grid-template-columns: repeat(5, minmax(190px, 78vw));
-    grid-template-rows: 190px;
-    gap: 8px;
+  .hero-natural-points span {
+    min-height: 31px;
+    padding: 0 10px;
+    font-size: 0.72rem;
   }
 
   .contact-panel,

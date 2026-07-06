@@ -410,24 +410,70 @@ function galleryCards() {
     .join("");
 }
 
-const homeHeroVillaImageKeys = [
-  "premiumVillaConcept",
-  "whiteVillaGarden01",
-  "whiteVillaGarden02",
-  "whiteVillaPool03",
-  "whiteDuplexPool02",
+const homeNaturalMaterialSlides = [
+  {
+    imageKey: "hero",
+    kicker: "BTC & piscine lagon",
+    title: "Villa tropicale en matériaux naturels",
+    alt: "Villa tropicale en matériaux naturels avec BTC et piscine lagon",
+  },
+  {
+    imageKey: "bricks",
+    kicker: "BTC premium",
+    title: "Murs respirants, inertie thermique et présence architecturale",
+    alt: "Villa premium en BTC à Abidjan",
+  },
+  {
+    imageKey: "greenRoof",
+    kicker: "Toiture végétalisée",
+    title: "Fraicheur, ombrage et intégration au paysage",
+    alt: "Villa en matériaux naturels avec toiture végétalisée",
+  },
+  {
+    imageKey: "centralPatio",
+    kicker: "Patio central",
+    title: "Circulation fluide, air traversant et lumière naturelle",
+    alt: "Patio central en BTC et pisé",
+  },
+  {
+    imageKey: "coveredTerrace",
+    kicker: "Bois & véranda",
+    title: "Terrasses couvertes pour vivre dehors toute l'année",
+    alt: "Terrasse couverte en bois et matériaux locaux",
+  },
+  {
+    imageKey: "interiorWood",
+    kicker: "Intérieurs ouverts",
+    title: "Baies vitrées, bois et continuité avec le jardin",
+    alt: "Séjour ouvert avec bois, baies vitrées et jardin tropical",
+  },
 ];
 
-function homeHeroVillaMosaic() {
-  const galleryItemsByImageKey = new Map(site.gallery.map((item) => [item.imageKey, item]));
-
-  return homeHeroVillaImageKeys
-    .map((imageKey, index) => {
-      const title = galleryItemsByImageKey.get(imageKey)?.title || "Villa d'inspiration ARASAKA";
-
-      return `<img src="${imageUrl(imageKey)}" alt="${escapeHtml(title)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">`;
-    })
+function homeNaturalMaterialHeroVideo() {
+  const slides = homeNaturalMaterialSlides
+    .map(
+      (slide, index) => `
+        <figure class="hero-video-slide" style="--slide-index: ${index}">
+          <img src="${imageUrl(slide.imageKey)}" alt="${escapeHtml(slide.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">
+          <figcaption>
+            <span>${escapeHtml(slide.kicker)}</span>
+            <strong>${escapeHtml(slide.title)}</strong>
+          </figcaption>
+        </figure>
+      `,
+    )
     .join("");
+
+  const progress = homeNaturalMaterialSlides
+    .map((_, index) => `<span style="--bar-index: ${index}"></span>`)
+    .join("");
+
+  return `
+    <div class="hero-natural-video" aria-label="Présentation vidéo de villas en matériaux naturels">
+      ${slides}
+      <div class="hero-video-progress" aria-hidden="true">${progress}</div>
+    </div>
+  `;
 }
 
 function portfolioCards(items = site.portfolioItems) {
@@ -805,18 +851,24 @@ function renderHome() {
       "ARASAKA accompagne les projets de construction, rénovation, agrandissement, finitions et aménagements extérieurs en Côte d'Ivoire.",
     bodyClass: "page-home",
     body: `
-      <section class="hero hero-home" style="--hero-image: url('${imageUrl("hero")}')">
+      <section class="hero hero-home hero-home-natural-video" style="--hero-image: url('${imageUrl("hero")}')">
+        ${homeNaturalMaterialHeroVideo()}
         <div class="hero-home-layout">
           <div class="hero-content">
-            <p class="kicker">Construction & rénovation premium</p>
-            <h1>Construire en harmonie avec le climat tropical.</h1>
+            <p class="kicker">Villas en matériaux naturels</p>
+            <h1>Des villas tropicales naturelles, lumineuses et puissamment adaptées au climat ivoirien.</h1>
+            <p class="hero-copy">BTC, bois, bambou, pisé, toiture végétalisée, grandes baies vitrées, patios et vérandas couvertes : ARASAKA conçoit des villas qui respirent, protègent de la chaleur et affirment une architecture africaine contemporaine.</p>
+            <div class="hero-natural-points" aria-label="Points forts des villas en matériaux naturels">
+              <span>BTC</span>
+              <span>Bois</span>
+              <span>Pisé</span>
+              <span>Ventilation croisée</span>
+              <span>Ombrage</span>
+            </div>
             <div class="hero-actions">
               <a class="button primary" href="/contact">Demander une étude</a>
-              <a class="button ghost" href="/realisations">Voir nos réalisations</a>
+              <a class="button ghost" href="/materiaux">Voir les matériaux</a>
             </div>
-          </div>
-          <div class="hero-villa-mosaic" aria-label="Villas d'inspiration ARASAKA">
-            ${homeHeroVillaMosaic()}
           </div>
         </div>
       </section>
