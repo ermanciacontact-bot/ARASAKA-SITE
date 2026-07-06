@@ -365,6 +365,8 @@ module.exports = {
     franceLocation: "Savigny-le-Temple 77176, France",
     ermanciaLocation: "Ermancia, 77176 Savigny-le-Temple",
     director: "M. Tchotchoe Maixent",
+    directorDescription:
+      "M. Tchotchoe Maixent, directeur d'ARASAKA en Côte d'Ivoire et d'Ermancia en France.",
     partner: "En collaboration avec l'entreprise Ermancia en France",
     architectPartner:
       "ARASAKA et GE Architectes & Partenaires (GEAP) forment une seule et même entité, réunissant bâtiment, architecture, urbanisme et ingénierie pour renforcer les études, la qualité des choix architecturaux, la coordination du projet et la maîtrise des délais.",

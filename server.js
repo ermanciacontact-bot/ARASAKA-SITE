@@ -746,7 +746,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       </div>
       <div>
         <span>Direction</span>
-        <p>${escapeHtml(site.company.director)}</p>
+        <p>${escapeHtml(site.company.directorDescription)}</p>
       </div>
       <div>
         <span>Contact</span>
@@ -883,7 +883,7 @@ function renderFicheArasaka() {
           <p>${escapeHtml(site.company.finishPromise)}</p>
           <div class="fact-grid">
             <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
-            <div><span>Direction</span><strong>${escapeHtml(site.company.director)}</strong></div>
+            <div><span>Direction</span><strong>${escapeHtml(site.company.directorDescription)}</strong></div>
             <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
             <div><span>Études</span><strong>GE Architectes & Partenaires (GEAP)</strong></div>
           </div>
@@ -1041,7 +1041,7 @@ function renderAbout() {
             <dt>Implantation</dt>
             <dd>${escapeHtml(site.company.location)}</dd>
             <dt>Direction</dt>
-            <dd>${escapeHtml(site.company.director)}</dd>
+            <dd>${escapeHtml(site.company.directorDescription)}</dd>
             <dt>Architecture</dt>
             <dd>${escapeHtml(site.company.architectPartner)}</dd>
             <dt>International</dt>
@@ -1420,7 +1420,7 @@ function renderContact() {
             <span>France</span>
             <strong>${escapeHtml(site.company.franceLocation)}</strong>
             <span>Direction</span>
-            <strong>${escapeHtml(site.company.director)}</strong>
+            <strong>${escapeHtml(site.company.directorDescription)}</strong>
             <span>Ermancia</span>
             <strong>${escapeHtml(site.company.ermanciaLocation)}</strong>
             <span>Email</span>
