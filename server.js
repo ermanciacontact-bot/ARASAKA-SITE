@@ -455,10 +455,6 @@ function homeNaturalMaterialHeroVideo() {
       (slide, index) => `
         <figure class="hero-video-slide" style="--slide-index: ${index}">
           <img src="${imageUrl(slide.imageKey)}" alt="${escapeHtml(slide.alt)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">
-          <figcaption>
-            <span>${escapeHtml(slide.kicker)}</span>
-            <strong>${escapeHtml(slide.title)}</strong>
-          </figcaption>
         </figure>
       `,
     )
@@ -853,11 +849,16 @@ function renderHome() {
     body: `
       <section class="hero hero-home hero-home-natural-video" style="--hero-image: url('${imageUrl("hero")}')">
         ${homeNaturalMaterialHeroVideo()}
-        <div class="hero-home-layout">
-          <div class="hero-content">
+      </section>
+
+      <section class="hero-text-band">
+        <div class="hero-text-band-inner">
+          <div class="hero-text-copy">
             <p class="kicker">Villas en matériaux naturels</p>
             <h1>Des villas tropicales naturelles, lumineuses et puissamment adaptées au climat ivoirien.</h1>
             <p class="hero-copy">BTC, bois, bambou, pisé, toiture végétalisée, grandes baies vitrées, patios et vérandas couvertes : ARASAKA conçoit des villas qui respirent, protègent de la chaleur et affirment une architecture africaine contemporaine.</p>
+          </div>
+          <div class="hero-text-actions">
             <div class="hero-natural-points" aria-label="Points forts des villas en matériaux naturels">
               <span>BTC</span>
               <span>Bois</span>

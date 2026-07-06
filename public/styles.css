@@ -224,7 +224,7 @@ textarea {
 }
 
 .hero-home {
-  min-height: min(720px, calc(100svh - 58px));
+  min-height: clamp(500px, 72svh, 680px);
   align-items: center;
   background: #17140f;
 }
@@ -232,25 +232,10 @@ textarea {
 .hero-home::before {
   z-index: 1;
   background:
-    linear-gradient(90deg, rgba(16, 14, 12, 0.82), rgba(23, 20, 15, 0.56) 42%, rgba(23, 20, 15, 0.18) 72%),
-    linear-gradient(0deg, rgba(16, 14, 12, 0.38), rgba(16, 14, 12, 0.02) 58%),
+    linear-gradient(90deg, rgba(16, 14, 12, 0.32), rgba(23, 20, 15, 0.18) 42%, rgba(23, 20, 15, 0.08) 72%),
+    linear-gradient(0deg, rgba(16, 14, 12, 0.24), rgba(16, 14, 12, 0.02) 58%),
     radial-gradient(circle at 78% 78%, rgba(232, 192, 141, 0.18), rgba(232, 192, 141, 0) 30%);
   mix-blend-mode: normal;
-}
-
-.hero-home-layout {
-  position: relative;
-  z-index: 2;
-  width: min(var(--max), calc(100% - 48px));
-  margin: 0 auto;
-}
-
-.hero-home .hero-content {
-  width: auto;
-  max-width: 720px;
-  margin: 0;
-  padding: 0;
-  text-shadow: 0 18px 42px rgba(0, 0, 0, 0.42);
 }
 
 .hero-natural-video {
@@ -279,36 +264,6 @@ textarea {
   transform: scale(1.08);
   animation: hero-natural-kenburns 42s infinite;
   animation-delay: calc(var(--slide-index) * 7s);
-}
-
-.hero-video-slide figcaption {
-  position: absolute;
-  right: max(24px, calc((100vw - var(--max)) / 2));
-  bottom: 34px;
-  max-width: 390px;
-  padding: 14px 16px;
-  color: var(--white);
-  background: rgba(24, 22, 18, 0.62);
-  border-left: 4px solid #e8c08d;
-  border-radius: 6px;
-  backdrop-filter: blur(10px);
-}
-
-.hero-video-slide figcaption span {
-  display: block;
-  margin-bottom: 5px;
-  color: #e8c08d;
-  font-size: 0.68rem;
-  font-weight: 850;
-  text-transform: uppercase;
-}
-
-.hero-video-slide figcaption strong {
-  display: block;
-  font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1rem, 1.55vw, 1.34rem);
-  font-weight: 520;
-  line-height: 1.12;
 }
 
 .hero-video-progress {
@@ -341,11 +296,55 @@ textarea {
   animation-delay: calc(var(--bar-index) * 7s);
 }
 
+.hero-text-band {
+  padding: clamp(22px, 3vw, 34px) 24px;
+  color: var(--white);
+  background:
+    linear-gradient(135deg, rgba(23, 63, 43, 0.92), rgba(43, 38, 31, 0.96)),
+    #173f2b;
+  border-top: 1px solid rgba(232, 192, 141, 0.24);
+}
+
+.hero-text-band-inner {
+  width: min(var(--max), 100%);
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 1.35fr) minmax(280px, 0.65fr);
+  gap: clamp(24px, 4vw, 56px);
+  align-items: center;
+}
+
+.hero-text-band .kicker {
+  color: #e8c08d;
+}
+
+.hero-text-band h1 {
+  max-width: 920px;
+  color: var(--white);
+  font-size: clamp(1.45rem, 2.8vw, 2.45rem);
+}
+
+.hero-text-band .hero-copy {
+  max-width: 860px;
+  margin-top: 14px;
+}
+
+.hero-text-actions {
+  display: grid;
+  gap: 18px;
+  align-content: center;
+}
+
+.hero-text-band .hero-actions {
+  margin-top: 0;
+  margin-bottom: 0;
+}
+
 .hero-natural-points {
   display: flex;
   flex-wrap: wrap;
   gap: 10px;
-  margin-top: 22px;
+  margin-top: 0;
 }
 
 .hero-natural-points span {
@@ -2753,13 +2752,8 @@ dd {
     font-size: 0.66rem;
   }
 
-  .hero-home .hero-content {
-    max-width: 720px;
-  }
-
-  .hero-video-slide figcaption {
-    right: 24px;
-    bottom: 42px;
+  .hero-text-band-inner {
+    grid-template-columns: 1fr;
   }
 
   .proof-row,
@@ -2924,21 +2918,7 @@ dd {
   }
 
   .hero-home {
-    min-height: calc(100svh - 72px);
-    padding-top: 42px;
-    padding-bottom: 58px;
-  }
-
-  .hero-home-layout {
-    width: min(calc(100% - 32px), var(--max));
-  }
-
-  .hero-home .hero-actions {
-    margin-bottom: 0;
-  }
-
-  .hero-video-slide figcaption {
-    display: none;
+    min-height: clamp(360px, 58svh, 500px);
   }
 
   .hero-video-progress {
@@ -2950,6 +2930,18 @@ dd {
 
   .hero-natural-points {
     gap: 8px;
+  }
+
+  .hero-text-band {
+    padding: 26px 16px 30px;
+  }
+
+  .hero-text-band h1 {
+    font-size: clamp(1.45rem, 7vw, 2.35rem);
+  }
+
+  .hero-text-band .hero-actions {
+    margin-bottom: 0;
   }
 
   .page-hero {
@@ -3159,10 +3151,6 @@ dd {
   .dark-cta,
   .remote-trust,
   .turnkey-panel {
-    width: min(calc(100% - 24px), var(--max));
-  }
-
-  .hero-home-layout {
     width: min(calc(100% - 24px), var(--max));
   }
 
