@@ -569,15 +569,17 @@ function villaGalleryVideoSection() {
               <span>${escapeHtml(video.priceLabel || "Prix proposé")}</span>
               <strong>${escapeHtml(video.price)}</strong>
             </div>
-            <ul class="villa-video-features">
-              ${video.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
-            </ul>
-            ${detailGroups ? `<div class="villa-video-details">${detailGroups}</div>` : ""}
           </div>
           <figure class="villa-video-player">
             <img src="${escapeHtml(video.video)}" alt="Visite guidée animée de ${escapeHtml(video.title)}" loading="eager" decoding="async">
             <figcaption>Vous avez le terrain: ARASAKA vous propose une villa premium de 150 m², lumineuse, ouverte par de grandes baies vitrées et pensée pour le climat tropical avec matériaux naturels, BTC, bois, ventilation croisée, ombrage et aménagement paysager inclus.</figcaption>
           </figure>
+          <div class="villa-video-specs">
+            <ul class="villa-video-features">
+              ${video.features.map((feature) => `<li>${escapeHtml(feature)}</li>`).join("")}
+            </ul>
+            ${detailGroups ? `<div class="villa-video-details">${detailGroups}</div>` : ""}
+          </div>
         </div>
       </section>
   `;
