@@ -566,7 +566,7 @@ function villaGalleryVideoSection() {
             <p>${escapeHtml(video.description)}</p>
             ${video.commercialCopy ? `<p class="villa-video-sales-copy">${escapeHtml(video.commercialCopy)}</p>` : ""}
             <div class="villa-video-price">
-              <span>Prix proposé</span>
+              <span>${escapeHtml(video.priceLabel || "Prix proposé")}</span>
               <strong>${escapeHtml(video.price)}</strong>
             </div>
             <ul class="villa-video-features">
@@ -576,7 +576,7 @@ function villaGalleryVideoSection() {
           </div>
           <figure class="villa-video-player">
             <img src="${escapeHtml(video.video)}" alt="Visite guidée animée de ${escapeHtml(video.title)}" loading="eager" decoding="async">
-            <figcaption>Villa basse premium 3 chambres, chacune avec salle de bain, cuisine meublée et équipée, cuisine africaine, buanderie, cellier et véranda bois.</figcaption>
+            <figcaption>Vous avez le terrain: ARASAKA vous propose une villa premium de 150 m², lumineuse, ouverte par de grandes baies vitrées et pensée pour le climat tropical avec matériaux naturels, BTC, bois, ventilation croisée, ombrage et aménagement paysager inclus.</figcaption>
           </figure>
         </div>
       </section>
