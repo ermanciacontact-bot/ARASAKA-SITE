@@ -373,7 +373,7 @@ module.exports = {
     internationalPartner:
       "X-GONE BTP, partenaire international basé à Lomé au Togo, entreprise générale de construction et de rénovation active sur projets publics et privés, bâtiments de prestige et infrastructures.",
     legalOperationsPartner:
-      "GROUPE ROYAL CONSULTING (GR CONSULTING), cabinet de management juridique en Côte d'Ivoire, accompagne la création, la gestion, la formation, l'assistance juridique, le recouvrement et la régularité des opérations.",
+      "GR CONSULTING, cabinet juridique en Côte d'Ivoire avec lequel ARASAKA travaille pour la conformité des transactions, l'analyse des opérations et l'assistance juridique des projets.",
     standards:
       "ARASAKA travaille avec des artisans et techniciens formés dans les meilleurs lycées techniques du pays, dans une culture de chantier alignée sur les normes internationales.",
     finishPromise:

@@ -1056,7 +1056,7 @@ function renderAbout() {
           <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
           <article><h3>Entité ARASAKA - GEAP</h3><p>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de la même entité, pour renforcer la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
           <article><h3>Partenaire international X-GONE BTP</h3><p>Basée à Lomé au Togo, X-GONE BTP apporte une expérience d'entreprise générale sur projets publics et privés, construction neuve, rénovation lourde, génie civil et bâtiments de prestige.</p></article>
-          <article><h3>Cabinet GR CONSULTING</h3><p>GROUPE ROYAL CONSULTING accompagne la régularité des opérations: management juridique, création, gestion, formation, assistance juridique, recouvrement et renforcement des capacités.</p></article>
+          <article><h3>Cabinet juridique GR CONSULTING</h3><p>GR CONSULTING est le cabinet juridique avec lequel ARASAKA travaille pour renforcer la conformité des transactions, l'analyse des opérations et l'assistance juridique des projets.</p></article>
         </div>
       </section>
     `,
