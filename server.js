@@ -410,6 +410,26 @@ function galleryCards() {
     .join("");
 }
 
+const homeHeroVillaImageKeys = [
+  "premiumVillaConcept",
+  "whiteVillaGarden01",
+  "whiteVillaGarden02",
+  "whiteVillaPool03",
+  "whiteDuplexPool02",
+];
+
+function homeHeroVillaMosaic() {
+  const galleryItemsByImageKey = new Map(site.gallery.map((item) => [item.imageKey, item]));
+
+  return homeHeroVillaImageKeys
+    .map((imageKey, index) => {
+      const title = galleryItemsByImageKey.get(imageKey)?.title || "Villa d'inspiration ARASAKA";
+
+      return `<img src="${imageUrl(imageKey)}" alt="${escapeHtml(title)}" loading="${index === 0 ? "eager" : "lazy"}" fetchpriority="${index === 0 ? "high" : "auto"}" decoding="async">`;
+    })
+    .join("");
+}
+
 function portfolioCards(items = site.portfolioItems) {
   return items
     .map(
@@ -786,12 +806,17 @@ function renderHome() {
     bodyClass: "page-home",
     body: `
       <section class="hero hero-home" style="--hero-image: url('${imageUrl("hero")}')">
-        <div class="hero-content">
-          <p class="kicker">Construction & rénovation premium</p>
-          <h1>Construire en harmonie avec le climat tropical.</h1>
-          <div class="hero-actions">
-            <a class="button primary" href="/contact">Demander une étude</a>
-            <a class="button ghost" href="/realisations">Voir nos réalisations</a>
+        <div class="hero-home-layout">
+          <div class="hero-content">
+            <p class="kicker">Construction & rénovation premium</p>
+            <h1>Construire en harmonie avec le climat tropical.</h1>
+            <div class="hero-actions">
+              <a class="button primary" href="/contact">Demander une étude</a>
+              <a class="button ghost" href="/realisations">Voir nos réalisations</a>
+            </div>
+          </div>
+          <div class="hero-villa-mosaic" aria-label="Villas d'inspiration ARASAKA">
+            ${homeHeroVillaMosaic()}
           </div>
         </div>
       </section>

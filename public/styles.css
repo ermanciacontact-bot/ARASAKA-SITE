@@ -224,8 +224,10 @@ textarea {
 }
 
 .hero-home {
+  min-height: min(720px, calc(100svh - 58px));
+  align-items: center;
   background-image:
-    linear-gradient(90deg, rgba(24, 22, 18, 0.66), rgba(24, 22, 18, 0.2) 42%, rgba(24, 22, 18, 0.02) 72%),
+    linear-gradient(90deg, rgba(24, 22, 18, 0.84), rgba(24, 22, 18, 0.44) 44%, rgba(24, 22, 18, 0.12) 78%),
     var(--hero-image);
   background-position: center 56%;
 }
@@ -234,6 +236,43 @@ textarea {
   background:
     radial-gradient(circle at 78% 78%, rgba(255, 255, 255, 0.12), rgba(255, 255, 255, 0) 28%),
     linear-gradient(180deg, rgba(255, 255, 255, 0.04), rgba(255, 255, 255, 0));
+}
+
+.hero-home-layout {
+  width: min(var(--max), calc(100% - 48px));
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: minmax(0, 0.82fr) minmax(420px, 1.18fr);
+  gap: clamp(26px, 5vw, 66px);
+  align-items: center;
+}
+
+.hero-home .hero-content {
+  width: auto;
+  max-width: 620px;
+  margin: 0;
+  padding: 0;
+}
+
+.hero-villa-mosaic {
+  display: grid;
+  grid-template-columns: minmax(190px, 1.25fr) repeat(2, minmax(150px, 0.9fr));
+  grid-template-rows: repeat(2, minmax(170px, 1fr));
+  gap: 10px;
+  min-height: clamp(390px, 42vw, 520px);
+}
+
+.hero-villa-mosaic img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border: 1px solid rgba(255, 255, 255, 0.18);
+  border-radius: 8px;
+  box-shadow: 0 22px 54px rgba(16, 14, 12, 0.28);
+}
+
+.hero-villa-mosaic img:nth-child(1) {
+  grid-row: 1 / span 2;
 }
 
 .hero-fiche {
@@ -2566,6 +2605,19 @@ dd {
     font-size: 0.66rem;
   }
 
+  .hero-home-layout {
+    grid-template-columns: 1fr;
+    gap: 30px;
+  }
+
+  .hero-home .hero-content {
+    max-width: 720px;
+  }
+
+  .hero-villa-mosaic {
+    min-height: 380px;
+  }
+
   .proof-row,
   .service-grid,
   .service-grid.expanded,
@@ -2725,6 +2777,37 @@ dd {
   .hero {
     min-height: 460px;
     background-position: 58% center;
+  }
+
+  .hero-home {
+    min-height: auto;
+    padding-top: 42px;
+    padding-bottom: 30px;
+  }
+
+  .hero-home-layout {
+    width: min(calc(100% - 32px), var(--max));
+    gap: 22px;
+  }
+
+  .hero-home .hero-actions {
+    margin-bottom: 0;
+  }
+
+  .hero-villa-mosaic {
+    grid-template-columns: repeat(5, minmax(210px, 70vw));
+    grid-template-rows: 220px;
+    min-height: 0;
+    overflow-x: auto;
+    padding-bottom: 4px;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: thin;
+  }
+
+  .hero-villa-mosaic img,
+  .hero-villa-mosaic img:nth-child(1) {
+    grid-row: auto;
+    scroll-snap-align: start;
   }
 
   .page-hero {
@@ -2935,6 +3018,16 @@ dd {
   .remote-trust,
   .turnkey-panel {
     width: min(calc(100% - 24px), var(--max));
+  }
+
+  .hero-home-layout {
+    width: min(calc(100% - 24px), var(--max));
+  }
+
+  .hero-villa-mosaic {
+    grid-template-columns: repeat(5, minmax(190px, 78vw));
+    grid-template-rows: 190px;
+    gap: 8px;
   }
 
   .contact-panel,
