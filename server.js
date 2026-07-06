@@ -796,13 +796,6 @@ function renderHome() {
 
       ${villaGalleryVideoSection()}
 
-      <section class="content-band compact-band">
-        ${sectionIntro("Ambiances premium", "Plus de matières, plus de lumière, plus d'espaces extérieurs", "Villas blanches, BTC, terrasses en teck, piscines lagon, jardins et intérieurs ouverts donnent une lecture concrète du niveau recherché.")}
-        <div class="home-photo-grid">
-          ${["hero", "premiumVillaConcept", "bricks", "whiteDuplexPool02", "tropicalPool", "teakTerrace", "interiorWood", "coveredTerrace"].map((key) => `<img src="${imageUrl(key)}" alt="Ambiance premium ARASAKA" loading="lazy">`).join("")}
-        </div>
-      </section>
-
       <section class="content-band">
         ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, finalisation d'un appartement en promotion immobilière, investissement ou création d'un art de vivre tropical : chaque offre est cadrée selon le bien, le budget et le niveau de finition attendu.")}
         <div class="offer-grid">${offerCards()}</div>
