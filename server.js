@@ -410,47 +410,41 @@ function galleryCards() {
     .join("");
 }
 
-const homeNaturalMaterialSlides = [
+const homeHeroVideoSlides = [
+  {
+    imageKey: "whiteVillaGarden01",
+    kicker: "Villa blanche",
+    title: "Grandes baies vitrées ouvertes sur jardin tropical",
+    alt: "Villa blanche avec grandes baies vitrées sur jardin tropical",
+  },
+  {
+    imageKey: "whiteVillaPool03",
+    kicker: "Villa blanche",
+    title: "Lignes contemporaines, piscine et lumière naturelle",
+    alt: "Villa blanche contemporaine avec grandes baies vitrées et piscine",
+  },
+  {
+    imageKey: "whiteDuplexPool02",
+    kicker: "Villa blanche duplex",
+    title: "Volumes lumineux et extérieur premium",
+    alt: "Villa duplex blanche avec piscine",
+  },
   {
     imageKey: "hero",
-    kicker: "BTC & piscine lagon",
-    title: "Villa tropicale en matériaux naturels",
+    kicker: "Matériaux naturels",
+    title: "BTC, piscine lagon et confort tropical",
     alt: "Villa tropicale en matériaux naturels avec BTC et piscine lagon",
   },
   {
     imageKey: "bricks",
-    kicker: "BTC premium",
-    title: "Murs respirants, inertie thermique et présence architecturale",
+    kicker: "Matériaux naturels",
+    title: "Murs en BTC et présence architecturale",
     alt: "Villa premium en BTC à Abidjan",
-  },
-  {
-    imageKey: "greenRoof",
-    kicker: "Toiture végétalisée",
-    title: "Fraicheur, ombrage et intégration au paysage",
-    alt: "Villa en matériaux naturels avec toiture végétalisée",
-  },
-  {
-    imageKey: "centralPatio",
-    kicker: "Patio central",
-    title: "Circulation fluide, air traversant et lumière naturelle",
-    alt: "Patio central en BTC et pisé",
-  },
-  {
-    imageKey: "coveredTerrace",
-    kicker: "Bois & véranda",
-    title: "Terrasses couvertes pour vivre dehors toute l'année",
-    alt: "Terrasse couverte en bois et matériaux locaux",
-  },
-  {
-    imageKey: "interiorWood",
-    kicker: "Intérieurs ouverts",
-    title: "Baies vitrées, bois et continuité avec le jardin",
-    alt: "Séjour ouvert avec bois, baies vitrées et jardin tropical",
   },
 ];
 
-function homeNaturalMaterialHeroVideo() {
-  const slides = homeNaturalMaterialSlides
+function homeHeroVideoPresentation() {
+  const slides = homeHeroVideoSlides
     .map(
       (slide, index) => `
         <figure class="hero-video-slide" style="--slide-index: ${index}">
@@ -460,12 +454,12 @@ function homeNaturalMaterialHeroVideo() {
     )
     .join("");
 
-  const progress = homeNaturalMaterialSlides
+  const progress = homeHeroVideoSlides
     .map((_, index) => `<span style="--bar-index: ${index}"></span>`)
     .join("");
 
   return `
-    <div class="hero-natural-video" aria-label="Présentation vidéo de villas en matériaux naturels">
+    <div class="hero-natural-video" aria-label="Présentation vidéo de trois villas blanches et deux villas en matériaux naturels">
       ${slides}
       <div class="hero-video-progress" aria-hidden="true">${progress}</div>
     </div>
@@ -848,23 +842,23 @@ function renderHome() {
     bodyClass: "page-home",
     body: `
       <section class="hero hero-home hero-home-natural-video" style="--hero-image: url('${imageUrl("hero")}')">
-        ${homeNaturalMaterialHeroVideo()}
+        ${homeHeroVideoPresentation()}
       </section>
 
       <section class="hero-text-band">
         <div class="hero-text-band-inner">
           <div class="hero-text-copy">
-            <p class="kicker">Villas en matériaux naturels</p>
-            <h1>Des villas tropicales naturelles, lumineuses et puissamment adaptées au climat ivoirien.</h1>
-            <p class="hero-copy">BTC, bois, bambou, pisé, toiture végétalisée, grandes baies vitrées, patios et vérandas couvertes : ARASAKA conçoit des villas qui respirent, protègent de la chaleur et affirment une architecture africaine contemporaine.</p>
+            <p class="kicker">Villas blanches & matériaux naturels</p>
+            <h1>Des villas premium lumineuses, entre lignes blanches contemporaines et matériaux naturels.</h1>
+            <p class="hero-copy">Grandes baies vitrées, jardins tropicaux, piscines, BTC, bois, ventilation croisée et ombrage : ARASAKA conçoit des villas qui valorisent la lumière, respirent mieux et affirment une architecture tropicale haut de gamme.</p>
           </div>
           <div class="hero-text-actions">
-            <div class="hero-natural-points" aria-label="Points forts des villas en matériaux naturels">
+            <div class="hero-natural-points" aria-label="Points forts des villas présentées dans le hero">
+              <span>Villas blanches</span>
               <span>BTC</span>
               <span>Bois</span>
-              <span>Pisé</span>
+              <span>Baies vitrées</span>
               <span>Ventilation croisée</span>
-              <span>Ombrage</span>
             </div>
             <div class="hero-actions">
               <a class="button primary" href="/contact">Demander une étude</a>

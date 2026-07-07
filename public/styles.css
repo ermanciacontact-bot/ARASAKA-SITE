@@ -253,7 +253,7 @@ textarea {
   inset: 0;
   margin: 0;
   opacity: 0;
-  animation: hero-natural-fade 42s infinite;
+  animation: hero-natural-fade 35s infinite;
   animation-delay: calc(var(--slide-index) * 7s);
 }
 
@@ -262,7 +262,7 @@ textarea {
   height: 100%;
   object-fit: cover;
   transform: scale(1.08);
-  animation: hero-natural-kenburns 42s infinite;
+  animation: hero-natural-kenburns 35s infinite;
   animation-delay: calc(var(--slide-index) * 7s);
 }
 
@@ -273,7 +273,7 @@ textarea {
   bottom: 18px;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(6, minmax(0, 1fr));
+  grid-template-columns: repeat(5, minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -292,7 +292,7 @@ textarea {
   transform: scaleX(0);
   transform-origin: left;
   background: #e8c08d;
-  animation: hero-video-progress 42s infinite;
+  animation: hero-video-progress 35s infinite;
   animation-delay: calc(var(--bar-index) * 7s);
 }
 
