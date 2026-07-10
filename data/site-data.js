@@ -517,6 +517,7 @@ module.exports = {
   images: {
     hero: asset("hero-villa-btc-piscine-lagon.png"),
     portfolioHero: portfolioAfricanManagerImage,
+    groupementWorkSession: asset("groupement-partenaires-africains-dossier.png"),
     rammedEarth: image("photo-1761367950537-14f834333ecc", 1400, 82),
     tropicalPool: asset("piscine-lagon-villa-tropicale.png"),
     bambooWall: asset("bambou-decoration-cloture.png"),

@@ -1127,7 +1127,7 @@ function renderGroupement() {
     description:
       "Groupement ARASAKA, GEAP, X-GONE BTP et GR CONSULTING pour appels d'offres, marchés importants du bâtiment et projets BTP en Afrique.",
     body: `
-      <section class="page-hero compact groupement-hero" style="--hero-image: url('${imageUrl("portfolioHero")}')">
+      <section class="page-hero compact groupement-hero" style="--hero-image: url('${imageUrl("groupementWorkSession")}')">
         <div>
           <p class="kicker">Groupement</p>
           <h1>Une entité de compétences pour répondre aux marchés importants du bâtiment et du BTP.</h1>
