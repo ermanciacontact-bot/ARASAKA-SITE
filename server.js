@@ -803,7 +803,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260710-2">
+    <link rel="stylesheet" href="/styles.css?v=20260710-3">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -1165,20 +1165,6 @@ function renderGroupement() {
         <div class="groupement-capability-grid">${groupementCapabilityCards()}</div>
       </section>
 
-      <section class="content-band groupement-documents">
-        <div class="groupement-document-panel">
-          <div>
-            <p class="kicker">Documents et preuves</p>
-            <h2>Centraliser les plaquettes dans l'onglet Groupement.</h2>
-            <p>Les documents partenaires sont rassemblés ici afin de garder l'accueil plus lisible et de présenter les preuves techniques au bon endroit, dans une logique de dossier institutionnel.</p>
-          </div>
-          <div class="groupement-document-actions">
-            <a class="button secondary full" href="/assets/plaquette-xgone-btp.pdf" target="_blank" rel="noreferrer">Plaquette X-GONE BTP</a>
-            <a class="button ghost-dark full" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer">Fiche GEAP</a>
-            <a class="button ghost-dark full" href="/realisations#realisations-partenaires">Réalisations partenaires</a>
-          </div>
-        </div>
-      </section>
     `,
   });
 }
