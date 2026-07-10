@@ -132,13 +132,13 @@ const homeVillaVideo = {
   description:
     "Vous possédez déjà votre terrain ? ARASAKA vous propose une villa basse premium de 150 m² habitables, pensée pour passer rapidement du foncier au projet concret. Pour 120 M FCFA, vous obtenez une base architecturale forte, un aménagement paysager compris et une maison conçue pour le climat tropical: matériaux naturels, BTC, bois, grandes baies vitrées, luminosité naturelle, ventilation croisée, ombrage et circulation fluide.",
   commercialCopy:
-    "Cette offre s'adresse aux propriétaires de terrain qui veulent construire sans perdre de temps dans l'improvisation. Le plan est clair, les surfaces sont cadrées, le confort est complet: suite parentale, deux chambres avec salles de bain, grand séjour lumineux de 45 m², grandes surfaces de baies vitrées, cuisine ouverte avec îlot, cuisine africaine, buanderie, cellier, véranda bois et finitions haut de gamme.",
+    "Cette offre s'adresse aux propriétaires de terrain qui veulent construire sans perdre de temps dans l'improvisation. Le plan est clair, les surfaces sont cadrées, le confort est complet: suite parentale, deux chambres avec salles de bain et WC privatifs, grand séjour lumineux de 45 m², grandes surfaces de baies vitrées, cuisine ouverte avec îlot, cuisine africaine, buanderie, cellier, véranda bois et finitions haut de gamme.",
   features: [
     "Offre réservée aux propriétaires de terrain",
     "150 m² habitables",
     "Budget construction maîtrisé",
     "Aménagement paysager inclus",
-    "3 chambres avec salles de bain privatives",
+    "3 chambres avec salles de bain et WC privatifs",
     "Grandes baies vitrées et forte luminosité",
     "Matériaux naturels, BTC et bois",
     "Confort tropical: ventilation et ombrage",
@@ -152,7 +152,7 @@ const homeVillaVideo = {
       items: [
         "Surface habitable optimisée: 150 m²",
         "Suite parentale avec salle de bain et WC: 24 m²",
-        "Deux chambres de 15 m² en moyenne: 30 m²",
+        "Deux chambres de 15 m² en moyenne",
         "Grand séjour et salle à manger: 45 m²",
       ],
     },
@@ -161,7 +161,7 @@ const homeVillaVideo = {
       items: [
         "Cuisine ouverte avec îlot central: 16 m²",
         "Cuisine africaine: 8 m²",
-        "Salles d'eau des chambres secondaires: 8 m²",
+        "Salles d'eau et WC des chambres secondaires: 8 m²",
         "Toilette visiteur: 3 m²",
         "Buanderie: 5 m²",
         "Cellier: 3 m²",
@@ -172,9 +172,8 @@ const homeVillaVideo = {
       title: "Espace nuit",
       items: [
         "Suite parentale avec salle de bain et WC privatifs",
-        "Deux chambres supplémentaires avec salle de bain privative",
-        "Salle de bain dans chaque chambre",
-        "Toilette visiteur",
+        "Deux chambres supplémentaires avec salle de bain et WC privatifs",
+        "Salle de bain et WC dans chaque chambre",
       ],
     },
     {
@@ -767,8 +766,8 @@ module.exports = {
       imageKey: "whiteVillaGarden01",
       features: [
         "Suite parentale avec salle de bain et WC",
-        "2 chambres supplémentaires avec salle de bain privative",
-        "Salle de bain dans chaque chambre",
+        "2 chambres supplémentaires avec salle de bain et WC privatifs",
+        "Salle de bain et WC dans chaque chambre",
         "Toilette visiteur",
         "Cuisine ouverte meublée et équipée avec îlot central",
         "Cuisine africaine",
