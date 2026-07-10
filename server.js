@@ -1165,26 +1165,6 @@ function renderGroupement() {
         <div class="groupement-capability-grid">${groupementCapabilityCards()}</div>
       </section>
 
-      <section class="content-band xgone-reference-section">
-        <div class="xgone-reference-lead">
-          <div>
-            <p class="kicker">Références X-GONE BTP</p>
-            <h2>Des références chiffrées pour appuyer les dossiers du groupement.</h2>
-            <p>La plaquette X-GONE BTP présente une expérience d'entreprise générale de construction et de rénovation sur des projets publics et privés: institutions, showrooms, entrepôts, réhabilitations, équipements et résidentiel haut standing.</p>
-          </div>
-          <div class="xgone-reference-stats">
-            <span><strong>Près de 10 ans</strong> d'expérience annoncée dans la plaquette</span>
-            <span><strong>1,300 milliard FCFA</strong> pour deux entrepôts CCT BATIMAT</span>
-            <span><strong>1,020 milliard FCFA</strong> pour les showrooms CFAO Motors Togo</span>
-          </div>
-        </div>
-        <div class="xgone-reference-grid">${xgoneReferenceCards()}</div>
-        <div class="xgone-reference-list">
-          <h3>Autres références structurantes</h3>
-          <ul>${xgoneAdditionalReferenceList()}</ul>
-        </div>
-      </section>
-
       <section class="content-band groupement-documents">
         <div class="groupement-document-panel">
           <div>
