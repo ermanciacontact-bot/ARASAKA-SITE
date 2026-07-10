@@ -1129,13 +1129,7 @@ function renderGroupement() {
     body: `
       <section class="page-hero compact groupement-hero" style="--hero-image: url('${imageUrl("groupementWorkSession")}')">
         <div>
-          <p class="kicker">Groupement</p>
           <h1>Une entité de compétences pour répondre aux marchés importants du bâtiment et du BTP.</h1>
-          <p class="page-hero-copy">ARASAKA réunit GE Architectes & Partenaires, X-GONE BTP et GR CONSULTING afin de porter des réponses solides aux appels d'offres publics et privés: conception, ingénierie, exécution, références sous-régionales et sécurisation juridique.</p>
-          <div class="hero-actions">
-            <a class="button primary" href="/contact?offre=Groupement%20et%20appel%20d%27offres">Présenter un dossier</a>
-            <a class="button ghost" href="#fiches-partenaires">Voir les partenaires</a>
-          </div>
         </div>
       </section>
 
