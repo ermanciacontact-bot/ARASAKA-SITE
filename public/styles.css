@@ -427,7 +427,7 @@ textarea {
 }
 
 .diaspora-hero {
-  background-position: center 48%;
+  background-position: 38% 30%;
 }
 
 .contact-hero {
@@ -2128,7 +2128,8 @@ dd {
 
 .groupement-hero {
   background-color: var(--green-900);
-  background-position: center;
+  min-height: min(460px, calc(100svh - 58px));
+  background-position: center 28%;
 }
 
 .groupement-positioning {
@@ -3190,6 +3191,15 @@ dd {
 
   .page-hero {
     background-position: center;
+  }
+
+  .diaspora-hero {
+    background-position: 28% 26%;
+  }
+
+  .groupement-hero {
+    min-height: 420px;
+    background-position: 48% 28%;
   }
 
   .portfolio-hero {
