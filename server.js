@@ -803,7 +803,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260710-3">
+    <link rel="stylesheet" href="/styles.css?v=20260710-4">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
