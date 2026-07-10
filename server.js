@@ -572,6 +572,48 @@ function xgoneAdditionalReferenceList() {
     .join("");
 }
 
+function groupementPartnerCards() {
+  return (site.groupementPartners || [])
+    .map((partner) => {
+      const target = partner.actionHref && partner.actionHref.endsWith(".pdf")
+        ? ' target="_blank" rel="noreferrer"'
+        : "";
+
+      return `
+        <article class="groupement-partner-card">
+          <div class="groupement-partner-topline">
+            <span>${escapeHtml(partner.label)}</span>
+            <strong>${escapeHtml(partner.status)}</strong>
+          </div>
+          <h3>${escapeHtml(partner.name)}</h3>
+          <p>${escapeHtml(partner.profile)}</p>
+          <div class="groupement-partner-detail">
+            <h4>Apports clés</h4>
+            <ul>
+              ${(partner.strengths || []).map((strength) => `<li>${escapeHtml(strength)}</li>`).join("")}
+            </ul>
+          </div>
+          <p class="groupement-partner-contribution">${escapeHtml(partner.contribution)}</p>
+          <a class="button ghost-dark full" href="${escapeHtml(partner.actionHref)}"${target}>${escapeHtml(partner.actionLabel)}</a>
+        </article>
+      `;
+    })
+    .join("");
+}
+
+function groupementCapabilityCards() {
+  return (site.groupementCapabilities || [])
+    .map(
+      (capability) => `
+        <article>
+          <h3>${escapeHtml(capability.title)}</h3>
+          <p>${escapeHtml(capability.text)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
 function portfolioVirtualTourCards() {
   return site.portfolioVirtualTours
     .map(
@@ -761,7 +803,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260704-2">
+    <link rel="stylesheet" href="/styles.css?v=20260710-1">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -884,9 +926,9 @@ function renderHome() {
       <section class="content-band">
         ${sectionIntro("Entité architecturale", "ARASAKA et GE Architectes & Partenaires (GEAP) forment une même entité", "Cette entité réunit bâtiment, architecture, urbanisme, ingénierie, maîtrise d'oeuvre complète et coordination de projets d'envergure.")}
         <div class="geap-showcase">
-          <a class="geap-preview" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer" aria-label="Ouvrir le pressbook GE Architectes & Partenaires">
-            <img src="/assets/geap-architectes-pressbook-apercu.png" alt="Extrait du pressbook GE Architectes & Partenaires">
-          </a>
+          <div class="geap-preview">
+            <img src="${imageUrl("premiumVillaConcept")}" alt="Villa contemporaine liée à l'approche architecturale ARASAKA GEAP">
+          </div>
           <div class="geap-copy">
             <p class="kicker">Cabinet partenaire</p>
             <h3>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de l'entité ARASAKA.</h3>
@@ -898,7 +940,7 @@ function renderHome() {
               <div><span>Maîtrise d'oeuvre</span><strong>Missions complètes, conduite d'opération et suivi structuré de projets.</strong></div>
             </div>
             <div class="hero-actions">
-              <a class="button secondary" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer">Consulter la fiche GEAP</a>
+              <a class="button secondary" href="/groupement">Voir le groupement</a>
               <a class="button ghost-dark" href="/qui-sommes-nous">Comprendre l'entité</a>
             </div>
           </div>
@@ -1073,6 +1115,89 @@ function renderDiaspora() {
           <p>Indiquez la localisation, les documents disponibles, le budget indicatif et le résultat recherché pour recevoir une première orientation.</p>
         </div>
         <a class="button light" href="/contact?offre=Projet%20diaspora">Demander une étude diaspora</a>
+      </section>
+    `,
+  });
+}
+
+function renderGroupement() {
+  return layout({
+    active: "groupement",
+    title: "Groupement partenaires",
+    description:
+      "Groupement ARASAKA, GEAP, X-GONE BTP et GR CONSULTING pour appels d'offres, marchés importants du bâtiment et projets BTP en Afrique.",
+    body: `
+      <section class="page-hero compact groupement-hero" style="--hero-image: url('${imageUrl("portfolioHero")}')">
+        <div>
+          <p class="kicker">Groupement</p>
+          <h1>Une entité de compétences pour répondre aux marchés importants du bâtiment et du BTP.</h1>
+          <p class="page-hero-copy">ARASAKA réunit GE Architectes & Partenaires, X-GONE BTP et GR CONSULTING afin de porter des réponses solides aux appels d'offres publics et privés: conception, ingénierie, exécution, références sous-régionales et sécurisation juridique.</p>
+          <div class="hero-actions">
+            <a class="button primary" href="/contact?offre=Groupement%20et%20appel%20d%27offres">Présenter un dossier</a>
+            <a class="button ghost" href="#fiches-partenaires">Voir les partenaires</a>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band groupement-positioning">
+        <div class="groupement-lead">
+          <div>
+            <p class="kicker">Positionnement</p>
+            <h2>Un groupement pensé pour convaincre les maîtres d'ouvrage exigeants.</h2>
+            <p>Le groupement associe la vision locale d'ARASAKA, le pôle architecture et ingénierie GEAP, la capacité d'exécution X-GONE BTP et l'appui juridique GR CONSULTING. L'objectif est clair: présenter des dossiers crédibles, documentés et compétitifs sur des opérations où l'expérience, la conformité et la maîtrise du contexte africain font la différence.</p>
+          </div>
+          <div class="groupement-proof-grid">
+            <article><span>3 partenaires clés</span><strong>GEAP, X-GONE BTP et GR CONSULTING</strong></article>
+            <article><span>Chaîne complète</span><strong>Études, ingénierie, exécution, conformité et suivi</strong></article>
+            <article><span>Références</span><strong>Togo, Côte d'Ivoire et sous-région ouest-africaine</strong></article>
+            <article><span>Marchés visés</span><strong>Bâtiment, BTP, tertiaire, institutionnel et résidentiel premium</strong></article>
+          </div>
+        </div>
+      </section>
+
+      <section class="content-band muted-band" id="fiches-partenaires">
+        ${sectionIntro("Fiches partenaires", "Trois expertises complémentaires, une réponse structurée", "Chaque partenaire apporte une compétence décisive pour les marchés importants: conception, exécution, références et sécurité juridique.")}
+        <div class="groupement-partner-grid">${groupementPartnerCards()}</div>
+      </section>
+
+      <section class="content-band">
+        ${sectionIntro("Capacité appels d'offres", "Une réponse lisible pour les maîtres d'ouvrage publics et privés", "Le groupement est conçu pour transformer les références et les expertises partenaires en dossiers de candidature cohérents, défendables et orientés résultat.")}
+        <div class="groupement-capability-grid">${groupementCapabilityCards()}</div>
+      </section>
+
+      <section class="content-band xgone-reference-section">
+        <div class="xgone-reference-lead">
+          <div>
+            <p class="kicker">Références X-GONE BTP</p>
+            <h2>Des références chiffrées pour appuyer les dossiers du groupement.</h2>
+            <p>La plaquette X-GONE BTP présente une expérience d'entreprise générale de construction et de rénovation sur des projets publics et privés: institutions, showrooms, entrepôts, réhabilitations, équipements et résidentiel haut standing.</p>
+          </div>
+          <div class="xgone-reference-stats">
+            <span><strong>Près de 10 ans</strong> d'expérience annoncée dans la plaquette</span>
+            <span><strong>1,300 milliard FCFA</strong> pour deux entrepôts CCT BATIMAT</span>
+            <span><strong>1,020 milliard FCFA</strong> pour les showrooms CFAO Motors Togo</span>
+          </div>
+        </div>
+        <div class="xgone-reference-grid">${xgoneReferenceCards()}</div>
+        <div class="xgone-reference-list">
+          <h3>Autres références structurantes</h3>
+          <ul>${xgoneAdditionalReferenceList()}</ul>
+        </div>
+      </section>
+
+      <section class="content-band groupement-documents">
+        <div class="groupement-document-panel">
+          <div>
+            <p class="kicker">Documents et preuves</p>
+            <h2>Centraliser les plaquettes dans l'onglet Groupement.</h2>
+            <p>Les documents partenaires sont rassemblés ici afin de garder l'accueil plus lisible et de présenter les preuves techniques au bon endroit, dans une logique de dossier institutionnel.</p>
+          </div>
+          <div class="groupement-document-actions">
+            <a class="button secondary full" href="/assets/plaquette-xgone-btp.pdf" target="_blank" rel="noreferrer">Plaquette X-GONE BTP</a>
+            <a class="button ghost-dark full" href="/assets/geap-architectes-pressbook.pdf" target="_blank" rel="noreferrer">Fiche GEAP</a>
+            <a class="button ghost-dark full" href="/realisations#realisations-partenaires">Réalisations partenaires</a>
+          </div>
+        </div>
       </section>
     `,
   });
@@ -1502,6 +1627,7 @@ function renderContact() {
 const routes = new Map([
   ["/", renderHome],
   ["/diaspora", renderDiaspora],
+  ["/groupement", renderGroupement],
   ["/qui-sommes-nous", renderAbout],
   ["/a-propos", renderAbout],
   ["/services", renderServices],

@@ -317,6 +317,93 @@ const xgoneAdditionalReferences = [
   "Plusieurs duplex résidentiels privés réalisés à Lomé.",
 ];
 
+const groupementPartners = [
+  {
+    name: "GE Architectes & Partenaires (GEAP)",
+    label: "Architecture, urbanisme et ingénierie",
+    status: "Entité ARASAKA - GEAP",
+    profile:
+      "GEAP constitue le pôle architecture, urbanisme et ingénierie de l'entité ARASAKA - GEAP. Son rôle est de donner aux projets une base d'études solide, lisible et défendable face aux exigences techniques des maîtres d'ouvrage.",
+    strengths: [
+      "Études architecturales et programmation",
+      "Urbanisme, conception et coordination technique",
+      "Maîtrise d'oeuvre, cohérence des plans et suivi des choix techniques",
+      "Références sous-régionales en équipements, bureaux, hôtellerie et résidentiel",
+    ],
+    contribution:
+      "GEAP crédibilise la partie conception et études du groupement, en apportant une lecture architecturale adaptée aux usages africains et aux standards internationaux.",
+    actionLabel: "Consulter la fiche GEAP",
+    actionHref: "/assets/geap-architectes-pressbook.pdf",
+  },
+  {
+    name: "X-GONE BTP",
+    label: "Entreprise générale de construction et rénovation",
+    status: "Partenaire international",
+    profile:
+      "Basée à Lomé, X-GONE BTP accompagne depuis près de 10 ans des maîtres d'ouvrage publics et privés sur des projets techniques à forte valeur ajoutée: construction neuve, rénovation lourde, génie civil, bâtiments institutionnels et sites occupés.",
+    strengths: [
+      "Projets publics et privés au Togo",
+      "Bâtiments institutionnels, showrooms, entrepôts et résidentiel haut standing",
+      "Gestion des délais, budgets, qualité, sécurité et environnement",
+      "Moyens humains et matériels structurés pour les chantiers importants",
+    ],
+    contribution:
+      "X-GONE BTP apporte au groupement une preuve d'exécution terrain, des références chiffrées et une capacité à intervenir sur des opérations BTP d'envergure.",
+    actionLabel: "Télécharger la plaquette X-GONE",
+    actionHref: "/assets/plaquette-xgone-btp.pdf",
+  },
+  {
+    name: "GR CONSULTING",
+    label: "Conformité des transactions et assistance juridique",
+    status: "Cabinet juridique partenaire",
+    profile:
+      "GR CONSULTING accompagne ARASAKA sur la conformité des transactions, l'analyse des opérations et l'assistance juridique des projets. Son intervention renforce la sécurité des dossiers, des engagements et des montages contractuels.",
+    strengths: [
+      "Analyse juridique des opérations",
+      "Sécurisation documentaire et contractuelle",
+      "Accompagnement des transactions immobilières et foncières",
+      "Appui à la régularité des dossiers dans le contexte ivoirien",
+    ],
+    contribution:
+      "GR CONSULTING permet au groupement de présenter des offres mieux cadrées juridiquement, avec une attention portée à la conformité et à la régularité des opérations.",
+    actionLabel: "Échanger sur un dossier",
+    actionHref: "/contact?offre=Groupement%20et%20appel%20d%27offres",
+  },
+];
+
+const groupementCapabilities = [
+  {
+    title: "Réponse aux appels d'offres",
+    text:
+      "Le groupement peut structurer une réponse complète: compréhension du besoin, références, méthodologie, organisation chantier, pièces techniques et argumentaire de valeur.",
+  },
+  {
+    title: "Marchés publics et privés",
+    text:
+      "Les profils réunis permettent de se positionner sur des programmes institutionnels, tertiaires, résidentiels, hôteliers, commerciaux et logistiques.",
+  },
+  {
+    title: "Contexte africain",
+    text:
+      "Les partenaires connaissent les réalités de terrain: climat, ressources locales, circuits de décision, contraintes administratives et attentes des maîtres d'ouvrage.",
+  },
+  {
+    title: "Références sous-régionales",
+    text:
+      "Les réalisations GEAP et X-GONE BTP donnent au groupement une base crédible pour défendre des projets d'envergure en Côte d'Ivoire et dans la sous-région.",
+  },
+  {
+    title: "Exécution et contrôle",
+    text:
+      "La chaîne conception, coordination, exécution, qualité et suivi permet de porter des dossiers exigeants sans perdre la maîtrise technique du projet.",
+  },
+  {
+    title: "Sécurité juridique",
+    text:
+      "GR CONSULTING renforce la régularité des opérations, la lecture contractuelle et la conformité des transactions liées aux projets immobiliers et BTP.",
+  },
+];
+
 const partnerPhotoItems = (items) =>
   items.map(([title, category, location, filename]) => ({
     title,
@@ -419,6 +506,7 @@ module.exports = {
   nav: [
     { href: "/", key: "home", label: "Accueil" },
     { href: "/qui-sommes-nous", key: "about", label: "Qui sommes-nous" },
+    { href: "/groupement", key: "groupement", label: "Groupement" },
     { href: "/diaspora", key: "diaspora", label: "Diaspora" },
     { href: "/realisations", key: "portfolio", label: "Réalisations" },
     { href: "/plans", key: "plans", label: "Inspirations" },
@@ -833,6 +921,8 @@ module.exports = {
   partnerRealisationPhotoGroups,
   xgoneInternationalProjects,
   xgoneAdditionalReferences,
+  groupementPartners,
+  groupementCapabilities,
   homeVillaVideo,
   portfolioCapabilities,
   process: [
