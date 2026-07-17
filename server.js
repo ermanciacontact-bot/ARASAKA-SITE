@@ -250,7 +250,7 @@ function materialCards() {
   return site.materials
     .map(
       (material) => `
-        <article class="material-card">
+        <article class="material-card${material.imageKey === "piseSmoothVilla" ? " material-card-pise" : ""}">
           <img src="${imageUrl(material.imageKey)}" alt="${escapeHtml(material.title)} - ${escapeHtml(material.subtitle)}" loading="lazy">
           <div>
             <p class="card-eyebrow">${escapeHtml(material.subtitle)}</p>
@@ -803,7 +803,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260717-1">
+    <link rel="stylesheet" href="/styles.css?v=20260717-2">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">

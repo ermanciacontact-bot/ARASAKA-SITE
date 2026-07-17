@@ -1218,6 +1218,12 @@ dd {
   background: var(--soft);
 }
 
+.material-card-pise img {
+  aspect-ratio: 3 / 2;
+  height: auto;
+  object-position: center;
+}
+
 .material-card div {
   padding: 18px;
 }
