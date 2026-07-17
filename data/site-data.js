@@ -525,6 +525,7 @@ module.exports = {
     contactParcel: asset("parcelle-nue-centre-ville-abidjan.png"),
     interiorWood: asset("sejour-cuisine-jardin-tropical.png"),
     mudWall: image("photo-1759323371061-1888a17d011a", 1200, 82),
+    piseSmoothVilla: asset("villa-enduit-pise-lisse-premium.png"),
     greenRoof: asset("toiture-vegetalisee-btc-pise.png"),
     bricks: asset("villa-btc-premium-abidjan.png"),
     whiteVilla: asset("villa-blanche-premium-beton.png"),
@@ -826,7 +827,7 @@ module.exports = {
     {
       title: "Pisé",
       subtitle: "Ravalement et enduits intérieurs",
-      imageKey: "materialsHeroNatural",
+      imageKey: "piseSmoothVilla",
       text: "Le pisé est utilisé en ravalement ou en enduit intérieur pour apporter une finition naturelle, minérale et élégante.",
       thermal: "En enduit, il améliore la sensation de confort et participe à la régulation naturelle de l'humidité.",
       eco: "Matière peu transformée, locale et réparable, adaptée aux finitions sobres et durables.",
