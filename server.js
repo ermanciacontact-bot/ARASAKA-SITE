@@ -231,13 +231,45 @@ function sectionIntro(kicker, title, text) {
   `;
 }
 
+const iconSvgs = {
+  leaf: `<path d="M6 18C7 9 13 5 21 4c-1 8-5 14-14 15"/><path d="M7 18c4-5 8-8 14-14"/><path d="M5 20c4-2 9-2 13 0"/>`,
+  wind: `<path d="M3 8h12a3 3 0 1 0-3-3"/><path d="M3 13h16a3 3 0 1 1-3 3"/><path d="M3 18h8"/>`,
+  shield: `<path d="M12 3l8 3v6c0 5-3.4 8-8 10-4.6-2-8-5-8-10V6l8-3z"/><path d="M8 12l3 3 5-6"/>`,
+  handshake: `<path d="M8 12l3-3 4 4"/><path d="M16 9l2-2 4 4-5 5"/><path d="M2 11l4-4 4 4-4 4-4-4z"/><path d="M9 15l2 2c1 1 3 1 4 0l2-2"/>`,
+  villa: `<path d="M3 20h18"/><path d="M5 20V9l7-5 7 5v11"/><path d="M9 20v-6h6v6"/><path d="M7 10h10"/>`,
+  renovation: `<path d="M4 20h16"/><path d="M6 20V9l6-4 6 4v11"/><path d="M9 14h6"/><path d="M16 4l4 4"/><path d="M18 2l4 4-3 3-4-4 3-3z"/>`,
+  tropical: `<path d="M4 20h16"/><path d="M12 20V8"/><path d="M12 8C9 5 6 5 3 7c3 0 5 1 7 3"/><path d="M12 8c3-3 6-3 9-1-3 0-5 1-7 3"/><path d="M12 8c-1-3 0-5 2-6 0 3 0 5-2 6"/><path d="M6 20V12l4-3 4 3v8"/>`,
+  garden: `<path d="M4 20h16"/><path d="M8 18c0-5 2-8 5-10"/><path d="M13 8c4 1 6 4 6 9"/><path d="M7 12c-3 1-4 3-4 6"/><path d="M12 8C9 7 8 5 8 3c3 0 5 2 4 5z"/><path d="M13 8c3-2 5-2 8 0-2 3-5 4-8 0z"/>`,
+  pool: `<path d="M3 9c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/><path d="M3 14c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/><path d="M3 19c2 1 4 1 6 0s4-1 6 0 4 1 6 0"/>`,
+  pergola: `<path d="M4 8h16"/><path d="M6 8v12"/><path d="M18 8v12"/><path d="M4 12h16"/><path d="M7 4h2M11 4h2M15 4h2"/><path d="M8 8l3-4M12 8l3-4M16 8l3-4"/>`,
+  globe: `<circle cx="12" cy="12" r="9"/><path d="M3 12h18"/><path d="M12 3c3 3 3 15 0 18"/><path d="M12 3c-3 3-3 15 0 18"/>`,
+  clock: `<circle cx="12" cy="12" r="9"/><path d="M12 7v6l4 2"/>`,
+  finish: `<path d="M4 20l4-1 10-10-3-3L5 16l-1 4z"/><path d="M14 6l3-3 3 3-3 3"/><path d="M9 20h11"/>`,
+  project: `<rect x="5" y="4" width="14" height="16" rx="2"/><path d="M9 8h6M9 12h6M9 16h4"/><path d="M7 8l1 1 2-2"/>`,
+  pin: `<path d="M12 21s7-6 7-12a7 7 0 0 0-14 0c0 6 7 12 7 12z"/><circle cx="12" cy="9" r="2.5"/>`,
+  user: `<circle cx="12" cy="8" r="4"/><path d="M4 21c1.5-4 4.5-6 8-6s6.5 2 8 6"/>`,
+  phone: `<path d="M7 4l3 4-2 2c2 4 4 6 8 8l2-2 4 3c-1 2-3 3-5 2-8-2-13-7-15-15 0-2 1-4 3-5l2 3z"/>`,
+  building: `<path d="M4 20h16"/><path d="M6 20V6h12v14"/><path d="M9 9h2M13 9h2M9 13h2M13 13h2M10 20v-4h4v4"/>`,
+  plan: `<path d="M4 6l5-2 6 2 5-2v14l-5 2-6-2-5 2V6z"/><path d="M9 4v14M15 6v14"/>`,
+  compass: `<circle cx="12" cy="12" r="9"/><path d="M15 9l-2 6-6 2 2-6 6-2z"/>`,
+  wood: `<path d="M4 16c4-6 9-8 16-8"/><path d="M4 20c4-6 9-8 16-8"/><path d="M6 11c4-2 8-3 13-3"/>`,
+  bamboo: `<path d="M8 21V3M14 21V3M20 21V3"/><path d="M6 8h4M12 13h4M18 7h4"/><path d="M8 11l-4 3M14 8l4 2"/>`,
+  earth: `<path d="M4 9h16M4 13h16M4 17h16"/><path d="M7 7c2 1 4 1 6 0s4-1 6 0"/><path d="M5 21h14"/>`,
+  greenroof: `<path d="M3 13l9-8 9 8"/><path d="M6 12v8h12v-8"/><path d="M7 8c4-5 9-5 13-1"/><path d="M9 7c0-3 2-5 5-5"/>`,
+};
+
+function iconSvg(icon, className = "") {
+  const paths = iconSvgs[icon] || iconSvgs.project;
+  return `<span class="picto ${escapeHtml(className)}" aria-hidden="true"><svg viewBox="0 0 24 24" focusable="false">${paths}</svg></span>`;
+}
+
 function serviceCards(limit) {
   return site.services
     .slice(0, limit || site.services.length)
     .map(
       (service) => `
         <article class="service-card">
-          <span class="service-mark" aria-hidden="true">${escapeHtml(service.title.slice(0, 2))}</span>
+          ${iconSvg(service.icon, "service-mark")}
           <h3>${escapeHtml(service.title)}</h3>
           <p>${escapeHtml(service.short)}</p>
         </article>
@@ -253,15 +285,75 @@ function materialCards() {
         <article class="material-card${material.imageKey === "piseSmoothVilla" ? " material-card-pise" : ""}">
           <img src="${imageUrl(material.imageKey)}" alt="${escapeHtml(material.title)} - ${escapeHtml(material.subtitle)}" loading="lazy">
           <div>
+            ${iconSvg(material.icon, "material-mark")}
             <p class="card-eyebrow">${escapeHtml(material.subtitle)}</p>
             <h3>${escapeHtml(material.title)}</h3>
             <p>${escapeHtml(material.text)}</p>
+            ${
+              material.detailImageKey
+                ? `<figure class="material-detail-thumb"><img src="${imageUrl(material.detailImageKey)}" alt="Détail matière ${escapeHtml(material.title)}" loading="lazy"><figcaption>Détail matière</figcaption></figure>`
+                : ""
+            }
             <dl class="material-benefits">
               <dt>Thermique</dt>
               <dd>${escapeHtml(material.thermal || "")}</dd>
               <dt>Écologique</dt>
               <dd>${escapeHtml(material.eco || "")}</dd>
             </dl>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function visualPillarCards() {
+  return (site.visualPillars || [])
+    .map(
+      (pillar) => `
+        <article class="visual-pillar-card">
+          ${iconSvg(pillar.icon, "visual-pillar-mark")}
+          <h3>${escapeHtml(pillar.title)}</h3>
+          <p>${escapeHtml(pillar.text)}</p>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function qualityCommitmentCards() {
+  return (site.qualityCommitments || [])
+    .map(
+      (item) => `
+        <article class="quality-card">
+          ${iconSvg(item.icon, "quality-mark")}
+          <div>
+            <h3>${escapeHtml(item.title)}</h3>
+            <p>${escapeHtml(item.text)}</p>
+          </div>
+        </article>
+      `,
+    )
+    .join("");
+}
+
+function contactFactCards() {
+  const facts = [
+    { icon: "pin", label: "Localisation", value: site.company.location },
+    { icon: "user", label: "Direction", value: site.company.directorDescription },
+    { icon: "handshake", label: "Collaboration France", value: site.company.partner },
+    { icon: "phone", label: "Téléphone Côte d'Ivoire", value: site.company.phone, href: site.company.telHref },
+    { icon: "globe", label: "WhatsApp France", value: site.company.whatsappPhone, href: site.company.whatsappHref },
+  ];
+
+  return facts
+    .map(
+      (fact) => `
+        <article class="contact-icon-card">
+          ${iconSvg(fact.icon, "contact-mark")}
+          <div>
+            <span>${escapeHtml(fact.label)}</span>
+            <strong>${fact.href ? `<a href="${fact.href}" target="${fact.href.startsWith("http") ? "_blank" : "_self"}" rel="noreferrer">${escapeHtml(fact.value)}</a>` : escapeHtml(fact.value)}</strong>
           </div>
         </article>
       `,
@@ -368,7 +460,7 @@ function planCards() {
     .map(
       (plan) => `
         <article class="plan-card">
-          <div class="plan-art">${plan.imageKey ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
+          <div class="plan-art${plan.imageKey && plan.imageKey.startsWith("plaquettePlan") ? " plaquette-plan-art" : ""}">${plan.imageKey ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
           <div class="plan-analysis">
             <h4>Plan de circulation et ventilation croisée</h4>
             ${planSvg(plan.slug)}
@@ -412,34 +504,34 @@ function galleryCards() {
 
 const homeHeroVideoSlides = [
   {
-    imageKey: "whiteVillaGarden01",
+    imageKey: "plaquetteHeroVillaPool",
+    kicker: "Villa tropicale",
+    title: "Piscine lagon, pergola bois et jardin tropical",
+    alt: "Villa tropicale avec piscine lagon, pergola bois et jardin",
+  },
+  {
+    imageKey: "plaquetteVillaBlanche",
     kicker: "Villa blanche",
-    title: "Grandes baies vitrées ouvertes sur jardin tropical",
-    alt: "Villa blanche avec grandes baies vitrées sur jardin tropical",
+    title: "Béton clair, jardin tropical et lignes contemporaines",
+    alt: "Villa blanche moderne en béton avec jardin tropical",
   },
   {
-    imageKey: "whiteVillaPool03",
-    kicker: "Villa blanche",
-    title: "Lignes contemporaines, piscine et lumière naturelle",
-    alt: "Villa blanche contemporaine avec grandes baies vitrées et piscine",
+    imageKey: "plaquetteInteriorBay",
+    kicker: "Intérieur lumineux",
+    title: "Grandes baies vitrées et séjour naturellement ventilé",
+    alt: "Intérieur lumineux avec grandes baies vitrées",
   },
   {
-    imageKey: "whiteDuplexPool02",
-    kicker: "Villa blanche duplex",
-    title: "Volumes lumineux et extérieur premium",
-    alt: "Villa duplex blanche avec piscine",
+    imageKey: "plaquetteVillaPergola",
+    kicker: "Vie extérieure",
+    title: "Terrasse, pergola bois et confort tropical",
+    alt: "Villa tropicale avec pergola bois",
   },
   {
-    imageKey: "hero",
-    kicker: "Matériaux naturels",
-    title: "BTC, piscine lagon et confort tropical",
-    alt: "Villa tropicale en matériaux naturels avec BTC et piscine lagon",
-  },
-  {
-    imageKey: "bricks",
-    kicker: "Matériaux naturels",
-    title: "Murs en BTC et présence architecturale",
-    alt: "Villa premium en BTC à Abidjan",
+    imageKey: "plaquettePoolGarden",
+    kicker: "Piscine lagon",
+    title: "Eau naturelle intégrée au jardin tropical",
+    alt: "Piscine lagon intégrée dans un jardin tropical",
   },
 ];
 
@@ -803,7 +895,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260717-2">
+    <link rel="stylesheet" href="/styles.css?v=20260717-3">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -916,6 +1008,10 @@ function renderHome() {
         </div>
       </section>
 
+      <section class="content-band compact-band plaquette-pillar-band">
+        <div class="visual-pillar-grid">${visualPillarCards()}</div>
+      </section>
+
       ${villaGalleryVideoSection()}
 
       <section class="content-band">
@@ -953,11 +1049,16 @@ function renderHome() {
         </div>
       </section>
 
+      <section class="content-band muted-band quality-section">
+        ${sectionIntro("Engagements qualité", "Délais, normes, finitions et projet verrouillé", "Des repères simples pour comprendre la méthode ARASAKA avant le démarrage du chantier.")}
+        <div class="quality-grid">${qualityCommitmentCards()}</div>
+      </section>
+
       <section class="dark-cta">
         <div>
-          <p class="kicker">Confort thermique</p>
-          <h2>Moins de climatisation en journée, plus d'air, plus d'ombre, plus de calme.</h2>
-          <p>Les matériaux naturels, les baies vitrées bien protégées, les vérandas et la ventilation croisée permettent de créer des maisons respirantes, adaptées aux usages tropicaux.</p>
+          <p class="kicker">Étude personnalisée</p>
+          <h2>Présentez votre terrain, votre villa ou votre projet d'investissement.</h2>
+          <p>ARASAKA clarifie le besoin, les matériaux, les plans, le budget et les étapes pour transformer l'intention en projet constructible.</p>
         </div>
         <a class="button light" href="${whatsappLink(message)}" target="_blank" rel="noreferrer">Parler du projet</a>
       </section>
@@ -1026,11 +1127,16 @@ function renderFicheArasaka() {
         <div class="center-action"><a class="button ghost-dark" href="/realisations">Voir toute la galerie</a></div>
       </section>
 
+      <section class="content-band muted-band quality-section">
+        ${sectionIntro("Engagements qualité", "Délais, normes, finitions et projet verrouillé", "Des repères simples pour comprendre la méthode ARASAKA avant le démarrage du chantier.")}
+        <div class="quality-grid">${qualityCommitmentCards()}</div>
+      </section>
+
       <section class="dark-cta">
         <div>
-          <p class="kicker">Engagement qualité</p>
-          <h2>Délais, normes internationales, finitions soignées et définition précise du projet.</h2>
-          <p>ARASAKA met en avant un chantier documenté, des décisions claires et une finition alignée avec les standards internationaux les plus exigeants.</p>
+          <p class="kicker">Étude personnalisée</p>
+          <h2>Présentez votre terrain, votre villa ou votre projet d'investissement.</h2>
+          <p>ARASAKA clarifie le besoin, les matériaux, les plans, le budget et les étapes pour transformer l'intention en projet constructible.</p>
         </div>
         <a class="button light" href="/contact">Planifier une étude</a>
       </section>
@@ -1441,6 +1547,11 @@ function renderPortfolio() {
         <div class="portfolio-grid" data-gallery-grid>${portfolioCards()}</div>
       </section>
 
+      <section class="content-band">
+        ${sectionIntro("Galerie inspirations ARASAKA", "Villas, jardins, piscines, pergolas et intérieurs", "Cette sélection reprend les visuels de la plaquette et les replace par ambiance pour aider à cadrer le style du projet.")}
+        <div class="gallery-grid" data-gallery-grid>${galleryCards()}</div>
+      </section>
+
       <section class="content-band partner-photo-section" id="realisations-partenaires">
         ${partnerRealisationPhotoSections()}
       </section>
@@ -1568,22 +1679,7 @@ function renderContact() {
           <a class="button secondary full" href="${site.company.telHref}">Appeler Côte d'Ivoire ${escapeHtml(site.company.phone)}</a>
           <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">WhatsApp ${escapeHtml(site.company.whatsappPhone)}</a>
           <a class="button ghost-dark full" href="${site.company.gmailHref}" target="_blank" rel="noreferrer">Écrire par Gmail</a>
-          <div class="contact-details">
-            <span>Adresse</span>
-            <strong>${escapeHtml(site.company.location)}</strong>
-            <span>Téléphone Côte d'Ivoire</span>
-            <strong><a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a></strong>
-            <span>WhatsApp</span>
-            <strong><a href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.whatsappPhone)}</a></strong>
-            <span>France</span>
-            <strong>${escapeHtml(site.company.franceLocation)}</strong>
-            <span>Direction</span>
-            <strong>${escapeHtml(site.company.directorDescription)}</strong>
-            <span>Ermancia</span>
-            <strong>${escapeHtml(site.company.ermanciaLocation)}</strong>
-            <span>Email</span>
-            <strong><a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a></strong>
-          </div>
+          <div class="contact-icon-grid">${contactFactCards()}</div>
         </aside>
       </section>
     `,
@@ -1600,7 +1696,7 @@ const routes = new Map([
   ["/materiaux", renderMaterials],
   ["/realisations", renderPortfolio],
   ["/plans", renderPlans],
-  ["/galerie", renderPortfolio],
+  ["/galerie", renderGallery],
   ["/contact", renderContact],
 ]);
 

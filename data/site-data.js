@@ -515,7 +515,24 @@ module.exports = {
     { href: "/contact", key: "contact", label: "Contact" },
   ],
   images: {
-    hero: asset("hero-villa-btc-piscine-lagon.png"),
+    hero: asset("plaquette/plaquette-hero-villa-piscine-pergola.png"),
+    plaquetteHeroVillaPool: asset("plaquette/plaquette-hero-villa-piscine-pergola.png"),
+    plaquetteVillaBlanche: asset("plaquette/plaquette-villa-blanche-beton-jardin.png"),
+    plaquetteVillaPergola: asset("plaquette/plaquette-villa-tropicale-pergola-bois.png"),
+    plaquettePoolGarden: asset("plaquette/plaquette-piscine-lagon-jardin.png"),
+    plaquetteInteriorBay: asset("plaquette/plaquette-interieur-baies-vitrees.png"),
+    plaquetteLivingVentilated: asset("plaquette/plaquette-salon-sejour-ventile.png"),
+    plaquetteTerracePergola: asset("plaquette/plaquette-terrasse-pergola-mobilier.png"),
+    plaquetteTropicalGarden: asset("plaquette/plaquette-jardin-tropical-fleuri.png"),
+    plaquetteKitchenLiving: asset("plaquette/plaquette-cuisine-sejour-lumineux.png"),
+    plaquetteMaterialBtc: asset("plaquette/plaquette-materiau-btc.png"),
+    plaquetteMaterialWood: asset("plaquette/plaquette-materiau-bois.png"),
+    plaquetteMaterialBamboo: asset("plaquette/plaquette-materiau-bambou.png"),
+    plaquetteMaterialPise: asset("plaquette/plaquette-materiau-pise.png"),
+    plaquetteMaterialGreenRoof: asset("plaquette/plaquette-materiau-toiture-vegetalisee.png"),
+    plaquettePlanVilla3: asset("plaquette/plaquette-plan-villa-basse-3-chambres.png"),
+    plaquettePlanPatio: asset("plaquette/plaquette-plan-villa-familiale-patio.png"),
+    plaquettePlanVeranda: asset("plaquette/plaquette-plan-villa-grande-veranda.png"),
     portfolioHero: portfolioAfricanManagerImage,
     groupementWorkSession: asset("groupement-partenaires-africains-dossier.png"),
     rammedEarth: image("photo-1761367950537-14f834333ecc", 1400, 82),
@@ -565,9 +582,60 @@ module.exports = {
     "Matériaux naturels et durables",
     "Ventilation naturelle et confort thermique",
     "Chantier contrôlé, devis clair et reporting",
-      "Pont France - Côte d'Ivoire pour la diaspora",
-      "ARASAKA et GEAP, une même entité",
-      "Finitions aux standards internationaux",
+    "Pont France - Côte d'Ivoire pour la diaspora",
+    "ARASAKA et GEAP, une même entité",
+    "Finitions aux standards internationaux",
+  ],
+  visualPillars: [
+    {
+      icon: "leaf",
+      title: "Matériaux naturels et durables",
+      text:
+        "ARASAKA privilégie le BTC, le bois, le bambou, le pisé et les matériaux adaptés au climat tropical.",
+    },
+    {
+      icon: "wind",
+      title: "Confort thermique et ventilation naturelle",
+      text:
+        "Les villas sont pensées pour favoriser la circulation de l'air, limiter la chaleur intérieure et réduire l'usage de la climatisation en journée.",
+    },
+    {
+      icon: "shield",
+      title: "Normes internationales",
+      text:
+        "Les projets sont conçus et suivis avec rigueur, dans le respect des standards professionnels du bâtiment.",
+    },
+    {
+      icon: "handshake",
+      title: "Accompagnement personnalisé",
+      text:
+        "ARASAKA accompagne chaque client dans la définition, la sécurisation et le suivi de son projet.",
+    },
+  ],
+  qualityCommitments: [
+    {
+      icon: "clock",
+      title: "Respect des délais",
+      text: "Chaque projet est planifié avec précision afin de respecter les engagements pris.",
+    },
+    {
+      icon: "shield",
+      title: "Normes internationales",
+      text:
+        "Les projets sont conçus et suivis avec rigueur, dans le respect des standards professionnels du bâtiment.",
+    },
+    {
+      icon: "finish",
+      title: "Finitions haut de gamme",
+      text:
+        "ARASAKA accorde une attention particulière aux détails, aux finitions propres et à la qualité d'exécution.",
+    },
+    {
+      icon: "project",
+      title: "Définition précise du projet",
+      text:
+        "Avant le démarrage, ARASAKA clarifie le besoin, le budget, les matériaux, les plans et les étapes du chantier.",
+    },
   ],
   positioning: {
     title:
@@ -741,51 +809,69 @@ module.exports = {
   ],
   services: [
     {
+      icon: "villa",
       title: "Construction de villas",
-      short: "Villas basses, villas familiales et résidences haut de gamme adaptées au climat tropical.",
+      short:
+        "Conception et réalisation de villas basses, modernes, tropicales et adaptées au mode de vie ivoirien.",
     },
     {
+      icon: "renovation",
       title: "Rénovation haut de gamme",
-      short: "Modernisation de maisons, redistribution des pièces, finitions et valorisation patrimoniale.",
+      short:
+        "Rénovation de villas, appartements et espaces de vie avec un niveau de finition soigné.",
     },
     {
+      icon: "project",
       title: "Finalisation d'appartements et villas",
       short:
         "Achèvement, personnalisation et finitions d'appartements ou de villas acquis en promotion immobilière.",
     },
     {
+      icon: "plan",
       title: "Extensions de villas",
       short: "Agrandissements, nouvelles pièces, terrasses, cuisines extérieures, clôtures et façades modernisées.",
     },
     {
+      icon: "tropical",
       title: "Architecture tropicale",
-      short: "Orientation, ombrage, patios, vérandas, ventilation croisée et circulation fluide.",
+      short:
+        "Architecture ouverte sur l'extérieur, avec jardins, patios, vérandas, pergolas, ventilation naturelle et matériaux adaptés.",
     },
     {
+      icon: "garden",
       title: "Aménagements extérieurs",
-      short: "Jardins fleuris, zones ombragées, terrasses, circulations et lieux de vie dehors.",
+      short:
+        "Création d'espaces de vie extérieurs : jardins fleuris, terrasses, pergolas, cheminements et zones ombragées.",
     },
     {
+      icon: "pool",
       title: "Piscines lagon",
-      short: "Bassins naturels, plages immergées, intégration paysagère et ambiance resort privé.",
+      short:
+        "Conception de piscines naturelles et esthétiques, intégrées dans un environnement tropical.",
     },
     {
+      icon: "pergola",
       title: "Pergolas et vérandas",
-      short: "Structures bois ou bambou, protections solaires, salons extérieurs et repas au jardin.",
+      short: "Création d'espaces ombragés pour profiter de la vie extérieure avec confort.",
     },
     {
+      icon: "globe",
       title: "Accompagnement diaspora",
-      short: "Cadrage à distance, suivi documenté, collaboration France - Côte d'Ivoire et reporting clair.",
+      short:
+        "ARASAKA accompagne les clients ivoiriens et la diaspora dans la définition, la sécurisation et le suivi de leurs projets.",
     },
     {
+      icon: "building",
       title: "Petit immeuble locatif clé en main",
       short: "Conception et suivi de petits programmes locatifs avec optimisation du terrain, du budget et des délais.",
     },
     {
+      icon: "project",
       title: "Définition précise du projet",
       short: "Programme, plans, budget, planning et standards de finition verrouillés avant exécution.",
     },
     {
+      icon: "compass",
       title: "Pôle architecture GEAP",
       short:
         "ARASAKA et GE Architectes & Partenaires (GEAP) agissent comme une seule entité pour assurer la cohérence des études, du suivi et des délais.",
@@ -793,49 +879,56 @@ module.exports = {
   ],
   materials: [
     {
+      icon: "building",
       title: "Béton",
       subtitle: "Structure, dalles, voiles et villas blanches",
-      imageKey: "whiteVilla",
+      imageKey: "plaquetteVillaBlanche",
       text: "Le béton reste un matériau central pour certaines structures, villas blanches contemporaines et ouvrages exposés.",
       thermal: "À utiliser avec protections solaires, ventilation, débords et végétation pour éviter la surchauffe.",
       eco: "Durable lorsqu'il est bien dimensionné, limité aux usages pertinents et associé à des matériaux locaux plus sobres.",
     },
     {
+      icon: "leaf",
       title: "BTC",
       subtitle: "Villas en terre comprimée",
-      imageKey: "bricks",
+      imageKey: "plaquetteMaterialBtc",
       text: "La BTC permet de créer des villas respirantes, élégantes et naturellement adaptées à la chaleur tropicale.",
       thermal: "Stocke la fraîcheur et limite les pics de chaleur dans les pièces.",
       eco: "Valorise la terre locale, réduit les transports et demande moins d'énergie que des matériaux fortement transformés.",
     },
     {
+      icon: "wood",
       title: "Bois africain",
       subtitle: "Teck, iroko, finitions",
-      imageKey: "teakTerrace",
+      imageKey: "plaquetteMaterialWood",
       text: "Le teck et l'iroko apportent une finition noble, durable et adaptée aux terrasses, plafonds et espaces extérieurs protégés.",
       thermal: "Protège du rayonnement direct et améliore le confort des terrasses et plafonds ventilés.",
       eco: "Matériau renouvelable lorsqu'il est choisi, traité et sourcé correctement.",
     },
     {
+      icon: "bamboo",
       title: "Bambou",
       subtitle: "Clôtures, claustras, ombrage",
-      imageKey: "bambooWall",
+      imageKey: "plaquetteMaterialBamboo",
       text: "Léger, tropical et graphique, le bambou permet de composer des clôtures décoratives, claustras et zones d'ombrage respirantes.",
       thermal: "Filtre le soleil sans bloquer la ventilation naturelle.",
       eco: "Croissance rapide, faible poids et intégration naturelle dans les jardins tropicaux.",
     },
     {
+      icon: "earth",
       title: "Pisé",
       subtitle: "Ravalement et enduits intérieurs",
       imageKey: "piseSmoothVilla",
+      detailImageKey: "plaquetteMaterialPise",
       text: "Le pisé est utilisé en ravalement ou en enduit intérieur pour apporter une finition naturelle, minérale et élégante.",
       thermal: "En enduit, il améliore la sensation de confort et participe à la régulation naturelle de l'humidité.",
       eco: "Matière peu transformée, locale et réparable, adaptée aux finitions sobres et durables.",
     },
     {
+      icon: "greenroof",
       title: "Toitures végétalisées",
       subtitle: "Fraicheur, inertie, paysage",
-      imageKey: "greenRoof",
+      imageKey: "plaquetteMaterialGreenRoof",
       text: "Elles réduisent l'échauffement des volumes, prolongent le jardin et renforcent l'intégration au site.",
       thermal: "Protège la toiture du soleil et ralentit la transmission de chaleur.",
       eco: "Favorise la biodiversité, retient une partie des eaux de pluie et végétalise le bâti.",
@@ -853,7 +946,7 @@ module.exports = {
       title: "Villa basse premium 3 chambres",
       slug: "compact",
       surface: "150 - 190 m2",
-      imageKey: "whiteVillaGarden01",
+      imageKey: "plaquettePlanVilla3",
       features: [
         "Suite parentale avec salle de bain et WC",
         "2 chambres supplémentaires avec salle de bain et WC privatifs",
@@ -871,14 +964,14 @@ module.exports = {
       title: "Villa familiale avec patio",
       slug: "patio",
       surface: "220 - 280 m2",
-      imageKey: "centralPatio",
+      imageKey: "plaquettePlanPatio",
       features: ["Patio central", "Cuisine ouverte", "4 chambres", "Piscine lagon"],
     },
     {
       title: "Villa tropicale grande véranda",
       slug: "veranda",
       surface: "260 - 340 m2",
-      imageKey: "coveredTerrace",
+      imageKey: "plaquettePlanVeranda",
       features: ["Grande véranda", "Baies vitrées", "Pergola bois", "Toiture végétalisée"],
     },
     {
@@ -890,6 +983,15 @@ module.exports = {
     },
   ],
   gallery: [
+    { title: "Villa tropicale, piscine lagon, pergola et jardin", category: "piscines", imageKey: "plaquetteHeroVillaPool" },
+    { title: "Villa blanche moderne en béton avec jardin tropical", category: "villas-blanches", imageKey: "plaquetteVillaBlanche" },
+    { title: "Villa tropicale avec pergola bois", category: "terrasses", imageKey: "plaquetteVillaPergola" },
+    { title: "Piscine lagon intégrée dans un jardin tropical", category: "piscines", imageKey: "plaquettePoolGarden" },
+    { title: "Intérieur lumineux avec grandes baies vitrées", category: "interieurs", imageKey: "plaquetteInteriorBay" },
+    { title: "Séjour ventilé naturellement", category: "interieurs", imageKey: "plaquetteLivingVentilated" },
+    { title: "Cuisine et séjour ouverts sur l'extérieur", category: "interieurs", imageKey: "plaquetteKitchenLiving" },
+    { title: "Terrasse extérieure avec pergola et mobilier", category: "terrasses", imageKey: "plaquetteTerracePergola" },
+    { title: "Jardin tropical fleuri et arboré", category: "jardins", imageKey: "plaquetteTropicalGarden" },
     { title: "Villa blanche premium en béton ventilé", category: "villas-blanches", imageKey: "whiteVilla" },
     { title: "Villa blanche avec grandes baies sur jardin", category: "villas-blanches", imageKey: "whiteVillaGarden01" },
     { title: "Villa blanche contemporaine et jardin tropical", category: "villas-blanches", imageKey: "whiteVillaGarden02" },
