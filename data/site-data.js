@@ -945,7 +945,7 @@ module.exports = {
       title: "Villa basse premium 3 chambres",
       slug: "compact",
       surface: "150 - 190 m2",
-      imageKey: "plaquettePlanVilla3",
+      imageKey: "whiteVillaGarden01",
       features: [
         "Suite parentale avec salle de bain et WC",
         "2 chambres supplémentaires avec salle de bain et WC privatifs",
@@ -963,14 +963,14 @@ module.exports = {
       title: "Villa familiale avec patio",
       slug: "patio",
       surface: "220 - 280 m2",
-      imageKey: "plaquettePlanPatio",
+      imageKey: "centralPatio",
       features: ["Patio central", "Cuisine ouverte", "4 chambres", "Piscine lagon"],
     },
     {
       title: "Villa tropicale grande véranda",
       slug: "veranda",
       surface: "260 - 340 m2",
-      imageKey: "plaquettePlanVeranda",
+      imageKey: "coveredTerrace",
       features: ["Grande véranda", "Baies vitrées", "Pergola bois", "Toiture végétalisée"],
     },
     {
