@@ -803,7 +803,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260710-4">
+    <link rel="stylesheet" href="/styles.css?v=20260717-1">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -820,10 +820,16 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       <nav class="main-nav" id="main-nav" data-main-nav aria-label="Navigation principale">
         ${nav}
       </nav>
-      <a class="phone-link" href="${site.company.telHref}">
-        <span aria-hidden="true">Tel</span>
-        ${escapeHtml(site.company.phone)}
-      </a>
+      <div class="header-contacts" aria-label="Contacts rapides">
+        <a class="phone-link" href="${site.company.telHref}">
+          <span aria-hidden="true">Tel</span>
+          ${escapeHtml(site.company.phone)}
+        </a>
+        <a class="phone-link whatsapp-link" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">
+          <span aria-hidden="true">WA</span>
+          ${escapeHtml(site.company.whatsappPhone)}
+        </a>
+      </div>
     </header>
     <main>
       ${body}
@@ -913,12 +919,12 @@ function renderHome() {
       ${villaGalleryVideoSection()}
 
       <section class="content-band">
-        ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, finalisation d'un appartement en promotion immobilière, investissement ou création d'un art de vivre tropical : chaque offre est cadrée selon le bien, le budget et le niveau de finition attendu.")}
+        ${sectionIntro("Offres commerciales", "Un accompagnement adapté à chaque projet", "Construction, rénovation, finalisation d'appartements et de villas en promotion immobilière, investissement ou création d'un art de vivre tropical : chaque offre est cadrée selon le bien, le budget et le niveau de finition attendu.")}
         <div class="offer-grid">${offerCards()}</div>
       </section>
 
       <section class="content-band muted-band">
-        ${sectionIntro("Services", "Des prestations complètes pour villas, rénovations et investissements locatifs", "Construction, rénovation, architecture tropicale, piscines lagon, pergolas, jardins, petits immeubles et accompagnement à distance.")}
+        ${sectionIntro("Services", "Des prestations complètes pour appartements, villas, rénovations et investissements locatifs", "Construction, rénovation, finalisation d'appartements et de villas, architecture tropicale, piscines lagon, pergolas, jardins, petits immeubles et accompagnement à distance.")}
         <div class="service-grid">${serviceCards(8)}</div>
         <div class="center-action"><a class="button secondary" href="/services">Explorer tous les services</a></div>
       </section>
@@ -1143,7 +1149,7 @@ function renderGroupement() {
           <div class="groupement-proof-grid">
             <article><span>3 partenaires clés</span><strong>GEAP, X-GONE BTP et GR CONSULTING</strong></article>
             <article><span>Chaîne complète</span><strong>Études, ingénierie, exécution, conformité et suivi</strong></article>
-            <article><span>Références</span><strong>Togo, Côte d'Ivoire et sous-région ouest-africaine</strong></article>
+            <article><span>Références</span><strong>Togo, Côte d'Ivoire, France avec Ermancia et sous-région ouest-africaine</strong></article>
             <article><span>Marchés visés</span><strong>Bâtiment, BTP, tertiaire, institutionnel et résidentiel premium</strong></article>
           </div>
         </div>

@@ -146,12 +146,20 @@ textarea {
   transform: scaleX(1);
 }
 
+.header-contacts {
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  gap: 12px;
+  min-width: max-content;
+}
+
 .phone-link {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
+  gap: 8px;
   color: var(--green-900);
-  font-size: 0.82rem;
+  font-size: 0.78rem;
   font-weight: 650;
   white-space: nowrap;
 }
@@ -165,6 +173,10 @@ textarea {
   font-size: 0.72rem;
   background: var(--green-800);
   border-radius: 999px;
+}
+
+.whatsapp-link span {
+  background: #1f8f4d;
 }
 
 .menu-toggle {
@@ -2971,10 +2983,14 @@ dd {
     display: flex;
   }
 
+  .header-contacts {
+    gap: 8px;
+  }
+
   .phone-link {
     display: inline-flex;
     gap: 6px;
-    font-size: 0.84rem;
+    font-size: 0.72rem;
   }
 
   .phone-link span {
@@ -3099,6 +3115,7 @@ dd {
     display: flex;
   }
 
+  .header-contacts,
   .phone-link {
     display: none;
   }

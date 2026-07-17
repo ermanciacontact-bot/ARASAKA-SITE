@@ -328,7 +328,7 @@ const groupementPartners = [
       "Études architecturales et programmation",
       "Urbanisme, conception et coordination technique",
       "Maîtrise d'oeuvre, cohérence des plans et suivi des choix techniques",
-      "Références sous-régionales en équipements, bureaux, hôtellerie et résidentiel",
+      "Références sous-régionales et relais France avec Ermancia",
     ],
     contribution:
       "GEAP crédibilise la partie conception et études du groupement, en apportant une lecture architecturale adaptée aux usages africains et aux standards internationaux.",
@@ -390,7 +390,7 @@ const groupementCapabilities = [
   {
     title: "Références sous-régionales",
     text:
-      "Les réalisations GEAP et X-GONE BTP donnent au groupement une base crédible pour défendre des projets d'envergure en Côte d'Ivoire et dans la sous-région.",
+      "Les réalisations GEAP et X-GONE BTP, complétées par le relais France avec Ermancia, donnent au groupement une base crédible pour défendre des projets d'envergure en Côte d'Ivoire, en France et dans la sous-région.",
   },
   {
     title: "Exécution et contrôle",
@@ -646,11 +646,11 @@ module.exports = {
       cta: "Étudier une rénovation",
     },
     {
-      title: "Finalisation d'appartement en promotion immobilière",
+      title: "Finalisation d'appartements et villas en promotion immobilière",
       audience: "Acquéreurs et investisseurs",
       text:
-        "État des lieux, définition des finitions, achèvement des lots, coordination des intervenants, contrôle qualité et livraison d'un appartement prêt à vivre ou à louer.",
-      cta: "Finaliser un appartement",
+        "État des lieux, définition des finitions, achèvement des lots, coordination des intervenants, contrôle qualité et livraison d'un appartement ou d'une villa prêt à vivre ou à louer.",
+      cta: "Finaliser un bien",
     },
     {
       title: "Jardins et espaces de vie extérieurs",
@@ -826,7 +826,7 @@ module.exports = {
     {
       title: "Pisé",
       subtitle: "Ravalement et enduits intérieurs",
-      imageKey: "mudWall",
+      imageKey: "materialsHeroNatural",
       text: "Le pisé est utilisé en ravalement ou en enduit intérieur pour apporter une finition naturelle, minérale et élégante.",
       thermal: "En enduit, il améliore la sensation de confort et participe à la régulation naturelle de l'humidité.",
       eco: "Matière peu transformée, locale et réparable, adaptée aux finitions sobres et durables.",
