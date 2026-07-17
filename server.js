@@ -457,10 +457,11 @@ function planSvg(slug) {
 
 function planCards() {
   return site.plans
-    .map(
-      (plan) => `
+    .map((plan) => {
+      const useVectorPlan = plan.imageKey && plan.imageKey.startsWith("plaquettePlan");
+      return `
         <article class="plan-card">
-          <div class="plan-art${plan.imageKey && plan.imageKey.startsWith("plaquettePlan") ? " plaquette-plan-art" : ""}">${plan.imageKey ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
+          <div class="plan-art${useVectorPlan ? " plaquette-plan-art" : ""}">${plan.imageKey && !useVectorPlan ? `<img src="${imageUrl(plan.imageKey)}" alt="${escapeHtml(plan.title)}" loading="lazy">` : planSvg(plan.slug)}</div>
           <div class="plan-analysis">
             <h4>Plan de circulation et ventilation croisée</h4>
             ${planSvg(plan.slug)}
@@ -478,8 +479,8 @@ function planCards() {
             <a class="link-arrow" href="/contact?plan=${encodeURIComponent(plan.title)}">Demander ce plan</a>
           </div>
         </article>
-      `,
-    )
+      `;
+    })
     .join("");
 }
 
@@ -504,20 +505,50 @@ function galleryCards() {
 
 const homeHeroVideoSlides = [
   {
+    imageKey: "whiteVillaGarden01",
+    kicker: "Villa blanche",
+    title: "Grandes baies vitrées ouvertes sur jardin tropical",
+    alt: "Villa blanche avec grandes baies vitrées sur jardin tropical",
+  },
+  {
+    imageKey: "whiteVillaPool03",
+    kicker: "Villa blanche",
+    title: "Lignes contemporaines, piscine et lumière naturelle",
+    alt: "Villa blanche contemporaine avec grandes baies vitrées et piscine",
+  },
+  {
+    imageKey: "whiteDuplexPool02",
+    kicker: "Villa blanche duplex",
+    title: "Volumes lumineux et extérieur premium",
+    alt: "Villa duplex blanche avec piscine",
+  },
+  {
+    imageKey: "hero",
+    kicker: "Matériaux naturels",
+    title: "BTC, piscine lagon et confort tropical",
+    alt: "Villa tropicale en matériaux naturels avec BTC et piscine lagon",
+  },
+  {
+    imageKey: "bricks",
+    kicker: "Matériaux naturels",
+    title: "Murs en BTC et présence architecturale",
+    alt: "Villa premium en BTC à Abidjan",
+  },
+  {
     imageKey: "plaquetteHeroVillaPool",
-    kicker: "Villa tropicale",
+    kicker: "Inspiration plaquette",
     title: "Piscine lagon, pergola bois et jardin tropical",
     alt: "Villa tropicale avec piscine lagon, pergola bois et jardin",
   },
   {
     imageKey: "plaquetteVillaBlanche",
-    kicker: "Villa blanche",
+    kicker: "Inspiration plaquette",
     title: "Béton clair, jardin tropical et lignes contemporaines",
     alt: "Villa blanche moderne en béton avec jardin tropical",
   },
   {
     imageKey: "plaquetteInteriorBay",
-    kicker: "Intérieur lumineux",
+    kicker: "Inspiration plaquette",
     title: "Grandes baies vitrées et séjour naturellement ventilé",
     alt: "Intérieur lumineux avec grandes baies vitrées",
   },
@@ -551,7 +582,7 @@ function homeHeroVideoPresentation() {
     .join("");
 
   return `
-    <div class="hero-natural-video" aria-label="Présentation vidéo de trois villas blanches et deux villas en matériaux naturels">
+    <div class="hero-natural-video" style="--hero-slide-count: ${homeHeroVideoSlides.length}" aria-label="Présentation vidéo de villas blanches, villas en matériaux naturels et inspirations plaquette">
       ${slides}
       <div class="hero-video-progress" aria-hidden="true">${progress}</div>
     </div>
@@ -895,7 +926,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260717-3">
+    <link rel="stylesheet" href="/styles.css?v=20260717-4">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">

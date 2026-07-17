@@ -251,6 +251,8 @@ textarea {
 }
 
 .hero-natural-video {
+  --hero-step: 7s;
+  --hero-duration: calc(var(--hero-slide-count, 10) * var(--hero-step));
   position: absolute;
   inset: 0;
   z-index: 0;
@@ -265,8 +267,8 @@ textarea {
   inset: 0;
   margin: 0;
   opacity: 0;
-  animation: hero-natural-fade 35s infinite;
-  animation-delay: calc(var(--slide-index) * 7s);
+  animation: hero-natural-fade var(--hero-duration) infinite;
+  animation-delay: calc(var(--slide-index) * var(--hero-step));
 }
 
 .hero-video-slide img {
@@ -275,8 +277,8 @@ textarea {
   object-fit: cover;
   filter: brightness(1.24) contrast(1.22) saturate(1.12);
   transform: scale(1.08);
-  animation: hero-natural-kenburns 35s infinite;
-  animation-delay: calc(var(--slide-index) * 7s);
+  animation: hero-natural-kenburns var(--hero-duration) infinite;
+  animation-delay: calc(var(--slide-index) * var(--hero-step));
 }
 
 .hero-video-progress {
@@ -286,7 +288,7 @@ textarea {
   bottom: 18px;
   z-index: 2;
   display: grid;
-  grid-template-columns: repeat(5, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--hero-slide-count, 10), minmax(0, 1fr));
   gap: 10px;
 }
 
@@ -305,8 +307,8 @@ textarea {
   transform: scaleX(0);
   transform-origin: left;
   background: #e8c08d;
-  animation: hero-video-progress 35s infinite;
-  animation-delay: calc(var(--bar-index) * 7s);
+  animation: hero-video-progress var(--hero-duration) infinite;
+  animation-delay: calc(var(--bar-index) * var(--hero-step));
 }
 
 .hero-text-band {
@@ -380,12 +382,12 @@ textarea {
     opacity: 0;
   }
 
-  3%,
-  15% {
+  1.5%,
+  8.5% {
     opacity: 1;
   }
 
-  20% {
+  10% {
     opacity: 0;
   }
 }
@@ -395,7 +397,7 @@ textarea {
     transform: scale(1.08) translate3d(0, 0, 0);
   }
 
-  20% {
+  10% {
     transform: scale(1.16) translate3d(-1.4%, -0.8%, 0);
   }
 
@@ -409,11 +411,11 @@ textarea {
     transform: scaleX(0);
   }
 
-  15% {
+  8.5% {
     transform: scaleX(1);
   }
 
-  16%,
+  10%,
   100% {
     transform: scaleX(0);
   }
