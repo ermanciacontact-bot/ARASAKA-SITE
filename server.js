@@ -6,6 +6,13 @@ const tls = require("node:tls");
 const { URL } = require("node:url");
 const site = require("./data/site-data");
 
+let nodemailer = null;
+try {
+  nodemailer = require("nodemailer");
+} catch {
+  nodemailer = null;
+}
+
 const PORT = Number(process.env.PORT || 4321);
 const SITE_AUTH_ENABLED = process.env.SITE_AUTH === "1" || process.env.SITE_AUTH === "true";
 const SITE_USERNAME = process.env.SITE_USERNAME || "arasaka";
@@ -167,7 +174,38 @@ function encodeHeader(value) {
   return `=?UTF-8?B?${Buffer.from(safeHeader(value), "utf8").toString("base64")}?=`;
 }
 
-async function sendContactEmail(lead, contactText) {
+function smtpErrorMessage(error) {
+  return (
+    error?.response ||
+    error?.message ||
+    error?.code ||
+    "Erreur SMTP inconnue"
+  );
+}
+
+async function sendContactEmailWithNodemailer(lead, contactText) {
+  const transporter = nodemailer.createTransport({
+    host: SMTP_HOST,
+    port: SMTP_PORT,
+    secure: SMTP_PORT === 465,
+    auth: {
+      user: SMTP_USER,
+      pass: SMTP_PASS,
+    },
+  });
+
+  await transporter.sendMail({
+    from: `ARASAKA Site <${SMTP_USER}>`,
+    to: site.company.email,
+    replyTo: lead.email || undefined,
+    subject: `Nouvelle demande ARASAKA - ${lead.name}`,
+    text: contactText,
+  });
+
+  return { sent: true };
+}
+
+async function sendContactEmailWithBuiltinSmtp(lead, contactText) {
   if (!smtpConfigured()) {
     return { sent: false, reason: "SMTP_NOT_CONFIGURED" };
   }
@@ -214,10 +252,27 @@ async function sendContactEmail(lead, contactText) {
 
     return { sent: true };
   } catch (error) {
-    console.error(`Envoi email impossible: ${error.message}`);
+    console.error(`Envoi email impossible: ${smtpErrorMessage(error)}`);
     return { sent: false, reason: "SMTP_SEND_FAILED" };
   } finally {
     socket.destroy();
+  }
+}
+
+async function sendContactEmail(lead, contactText) {
+  if (!smtpConfigured()) {
+    return { sent: false, reason: "SMTP_NOT_CONFIGURED" };
+  }
+
+  try {
+    if (nodemailer) {
+      return await sendContactEmailWithNodemailer(lead, contactText);
+    }
+
+    return await sendContactEmailWithBuiltinSmtp(lead, contactText);
+  } catch (error) {
+    console.error(`Envoi email impossible: ${smtpErrorMessage(error)}`);
+    return { sent: false, reason: "SMTP_SEND_FAILED" };
   }
 }
 
