@@ -3587,11 +3587,20 @@ dd {
   }
 
   .floating-contact {
-    right: 14px;
-    min-height: 42px;
-    padding: 0 14px;
-    font-size: 0.86rem;
+    right: 12px;
+    bottom: max(14px, calc(env(safe-area-inset-bottom) + 12px));
+    width: 48px;
+    min-height: 48px;
+    padding: 0;
+    font-size: 0;
+    border-radius: 999px;
     box-shadow: 0 14px 34px rgba(16, 47, 33, 0.24);
+  }
+
+  .floating-contact::before {
+    content: "WA";
+    font-size: 0.82rem;
+    font-weight: 900;
   }
 }
 
