@@ -1407,9 +1407,9 @@ function renderAbout() {
       <section class="content-band">
         ${sectionIntro("Notre méthode", "Une exigence moderne au service d'une architecture enracinée", "Chaque projet associe une définition précise du besoin, des études cohérentes, un suivi transparent et une attention constante portée aux finitions.")}
         <div class="commitment-grid">
-          <article><h3>Respect des délais</h3><p>Planning par étapes, points d'avancement et priorisation des decisions critiques.</p></article>
+          <article><h3>Respect des délais</h3><p>Planning par étapes, points d'avancement et priorisation des décisions critiques.</p></article>
           <article><h3>Normes internationales</h3><p>Culture de chantier structurée, standards techniques et contrôle qualité.</p></article>
-          <article><h3>Finitions soignées</h3><p>Attention portee aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
+          <article><h3>Finitions soignées</h3><p>Attention portée aux matériaux, raccords, détails visibles et confort quotidien.</p></article>
           <article><h3>Projet précis</h3><p>Plans, programme, budget et choix matériaux clarifiés avant exécution.</p></article>
           <article><h3>Entité ARASAKA - GEAP</h3><p>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de la même entité, pour renforcer la cohérence des études, la coordination du projet, la qualité architecturale et la maîtrise des délais.</p></article>
           <article><h3>Partenaire international X-GONE BTP</h3><p>Basée à Lomé au Togo, X-GONE BTP apporte une expérience d'entreprise générale sur projets publics et privés, construction neuve, rénovation lourde, génie civil et bâtiments de prestige.</p></article>
