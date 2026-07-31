@@ -556,6 +556,7 @@ module.exports = {
     premiumVillaConcept: asset("villa-moderne-blanche-terrasse-piscine-naturelle.png"),
     premiumVillaPlan: asset("plan-detaille-villa-blanche-piscine.png"),
     teakTerrace: asset("terrasse-teck-iroko-piscine.png"),
+    diasporaHeroDepth: asset("diaspora-hero-profondeur.png"),
     diasporaClients: asset("diaspora-clients-premium-visio.png"),
     diasporaSite: asset("suivi-chantier-techniciens-premium.png"),
     poolSun01: asset("piscine-lagon-grand-soleil-01.png"),

@@ -981,7 +981,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260731-2">
+    <link rel="stylesheet" href="/styles.css?v=20260731-3">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -1241,7 +1241,7 @@ function renderDiaspora() {
       "Offre diaspora ARASAKA pour construire, rénover, agrandir ou aménager un bien en Côte d’Ivoire avec un suivi clair depuis l'étranger.",
     bodyClass: "page-diaspora",
     body: `
-      <section class="page-hero remote-hero diaspora-hero" style="--hero-image: url('${imageUrl("diasporaClients")}')">
+      <section class="page-hero remote-hero diaspora-hero" style="--hero-image: url('${imageUrl("diasporaHeroDepth")}')">
         <div>
           <p class="kicker">Offre diaspora</p>
           <h1>Construire, rénover ou agrandir en Côte d’Ivoire depuis l'étranger.</h1>
