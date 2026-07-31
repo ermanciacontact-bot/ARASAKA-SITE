@@ -535,7 +535,7 @@ module.exports = {
     plaquettePlanPatio: asset("plan-detaille-villa-blanche-piscine.png"),
     plaquettePlanVeranda: asset("plan-detaille-villa-blanche-piscine.png"),
     portfolioHero: portfolioAfricanManagerImage,
-    groupementWorkSession: asset("groupement-partenaires-africains-dossier-jeunes.png"),
+    groupementWorkSession: asset("groupement-techniciens-ingenieurs-intergenerationnels.png"),
     rammedEarth: image("photo-1761367950537-14f834333ecc", 1400, 82),
     tropicalPool: asset("piscine-lagon-villa-tropicale.png"),
     bambooWall: asset("bambou-decoration-cloture.png"),
