@@ -79,10 +79,10 @@ textarea {
   top: 0;
   z-index: 50;
   display: grid;
-  grid-template-columns: auto minmax(0, 1fr) auto;
+  grid-template-columns: minmax(210px, 270px) minmax(0, 1fr) auto;
   align-items: center;
-  gap: 16px;
-  min-height: 58px;
+  gap: clamp(12px, 2vw, 24px);
+  min-height: 64px;
   padding: 0 22px;
   background: rgba(255, 255, 255, 0.94);
   border-bottom: 1px solid rgba(23, 63, 43, 0.12);
@@ -91,22 +91,25 @@ textarea {
 
 .brand {
   display: grid;
-  gap: 2px;
-  min-width: 160px;
+  gap: 4px;
+  min-width: 0;
+  max-width: 270px;
 }
 
 .brand strong {
   font-family: Georgia, "Times New Roman", serif;
-  font-size: clamp(1.45rem, 2.1vw, 1.9rem);
+  font-size: clamp(1.55rem, 2vw, 1.95rem);
   line-height: 1;
   color: var(--green-800);
 }
 
 .brand span {
-  max-width: 190px;
-  color: var(--muted);
-  font-size: 0.64rem;
-  line-height: 1.18;
+  max-width: 270px;
+  color: #5d5448;
+  font-size: 0.72rem;
+  font-weight: 650;
+  line-height: 1.22;
+  text-wrap: balance;
 }
 
 .main-nav {
@@ -3090,9 +3093,9 @@ dd {
 
 @media (max-width: 1100px) {
   .site-header {
-    grid-template-columns: minmax(140px, 170px) minmax(0, 1fr) auto;
+    grid-template-columns: minmax(190px, 220px) minmax(0, 1fr) auto;
     gap: 10px;
-    min-height: 66px;
+    min-height: 70px;
     padding: 0 14px;
     align-items: center;
   }
@@ -3106,8 +3109,9 @@ dd {
   }
 
   .brand span {
-    max-width: 168px;
-    font-size: 0.68rem;
+    max-width: 220px;
+    font-size: 0.65rem;
+    line-height: 1.2;
   }
 
   .menu-toggle {
@@ -3127,8 +3131,8 @@ dd {
   }
 
   .main-nav a {
-    padding: 9px 7px;
-    font-size: 0.82rem;
+    padding: 9px 5px;
+    font-size: 0.74rem;
   }
 
   body.menu-open .main-nav {
@@ -3136,7 +3140,7 @@ dd {
   }
 
   .header-contacts {
-    gap: 8px;
+    display: none;
   }
 
   .phone-link {
@@ -3232,6 +3236,15 @@ dd {
     padding: 8px 14px;
   }
 
+  .brand {
+    max-width: min(100%, 300px);
+  }
+
+  .brand span {
+    max-width: 260px;
+    font-size: 0.68rem;
+  }
+
   .menu-toggle {
     display: inline-grid;
     place-content: center;
@@ -3295,8 +3308,9 @@ dd {
   }
 
   .brand span {
-    max-width: 170px;
-    font-size: 0.68rem;
+    max-width: 260px;
+    font-size: 0.66rem;
+    line-height: 1.22;
   }
 
   .main-nav {
@@ -3618,8 +3632,8 @@ dd {
   }
 
   .brand span {
-    max-width: 145px;
-    font-size: 0.62rem;
+    max-width: 236px;
+    font-size: 0.6rem;
   }
 
   .menu-toggle {

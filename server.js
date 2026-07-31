@@ -397,7 +397,7 @@ function contactFactCards() {
     { icon: "pin", label: "Localisation", value: site.company.location },
     { icon: "user", label: "Direction", value: site.company.directorDescription },
     { icon: "handshake", label: "Collaboration France", value: site.company.partner },
-    { icon: "phone", label: "Téléphone Côte d'Ivoire", value: site.company.phone, href: site.company.telHref },
+    { icon: "phone", label: "Téléphone Côte d’Ivoire", value: site.company.phone, href: site.company.telHref },
     { icon: "globe", label: "WhatsApp France", value: site.company.whatsappPhone, href: site.company.whatsappHref },
   ];
 
@@ -968,7 +968,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     address: site.company.location,
     telephone: site.company.phone,
     email: site.company.email,
-    areaServed: ["Côte d'Ivoire", "Abidjan", "France", "Diaspora ivoirienne"],
+    areaServed: ["Côte d’Ivoire", "Abidjan", "France", "Diaspora ivoirienne"],
     founder: site.company.director,
   };
 
@@ -981,7 +981,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
     <meta name="description" content="${escapeHtml(description)}">
     <meta name="theme-color" content="#123923">
     <link rel="icon" href="/favicon.svg" type="image/svg+xml">
-    <link rel="stylesheet" href="/styles.css?v=20260717-4">
+    <link rel="stylesheet" href="/styles.css?v=20260731-1">
     <script type="application/ld+json">${JSON.stringify(schema)}</script>
   </head>
   <body class="${escapeHtml(bodyClass)}">
@@ -1000,7 +1000,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       </nav>
       <div class="header-contacts" aria-label="Contacts rapides">
         <a class="phone-link" href="${site.company.telHref}">
-          <span aria-hidden="true">Tel</span>
+          <span aria-hidden="true">Tél</span>
           ${escapeHtml(site.company.phone)}
         </a>
         <a class="phone-link whatsapp-link" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">
@@ -1021,7 +1021,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
         <p>${escapeHtml(site.company.baseline)}</p>
       </div>
       <div>
-        <span>Côte d'Ivoire</span>
+        <span>Côte d’Ivoire</span>
         <p>${escapeHtml(site.company.location)}</p>
       </div>
       <div>
@@ -1035,7 +1035,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       <div>
         <span>Contact</span>
         <p>
-          Côte d'Ivoire : <a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br>
+          Côte d’Ivoire : <a href="${site.company.telHref}">${escapeHtml(site.company.phone)}</a><br>
           WhatsApp : <a href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.whatsappPhone)}</a><br>
           <a href="${site.company.gmailHref}" target="_blank" rel="noreferrer">${escapeHtml(site.company.email)}</a>
         </p>
@@ -1051,20 +1051,20 @@ function layout({ active, title, description, body, bodyClass = "" }) {
         <button type="button" data-tour-next>Suivant</button>
       </div>
     </div>
-    <script src="/app.js?v=20260704-2" defer></script>
+    <script src="/app.js?v=20260731-1" defer></script>
   </body>
 </html>`;
 }
 
 function renderHome() {
   const message =
-    "Bonjour ARASAKA, je souhaite demander une étude pour un projet de villa ou rénovation en Côte d'Ivoire.";
+    "Bonjour ARASAKA, je souhaite demander une étude pour un projet de villa ou rénovation en Côte d’Ivoire.";
 
   return layout({
     active: "home",
     title: "Accueil",
     description:
-      "ARASAKA accompagne les projets de construction, rénovation, agrandissement, finitions et aménagements extérieurs en Côte d'Ivoire.",
+      "ARASAKA accompagne les projets de construction, rénovation, agrandissement, finitions et aménagements extérieurs en Côte d’Ivoire.",
     bodyClass: "page-home",
     body: `
       <section class="hero hero-home hero-home-natural-video" style="--hero-image: url('${imageUrl("hero")}')">
@@ -1112,7 +1112,7 @@ function renderHome() {
       </section>
 
       <section class="content-band">
-        ${sectionIntro("Entité architecturale", "ARASAKA et GE Architectes & Partenaires (GEAP) forment une même entité", "Cette entité réunit bâtiment, architecture, urbanisme, ingénierie, maîtrise d'oeuvre complète et coordination de projets d'envergure.")}
+        ${sectionIntro("Entité architecturale", "ARASAKA et GE Architectes & Partenaires (GEAP) forment une même entité", "Cette entité réunit bâtiment, architecture, urbanisme, ingénierie, maîtrise d’œuvre complète et coordination de projets d'envergure.")}
         <div class="geap-showcase">
           <div class="geap-preview">
             <img src="${imageUrl("premiumVillaConcept")}" alt="Villa contemporaine liée à l'approche architecturale ARASAKA GEAP">
@@ -1122,10 +1122,10 @@ function renderHome() {
             <h3>GE Architectes & Partenaires constitue le pôle architecture, urbanisme et ingénierie de l'entité ARASAKA.</h3>
             <p>Le pressbook présente une expertise en architecture, urbanisme, ingénierie, études préalables, programmes, planification et assistance à maîtrise d'ouvrage. Pour les projets ARASAKA, cela signifie des projets mieux cadrés, des choix architecturaux plus solides et une coordination renforcée entre conception et réalisation.</p>
             <div class="geap-proof-grid">
-              <div><span>Architecture</span><strong>Equipements urbains, bureaux, logements, rénovation, réhabilitation et habitat planifié.</strong></div>
+              <div><span>Architecture</span><strong>Équipements urbains, bureaux, logements, rénovation, réhabilitation et habitat planifié.</strong></div>
               <div><span>Urbanisme</span><strong>Schémas directeurs, restructuration, projets littoraux, réseaux et équipements urbains.</strong></div>
-              <div><span>Références</span><strong>Togo, Bénin, Gabon, Côte d'Ivoire, Sénégal et Burkina Faso.</strong></div>
-              <div><span>Maîtrise d'oeuvre</span><strong>Missions complètes, conduite d'opération et suivi structuré de projets.</strong></div>
+              <div><span>Références</span><strong>Togo, Bénin, Gabon, Côte d’Ivoire, Sénégal et Burkina Faso.</strong></div>
+              <div><span>Maîtrise d’œuvre</span><strong>Missions complètes, conduite d'opération et suivi structuré de projets.</strong></div>
             </div>
             <div class="hero-actions">
               <a class="button secondary" href="/groupement">Voir le groupement</a>
@@ -1184,7 +1184,7 @@ function renderFicheArasaka() {
           <p>${escapeHtml(site.company.standards)}</p>
           <p>${escapeHtml(site.company.finishPromise)}</p>
           <div class="fact-grid">
-            <div><span>Base</span><strong>Abidjan, Angre 7e Tranche</strong></div>
+            <div><span>Base</span><strong>${escapeHtml(site.company.location)}</strong></div>
             <div><span>Direction</span><strong>${escapeHtml(site.company.directorDescription)}</strong></div>
             <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
             <div><span>Études</span><strong>GE Architectes & Partenaires (GEAP)</strong></div>
@@ -1232,19 +1232,19 @@ function renderFicheArasaka() {
 
 function renderDiaspora() {
   const message =
-    "Bonjour ARASAKA, je souhaite étudier un projet de construction, rénovation ou extension en Côte d'Ivoire depuis l'étranger.";
+    "Bonjour ARASAKA, je souhaite étudier un projet de construction, rénovation ou extension en Côte d’Ivoire depuis l'étranger.";
 
   return layout({
     active: "diaspora",
     title: "Diaspora",
     description:
-      "Offre diaspora ARASAKA pour construire, rénover, agrandir ou aménager un bien en Côte d'Ivoire avec un suivi clair depuis l'étranger.",
+      "Offre diaspora ARASAKA pour construire, rénover, agrandir ou aménager un bien en Côte d’Ivoire avec un suivi clair depuis l'étranger.",
     bodyClass: "page-diaspora",
     body: `
       <section class="page-hero remote-hero diaspora-hero" style="--hero-image: url('${imageUrl("diasporaClients")}')">
         <div>
           <p class="kicker">Offre diaspora</p>
-          <h1>Construire, rénover ou agrandir en Côte d'Ivoire depuis l'étranger.</h1>
+          <h1>Construire, rénover ou agrandir en Côte d’Ivoire depuis l'étranger.</h1>
           <p class="page-hero-copy">ARASAKA transforme votre projet en un cadre de vie moderne africain, avec un interlocuteur unique, un budget cadré et un suivi documenté jusqu'à la livraison.</p>
           <div class="hero-actions">
             <a class="button primary" href="/contact?offre=Projet%20diaspora">Présenter mon projet</a>
@@ -1294,7 +1294,7 @@ function renderDiaspora() {
         <div>
           <p class="kicker">Une expérience partagée</p>
           <h2>Comprendre les attentes de la diaspora pour construire avec confiance.</h2>
-          <p>Étant moi-même issu de la diaspora et professionnel du bâtiment, je comprends les attentes de ceux qui souhaitent construire en Côte d'Ivoire avec confiance. Mon ambition avec ARASAKA est de proposer une approche équilibrée : valoriser les matériaux locaux, respecter le climat tropical, affirmer une architecture africaine contemporaine et apporter une méthode de travail rigoureuse, transparente et soignée.</p>
+          <p>Étant moi-même issu de la diaspora et professionnel du bâtiment, je comprends les attentes de ceux qui souhaitent construire en Côte d’Ivoire avec confiance. Mon ambition avec ARASAKA est de proposer une approche équilibrée : valoriser les matériaux locaux, respecter le climat tropical, affirmer une architecture africaine contemporaine et apporter une méthode de travail rigoureuse, transparente et soignée.</p>
           <p>ARASAKA est un pont entre l'identité architecturale africaine et les exigences contemporaines du bâtiment. Nous concevons et réalisons des villas, rénovations et espaces extérieurs qui valorisent les matériaux locaux, le confort tropical et les finitions haut de gamme.</p>
         </div>
       </section>
@@ -1341,7 +1341,7 @@ function renderGroupement() {
           <div class="groupement-proof-grid">
             <article><span>3 partenaires clés</span><strong>GEAP, X-GONE BTP et GR CONSULTING</strong></article>
             <article><span>Chaîne complète</span><strong>Études, ingénierie, exécution, conformité et suivi</strong></article>
-            <article><span>Références</span><strong>Togo, Côte d'Ivoire, France avec Ermancia et sous-région ouest-africaine</strong></article>
+            <article><span>Références</span><strong>Togo, Côte d’Ivoire, France avec Ermancia et sous-région ouest-africaine</strong></article>
             <article><span>Marchés visés</span><strong>Bâtiment, BTP, tertiaire, institutionnel et résidentiel premium</strong></article>
           </div>
         </div>
@@ -1366,7 +1366,7 @@ function renderAbout() {
     active: "about",
     title: "Qui sommes-nous",
     description:
-      "ARASAKA, un pont entre architecture africaine contemporaine et exigences modernes en Côte d'Ivoire.",
+      "ARASAKA, un pont entre architecture africaine contemporaine et exigences modernes en Côte d’Ivoire.",
     body: `
       <section class="page-hero compact" style="--hero-image: url('${imageUrl("materialsHeroNatural")}')">
         <div>
@@ -1377,11 +1377,11 @@ function renderAbout() {
 
       <section class="two-column">
         <div>
-          ${sectionIntro("Notre conviction", "Construire avec identité, confort et exigence", "ARASAKA est née d'une conviction simple : il est possible de construire en Côte d'Ivoire des maisons élégantes, durables et confortables, en respectant le climat tropical, les matériaux locaux et l'identité architecturale africaine.")}
+          ${sectionIntro("Notre conviction", "Construire avec identité, confort et exigence", "ARASAKA est née d'une conviction simple : il est possible de construire en Côte d’Ivoire des maisons élégantes, durables et confortables, en respectant le climat tropical, les matériaux locaux et l'identité architecturale africaine.")}
           <p>Notre approche ne consiste pas à importer un modèle extérieur, mais à créer un équilibre entre tradition, modernité et exigence. Nous valorisons les matériaux naturels disponibles sur le sol ivoirien — BTC, terre, bois, bambou, pierre, végétation tropicale — tout en intégrant les standards actuels de confort, de fonctionnalité, de rigueur et de finition.</p>
           <p>ARASAKA s'adresse particulièrement à la diaspora ivoirienne, parce que nous comprenons ses attentes : construire à distance, sécuriser son investissement, suivre les travaux avec transparence et obtenir un résultat à la hauteur de ses ambitions.</p>
           <p>Notre vision est celle d'une architecture africaine moderne, enracinée dans son environnement, ouverte sur le monde, mais profondément adaptée au mode de vie ivoirien : maisons ventilées, espaces fluides, grandes terrasses, jardins tropicaux, pergolas, patios, piscines lagon et finitions soignées.</p>
-          <p><strong>Avec ARASAKA, construire en Côte d'Ivoire devient un projet clair, maîtrisé et élégant.</strong></p>
+          <p><strong>Avec ARASAKA, construire en Côte d’Ivoire devient un projet clair, maîtrisé et élégant.</strong></p>
         </div>
         <aside class="identity-panel">
           <h2>ARASAKA en bref</h2>
@@ -1456,14 +1456,14 @@ function renderRemoteBuild() {
     active: "remote",
     title: "Construire depuis l'extérieur",
     description:
-      "Construire depuis l'extérieur avec ARASAKA: rénovation, villa clé en main et suivi diaspora pour projets en Côte d'Ivoire.",
+      "Construire depuis l'extérieur avec ARASAKA: rénovation, villa clé en main et suivi diaspora pour projets en Côte d’Ivoire.",
     bodyClass: "page-remote-build",
     body: `
       <section class="page-hero remote-hero" style="--hero-image: url('${imageUrl("remoteHero")}')">
         <div>
           <p class="kicker">Clients locaux et projets suivis à distance</p>
           <h1>Construire avec méthode, même lorsque le projet se pilote à distance.</h1>
-          <p class="page-hero-copy">ARASAKA accompagne les clients en Côte d'Ivoire et à l'extérieur avec un cadre clair: études, budget, planning, photos, vidéos et validations par étapes.</p>
+          <p class="page-hero-copy">ARASAKA accompagne les clients en Côte d’Ivoire et à l'extérieur avec un cadre clair: études, budget, planning, photos, vidéos et validations par étapes.</p>
           <div class="hero-actions">
             <a class="button primary" href="/contact?offre=Suivi%20diaspora">Demander un suivi diaspora</a>
             <a class="button ghost" href="/plans">Voir les concepts de villas</a>
@@ -1681,7 +1681,7 @@ function renderContact() {
     active: "contact",
     title: "Contact",
     description:
-      "Contact ARASAKA pour une étude de projet de construction, rénovation ou amenagement extérieur en Côte d'Ivoire.",
+      "Contact ARASAKA pour une étude de projet de construction, rénovation ou aménagement extérieur en Côte d’Ivoire.",
     body: `
       <section class="page-hero compact contact-hero" style="--hero-image: url('${imageUrl("contactParcel")}')">
         <div>
@@ -1705,7 +1705,7 @@ function renderContact() {
             <p>Indiquez vos disponibilités et le type de visite souhaitée: terrain, rénovation, villa existante ou première discussion.</p>
           </div>
 
-          <form class="contact-form" data-contact-form data-contact-email="${escapeHtml(site.company.email)}" method="post" action="/api/contact">
+          <form class="contact-form" data-contact-form data-contact-email="${escapeHtml(site.company.email)}" data-whatsapp-number="${escapeHtml(site.company.whatsappNumber)}" method="post" action="/api/contact">
             <input type="hidden" name="requestType" value="Demande d'étude" data-request-type>
             <label>
               Nom complet
@@ -1762,7 +1762,7 @@ function renderContact() {
         <aside class="contact-aside">
           <h2>Contact direct</h2>
           <p>Pour un premier échange rapide, appelez ou écrivez-nous par Gmail ou WhatsApp.</p>
-          <a class="button secondary full" href="${site.company.telHref}">Appeler Côte d'Ivoire ${escapeHtml(site.company.phone)}</a>
+          <a class="button secondary full" href="${site.company.telHref}">Appeler Côte d’Ivoire ${escapeHtml(site.company.phone)}</a>
           <a class="button ghost-dark full" href="${site.company.whatsappHref}" target="_blank" rel="noreferrer">WhatsApp ${escapeHtml(site.company.whatsappPhone)}</a>
           <a class="button ghost-dark full" href="${site.company.gmailHref}" target="_blank" rel="noreferrer">Écrire par Gmail</a>
           <div class="contact-icon-grid">${contactFactCards()}</div>

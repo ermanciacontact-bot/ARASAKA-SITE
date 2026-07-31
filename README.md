@@ -29,7 +29,7 @@ mot de passe: test123
 
 Ces valeurs peuvent être remplacées avec `SITE_USERNAME` et `SITE_PASSWORD`.
 
-Si le port 4321 est deja utilise:
+Si le port 4321 est déjà utilisé:
 
 ```powershell
 $env:PORT=4322; node server.js
@@ -85,4 +85,4 @@ Les photos de la rubrique Nos réalisations sont dans:
 public/assets/images/portfolio
 ```
 
-Les images utilisees sont des visuels d'illustration appeles depuis Unsplash. Pour un site final de production, remplacer progressivement ces images par des photos de vos propres réalisations ARASAKA.
+Les images utilisées sont des visuels d'illustration appelés depuis Unsplash. Pour un site final de production, remplacer progressivement ces images par des photos de vos propres réalisations ARASAKA.

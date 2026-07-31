@@ -230,6 +230,7 @@ if (selectedOffer && projectTypeField) {
 const form = document.querySelector("[data-contact-form]");
 const statusBox = document.querySelector("[data-form-status]");
 const contactEmail = form?.dataset.contactEmail || "arasakaci.contact@gmail.com";
+const whatsappNumber = form?.dataset.whatsappNumber || "33652831160";
 
 function formToObject(formElement) {
   return Object.fromEntries(new FormData(formElement).entries());
@@ -252,7 +253,7 @@ function buildContactText(fields) {
 }
 
 function buildWhatsappUrl(fields) {
-  return `https://wa.me/33652831160?text=${encodeURIComponent(buildContactText(fields))}`;
+  return `https://wa.me/${whatsappNumber}?text=${encodeURIComponent(buildContactText(fields))}`;
 }
 
 function buildGmailUrl(fields) {

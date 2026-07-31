@@ -232,7 +232,7 @@ const xgoneInternationalProjects = [
     period: "En cours",
     status: "En cours",
     summary:
-      "Projet commercial d'envergure au coeur d'un pôle marchand stratégique de la capitale togolaise.",
+      "Projet commercial d'envergure au cœur d'un pôle marchand stratégique de la capitale togolaise.",
     highlights: ["Commerce", "Structure d'envergure", "Pilotage privé"],
   },
   {
@@ -313,7 +313,7 @@ const xgoneAdditionalReferences = [
   "Rénovation du stade municipal de Tsévié pour l'État togolais.",
   "Rénovation du bâtiment principal de la Direction Générale de la CEET à Lomé.",
   "Construction d'une église et d'une communauté à Sokodé.",
-  "Construction d'une église pour les Soeurs du Cénacle Togo.",
+  "Construction d'une église pour les Sœurs du Cénacle Togo.",
   "Plusieurs duplex résidentiels privés réalisés à Lomé.",
 ];
 
@@ -327,7 +327,7 @@ const groupementPartners = [
     strengths: [
       "Études architecturales et programmation",
       "Urbanisme, conception et coordination technique",
-      "Maîtrise d'oeuvre, cohérence des plans et suivi des choix techniques",
+      "Maîtrise d’œuvre, cohérence des plans et suivi des choix techniques",
       "Références sous-régionales et relais France avec Ermancia",
     ],
     contribution:
@@ -390,7 +390,7 @@ const groupementCapabilities = [
   {
     title: "Références sous-régionales",
     text:
-      "Les réalisations GEAP et X-GONE BTP, complétées par le relais France avec Ermancia, donnent au groupement une base crédible pour défendre des projets d'envergure en Côte d'Ivoire, en France et dans la sous-région.",
+      "Les réalisations GEAP et X-GONE BTP, complétées par le relais France avec Ermancia, donnent au groupement une base crédible pour défendre des projets d'envergure en Côte d’Ivoire, en France et dans la sous-région.",
   },
   {
     title: "Exécution et contrôle",
@@ -427,7 +427,7 @@ const partnerRealisationPhotoGroups = [
       ["CFAO Motors Togo - showrooms", "Tertiaire commercial", "Lomé, Togo", "xgone-cfao-motors-showrooms.jpg"],
       ["Ancienne usine textile de Datcha", "Réhabilitation industrielle", "Datcha, Togo", "xgone-usine-textile-datcha.jpg"],
       ["Duplex privé à Lomé", "Résidentiel haut standing", "Lomé, Togo", "xgone-duplex-prive-lome.jpg"],
-      ["Église des Soeurs du Cénacle", "Communautaire", "Lomé, Togo", "xgone-eglise-soeurs-cenacle.jpg"],
+      ["Église des Sœurs du Cénacle", "Communautaire", "Lomé, Togo", "xgone-eglise-soeurs-cenacle.jpg"],
       ["Duplex à Lomé", "Résidentiel", "Lomé, Togo", "xgone-duplex-lome.jpg"],
       ["Consulat de Slovaquie à Lomé", "Diplomatie", "Lomé, Togo", "xgone-consulat-slovaquie-lome.jpg"],
       ["Ministère du Commerce - bâtiment principal", "Bâtiment public", "Lomé, Togo", "xgone-ministere-commerce.jpg"],
@@ -453,11 +453,11 @@ const partnerRealisationPhotoGroups = [
       ["Complexe à Cotonou et siège Togo Telecom", "Bureaux", "Bénin / Togo", "geap-complexe-cotonou-togo-telecom.jpg"],
       ["BGFI Bank - Libreville et Port-Gentil", "Bureaux", "Gabon", "geap-bgfi-bank-gabon.jpg"],
       ["Bureaux bord de mer et Direction CEET", "Bureaux", "Gabon / Togo", "geap-bureaux-bord-mer-ceet.jpg"],
-      ["Village balnéaire Les Palétuviers", "Hôtellerie", "Assinie, Côte d'Ivoire", "geap-village-balneaire-assinie.jpg"],
+      ["Village balnéaire Les Palétuviers", "Hôtellerie", "Assinie, Côte d’Ivoire", "geap-village-balneaire-assinie.jpg"],
       ["Hôtel à Lomé et Blue Turtle", "Hôtellerie", "Lomé, Togo", "geap-hotel-lome-blue-turtle.jpg"],
       ["Mall commercial à Lomé", "Commercial", "Lomé, Togo", "geap-mall-commercial-lome.jpg"],
       ["Showrooms CFAO et CCT BATIMAT", "Commercial", "Togo", "geap-showrooms-cfao-cct-batimat.jpg"],
-      ["Port fluvial et lagunaire de Dabou", "Aménagement portuaire", "Dabou, Côte d'Ivoire", "geap-port-fluvial-lagunaire-dabou.jpg"],
+      ["Port fluvial et lagunaire de Dabou", "Aménagement portuaire", "Dabou, Côte d’Ivoire", "geap-port-fluvial-lagunaire-dabou.jpg"],
       ["Revalorisation des lagunes", "Urbanisme", "Lomé, Togo", "geap-revalorisation-lagunes.jpg"],
       ["Église et communauté à Sokodé", "Communautaire", "Sokodé, Togo", "geap-eglise-communaute-sokode.jpg"],
       ["École du Lycée Français de Lomé", "Écoles et universités", "Lomé, Togo", "geap-lycee-francais-lome.jpg"],
@@ -476,20 +476,21 @@ const partnerRealisationPhotoGroups = [
 module.exports = {
   company: {
     name: "ARASAKA",
-    baseline: "Architecture tropicale adaptée au climat tropical",
-    location: "Abidjan, Angre 7e Tranche, Côte d'Ivoire",
+    baseline: "Bâtiment, rénovation & architecture tropicale en Côte d’Ivoire",
+    location: "Abidjan, Angré 7e Tranche, Côte d’Ivoire",
     franceLocation: "Savigny-le-Temple 77176, France",
     ermanciaLocation: "Ermancia, 77176 Savigny-le-Temple",
     director: "M. Tchotchoe Maixent",
     directorDescription:
-      "M. Tchotchoe Maixent, directeur d'ARASAKA en Côte d'Ivoire et d'Ermancia en France.",
-    partner: "En collaboration avec l'entreprise Ermancia en France",
+      "M. Tchotchoe Maixent, directeur d'ARASAKA en Côte d’Ivoire et d'Ermancia en France.",
+    partner:
+      "ARASAKA est basée à Abidjan et travaille en collaboration avec Ermancia en France afin de créer un pont de confiance avec la diaspora et de mieux accompagner les clients exigeants.",
     architectPartner:
       "ARASAKA et GE Architectes & Partenaires (GEAP) forment une seule et même entité, réunissant bâtiment, architecture, urbanisme et ingénierie pour renforcer les études, la qualité des choix architecturaux, la coordination du projet et la maîtrise des délais.",
     internationalPartner:
       "X-GONE BTP, partenaire international basé à Lomé au Togo, entreprise générale de construction et de rénovation active sur projets publics et privés, bâtiments de prestige et infrastructures.",
     legalOperationsPartner:
-      "GR CONSULTING, cabinet juridique en Côte d'Ivoire avec lequel ARASAKA travaille pour la conformité des transactions, l'analyse des opérations et l'assistance juridique des projets.",
+      "GR CONSULTING, cabinet juridique en Côte d’Ivoire avec lequel ARASAKA travaille pour la conformité des transactions, l'analyse des opérations et l'assistance juridique des projets.",
     standards:
       "ARASAKA travaille avec des artisans et techniciens formés dans les meilleurs lycées techniques du pays, dans une culture de chantier alignée sur les normes internationales.",
     finishPromise:
@@ -582,7 +583,7 @@ module.exports = {
     "Matériaux naturels et durables",
     "Ventilation naturelle et confort thermique",
     "Chantier contrôlé, devis clair et reporting",
-    "Pont France - Côte d'Ivoire pour la diaspora",
+    "Pont France - Côte d’Ivoire pour la diaspora",
     "ARASAKA et GEAP, une même entité",
     "Finitions aux standards internationaux",
   ],
@@ -696,7 +697,7 @@ module.exports = {
       title: "Construction, rénovation et extension",
       audience: "Offre diaspora",
       text:
-        "Un accompagnement complet pour créer ou transformer votre bien en Côte d'Ivoire et donner forme à un art de vivre moderne africain.",
+        "Un accompagnement complet pour créer ou transformer votre bien en Côte d’Ivoire et donner forme à un art de vivre moderne africain.",
       cta: "Découvrir l'offre diaspora",
       href: "/diaspora",
     },
@@ -926,7 +927,7 @@ module.exports = {
     {
       icon: "greenroof",
       title: "Toitures végétalisées",
-      subtitle: "Fraicheur, inertie, paysage",
+      subtitle: "Fraîcheur, inertie, paysage",
       imageKey: "plaquetteMaterialGreenRoof",
       text: "Elles réduisent l'échauffement des volumes, prolongent le jardin et renforcent l'intégration au site.",
       thermal: "Protège la toiture du soleil et ralentit la transmission de chaleur.",
@@ -974,7 +975,7 @@ module.exports = {
       features: ["Grande véranda", "Baies vitrées", "Pergola bois", "Toiture végétalisée"],
     },
     {
-      title: "Residence diaspora clé en main",
+      title: "Résidence diaspora clé en main",
       slug: "diaspora",
       surface: "240 - 340 m2",
       imageKey: "whiteDuplexGarden01",
