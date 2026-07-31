@@ -482,7 +482,7 @@ module.exports = {
     ermanciaLocation: "Ermancia, 77176 Savigny-le-Temple",
     director: "M. Tchotchoe Maixent",
     directorDescription:
-      "M. Tchotchoe Maixent, directeur d'ARASAKA en Côte d’Ivoire et d'Ermancia en France.",
+      "M. Tchotchoe Maixent, ARASAKA; Côte d’Ivoire, Ermancia; France.",
     partner:
       "ARASAKA est basée à Abidjan et travaille en collaboration avec Ermancia en France afin de créer un pont de confiance avec la diaspora et de mieux accompagner les clients exigeants.",
     architectPartner:
