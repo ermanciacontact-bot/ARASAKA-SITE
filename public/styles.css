@@ -2285,10 +2285,10 @@ dd {
   font-weight: 850;
 }
 
-.groupement-hero {
+.page-hero.compact.groupement-hero {
   background-color: var(--green-900);
-  min-height: min(460px, calc(100svh - 58px));
-  background-position: center 28%;
+  min-height: min(56.25vw, calc(100svh - 64px));
+  background-position: center;
 }
 
 .groupement-positioning {
@@ -3372,9 +3372,9 @@ dd {
     background-position: 28% 26%;
   }
 
-  .groupement-hero {
-    min-height: 420px;
-    background-position: 48% 28%;
+  .page-hero.compact.groupement-hero {
+    min-height: 430px;
+    background-position: 50% center;
   }
 
   .portfolio-hero {
