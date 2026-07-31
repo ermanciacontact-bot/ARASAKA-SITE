@@ -46,6 +46,10 @@ function escapeHtml(value) {
     .replaceAll("'", "&#039;");
 }
 
+function escapeHtmlLines(value) {
+  return escapeHtml(value).replaceAll("\n", "<br>");
+}
+
 function jsonScript(value) {
   return JSON.stringify(value)
     .replaceAll("&", "\\u0026")
@@ -395,24 +399,26 @@ function qualityCommitmentCards() {
 function contactFactCards() {
   const facts = [
     { icon: "pin", label: "Localisation", value: site.company.location },
-    { icon: "user", label: "Direction", value: site.company.directorDescription },
+    { icon: "user", label: "Direction", value: site.company.directorDescription, multiline: true },
     { icon: "handshake", label: "Collaboration France", value: site.company.partner },
     { icon: "phone", label: "Téléphone Côte d’Ivoire", value: site.company.phone, href: site.company.telHref },
     { icon: "globe", label: "WhatsApp France", value: site.company.whatsappPhone, href: site.company.whatsappHref },
   ];
 
   return facts
-    .map(
-      (fact) => `
+    .map((fact) => {
+      const value = fact.multiline ? escapeHtmlLines(fact.value) : escapeHtml(fact.value);
+
+      return `
         <article class="contact-icon-card">
           ${iconSvg(fact.icon, "contact-mark")}
           <div>
             <span>${escapeHtml(fact.label)}</span>
-            <strong>${fact.href ? `<a href="${fact.href}" target="${fact.href.startsWith("http") ? "_blank" : "_self"}" rel="noreferrer">${escapeHtml(fact.value)}</a>` : escapeHtml(fact.value)}</strong>
+            <strong>${fact.href ? `<a href="${fact.href}" target="${fact.href.startsWith("http") ? "_blank" : "_self"}" rel="noreferrer">${value}</a>` : value}</strong>
           </div>
         </article>
-      `,
-    )
+      `;
+    })
     .join("");
 }
 
@@ -1030,7 +1036,7 @@ function layout({ active, title, description, body, bodyClass = "" }) {
       </div>
       <div>
         <span>Direction</span>
-        <p>${escapeHtml(site.company.directorDescription)}</p>
+        <p>${escapeHtmlLines(site.company.directorDescription)}</p>
       </div>
       <div>
         <span>Contact</span>
@@ -1185,7 +1191,7 @@ function renderFicheArasaka() {
           <p>${escapeHtml(site.company.finishPromise)}</p>
           <div class="fact-grid">
             <div><span>Base</span><strong>${escapeHtml(site.company.location)}</strong></div>
-            <div><span>Direction</span><strong>${escapeHtml(site.company.directorDescription)}</strong></div>
+            <div><span>Direction</span><strong>${escapeHtmlLines(site.company.directorDescription)}</strong></div>
             <div><span>France</span><strong>${escapeHtml(site.company.ermanciaLocation)}</strong></div>
             <div><span>Études</span><strong>GE Architectes & Partenaires (GEAP)</strong></div>
           </div>
@@ -1391,7 +1397,7 @@ function renderAbout() {
             <dt>Implantation</dt>
             <dd>${escapeHtml(site.company.location)}</dd>
             <dt>Direction</dt>
-            <dd>${escapeHtml(site.company.directorDescription)}</dd>
+            <dd>${escapeHtmlLines(site.company.directorDescription)}</dd>
             <dt>Architecture</dt>
             <dd>${escapeHtml(site.company.architectPartner)}</dd>
             <dt>International</dt>
