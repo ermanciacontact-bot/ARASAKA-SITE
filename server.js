@@ -21,6 +21,9 @@ const SMTP_HOST = process.env.SMTP_HOST || "smtp.gmail.com";
 const SMTP_PORT = Number(process.env.SMTP_PORT || 465);
 const SMTP_USER = process.env.SMTP_USER || "";
 const SMTP_PASS = process.env.SMTP_PASS || process.env.GMAIL_APP_PASSWORD || "";
+const CONTACT_TO_EMAIL = process.env.CONTACT_TO_EMAIL || site.company.email;
+const RESEND_API_KEY = process.env.RESEND_API_KEY || "";
+const RESEND_FROM_EMAIL = process.env.RESEND_FROM_EMAIL || "";
 const ROOT = __dirname;
 const PUBLIC_DIR = path.join(ROOT, "public");
 const LEADS_FILE = path.join(ROOT, "data", "leads.jsonl");
@@ -141,6 +144,10 @@ function smtpConfigured() {
   return Boolean(SMTP_USER && SMTP_PASS);
 }
 
+function resendConfigured() {
+  return Boolean(RESEND_API_KEY && RESEND_FROM_EMAIL);
+}
+
 function smtpResponse(socket) {
   return new Promise((resolve, reject) => {
     let response = "";
@@ -204,7 +211,46 @@ function smtpErrorMessage(error) {
   );
 }
 
-async function sendContactEmailWithNodemailer(lead, contactText) {
+async function sendContactEmailWithResend(lead, contactText, subject) {
+  if (!resendConfigured()) {
+    return { sent: false, reason: "RESEND_NOT_CONFIGURED" };
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 15_000);
+
+  try {
+    const response = await fetch("https://api.resend.com/emails", {
+      method: "POST",
+      headers: {
+        Authorization: `Bearer ${RESEND_API_KEY}`,
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({
+        from: RESEND_FROM_EMAIL,
+        to: [CONTACT_TO_EMAIL],
+        reply_to: lead.email || undefined,
+        subject,
+        text: contactText,
+      }),
+      signal: controller.signal,
+    });
+    const responseText = await response.text();
+
+    if (!response.ok) {
+      throw new Error(`Resend ${response.status}: ${responseText.slice(0, 500)}`);
+    }
+
+    return { sent: true, provider: "RESEND" };
+  } catch (error) {
+    console.error(`Envoi email Resend impossible: ${smtpErrorMessage(error)}`);
+    return { sent: false, reason: "RESEND_SEND_FAILED" };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+async function sendContactEmailWithNodemailer(lead, contactText, subject) {
   const transporter = nodemailer.createTransport({
     host: SMTP_HOST,
     port: SMTP_PORT,
@@ -220,16 +266,16 @@ async function sendContactEmailWithNodemailer(lead, contactText) {
 
   await transporter.sendMail({
     from: `ARASAKA Site <${SMTP_USER}>`,
-    to: site.company.email,
+    to: CONTACT_TO_EMAIL,
     replyTo: lead.email || undefined,
-    subject: `Nouvelle demande ARASAKA - ${lead.name}`,
+    subject,
     text: contactText,
   });
 
   return { sent: true };
 }
 
-async function sendContactEmailWithBuiltinSmtp(lead, contactText) {
+async function sendContactEmailWithBuiltinSmtp(lead, contactText, subject) {
   if (!smtpConfigured()) {
     return { sent: false, reason: "SMTP_NOT_CONFIGURED" };
   }
@@ -250,14 +296,14 @@ async function sendContactEmailWithBuiltinSmtp(lead, contactText) {
     await smtpCommand(socket, Buffer.from(SMTP_USER).toString("base64"), [334]);
     await smtpCommand(socket, Buffer.from(SMTP_PASS).toString("base64"), [235]);
     await smtpCommand(socket, `MAIL FROM:<${safeHeader(SMTP_USER)}>`, [250]);
-    await smtpCommand(socket, `RCPT TO:<${safeHeader(site.company.email)}>`, [250, 251]);
+    await smtpCommand(socket, `RCPT TO:<${safeHeader(CONTACT_TO_EMAIL)}>`, [250, 251]);
     await smtpCommand(socket, "DATA", [354]);
 
     const headers = [
       `From: ARASAKA Site <${safeHeader(SMTP_USER)}>`,
-      `To: ${safeHeader(site.company.email)}`,
+      `To: ${safeHeader(CONTACT_TO_EMAIL)}`,
       lead.email ? `Reply-To: ${safeHeader(lead.email)}` : "",
-      `Subject: ${encodeHeader(`Nouvelle demande ARASAKA - ${lead.name}`)}`,
+      `Subject: ${encodeHeader(subject)}`,
       "MIME-Version: 1.0",
       "Content-Type: text/plain; charset=UTF-8",
       "Content-Transfer-Encoding: 8bit",
@@ -283,17 +329,21 @@ async function sendContactEmailWithBuiltinSmtp(lead, contactText) {
   }
 }
 
-async function sendContactEmail(lead, contactText) {
+async function sendContactEmail(lead, contactText, subject) {
+  if (resendConfigured()) {
+    return await sendContactEmailWithResend(lead, contactText, subject);
+  }
+
   if (!smtpConfigured()) {
     return { sent: false, reason: "SMTP_NOT_CONFIGURED" };
   }
 
   try {
     if (nodemailer) {
-      return await sendContactEmailWithNodemailer(lead, contactText);
+      return await sendContactEmailWithNodemailer(lead, contactText, subject);
     }
 
-    return await sendContactEmailWithBuiltinSmtp(lead, contactText);
+    return await sendContactEmailWithBuiltinSmtp(lead, contactText, subject);
   } catch (error) {
     console.error(`Envoi email impossible: ${smtpErrorMessage(error)}`);
     return { sent: false, reason: "SMTP_SEND_FAILED" };
@@ -1892,7 +1942,7 @@ async function handleContact(req, res) {
 
     const contactText = contactMessageText(lead);
     const subject = `${lead.requestType || "Nouvelle demande"} ARASAKA - ${lead.name}`;
-    const emailResult = await sendContactEmail(lead, contactText);
+    const emailResult = await sendContactEmail(lead, contactText, subject);
 
     sendJson(res, 200, {
       ok: true,

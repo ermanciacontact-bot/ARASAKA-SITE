@@ -56,14 +56,24 @@ Le formulaire de contact envoie les données vers `/api/contact` et les enregist
 data/leads.jsonl
 ```
 
-Si le serveur n'est pas lancé avec SMTP Gmail, la demande est enregistrée localement et le site affiche un message Gmail / WhatsApp prêt à envoyer:
+Si le serveur n'est pas lancé avec une API email ou SMTP Gmail, la demande est enregistrée localement et le site affiche un message Gmail / WhatsApp prêt à envoyer:
 
 ```text
 email: arasakaci.contact@gmail.com
 +33 6 52 83 11 60
 ```
 
-Pour activer l'envoi email SMTP via Gmail au moment de la soumission, lancer le site avec:
+Pour activer l'envoi automatique sur Render Free, utiliser Resend avec ces variables d'environnement:
+
+```text
+RESEND_API_KEY=re_xxxxxxxxxxxxxxxxxxxxx
+RESEND_FROM_EMAIL=ARASAKA <contact@arasaka-ci.com>
+CONTACT_TO_EMAIL=arasakaci.contact@gmail.com
+```
+
+Le domaine `arasaka-ci.com` doit d'abord être vérifié dans Resend, puis les entrées DNS demandées doivent être ajoutées chez OVH.
+
+Pour activer l'envoi email SMTP via Gmail en local, lancer le site avec:
 
 ```powershell
 .\start-with-gmail.ps1
