@@ -3021,6 +3021,12 @@ dd {
   font-weight: 800;
 }
 
+.form-status a {
+  color: var(--green-900);
+  text-decoration-thickness: 2px;
+  text-underline-offset: 3px;
+}
+
 .contact-aside {
   position: sticky;
   top: 106px;

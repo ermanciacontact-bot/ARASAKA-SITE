@@ -196,14 +196,26 @@ const labelsByTab = {
   rdv: "Rendez-vous",
 };
 
+function activeContactTabKey() {
+  return document.querySelector("[data-contact-tab].active")?.dataset.contactTab || "etude";
+}
+
+function syncRequestTypeFromActiveTab() {
+  if (requestTypeInput) {
+    requestTypeInput.value = labelsByTab[activeContactTabKey()] || "Demande d'étude";
+  }
+}
+
 contactTabs.forEach((tab) => {
   tab.addEventListener("click", () => {
     const key = tab.dataset.contactTab;
     contactTabs.forEach((item) => item.classList.toggle("active", item === tab));
     contactCopies.forEach((copy) => copy.classList.toggle("active", copy.dataset.tabCopy === key));
-    if (requestTypeInput) requestTypeInput.value = labelsByTab[key] || "Demande d'étude";
+    syncRequestTypeFromActiveTab();
   });
 });
+
+syncRequestTypeFromActiveTab();
 
 const searchParams = new URLSearchParams(window.location.search);
 const selectedPlan = searchParams.get("plan");
@@ -233,17 +245,19 @@ const contactEmail = form?.dataset.contactEmail || "arasakaci.contact@gmail.com"
 const whatsappNumber = form?.dataset.whatsappNumber || "33652831160";
 
 function formToObject(formElement) {
+  syncRequestTypeFromActiveTab();
   return Object.fromEntries(new FormData(formElement).entries());
 }
 
 function buildContactText(fields) {
   return [
     "Bonjour ARASAKA, je souhaite être contacté pour un projet.",
+    fields.requestType ? `Type de demande: ${fields.requestType}` : "",
     fields.name ? `Nom: ${fields.name}` : "",
     fields.phone ? `Téléphone: ${fields.phone}` : "",
     fields.email ? `Email: ${fields.email}` : "",
     fields.projectAddress ? `Adresse du projet: ${fields.projectAddress}` : "",
-    fields.messaging ? `Messagerie: ${fields.messaging}` : "",
+    fields.messaging ? `Messagerie préférée: ${fields.messaging}` : "",
     fields.projectType ? `Projet: ${fields.projectType}` : "",
     fields.budget ? `Budget: ${fields.budget}` : "",
     fields.message ? `Message: ${fields.message}` : "",
@@ -257,12 +271,13 @@ function buildWhatsappUrl(fields) {
 }
 
 function buildGmailUrl(fields) {
-  const subject = fields.name ? `Demande ARASAKA - ${fields.name}` : "Demande ARASAKA";
+  const requestType = fields.requestType || "Demande";
+  const subject = fields.name ? `${requestType} ARASAKA - ${fields.name}` : `${requestType} ARASAKA`;
   return `https://mail.google.com/mail/?view=cm&fs=1&to=${encodeURIComponent(contactEmail)}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(buildContactText(fields))}`;
 }
 
-function renderStatus(message, links) {
-  statusBox.textContent = message;
+function renderStatus(message, links = []) {
+  statusBox.replaceChildren(document.createTextNode(message));
   links.forEach(({ href, label }) => {
     if (!href) return;
     statusBox.append(" ");
@@ -298,13 +313,13 @@ if (form && statusBox) {
           { href: result.whatsappUrl, label: "Envoyer aussi sur WhatsApp" },
         ]);
       } else {
-        renderStatus(result.message || "Email automatique non configuré sur ce serveur. La demande est enregistrée localement; ouvrez Gmail puis cliquez sur Envoyer pour la transmettre à ARASAKA CI.", [
+        renderStatus(result.message || "Demande enregistrée. Pour garantir la transmission immédiate, ouvrez Gmail ou WhatsApp puis envoyez le message préparé.", [
           { href: result.gmailUrl, label: "Ouvrir Gmail" },
           { href: result.whatsappUrl, label: "Envoyer par WhatsApp" },
         ]);
       }
       form.reset();
-      if (requestTypeInput) requestTypeInput.value = "Demande d'étude";
+      syncRequestTypeFromActiveTab();
     } catch (error) {
       renderStatus("Le serveur n'a pas pu confirmer l'envoi.", [
         { href: buildGmailUrl(fields), label: "Ouvrir Gmail" },

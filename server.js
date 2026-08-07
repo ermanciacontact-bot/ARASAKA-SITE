@@ -120,6 +120,23 @@ function gmailLink(subject, message) {
   return `${site.company.gmailHref}&su=${encodeURIComponent(subject)}&body=${encodeURIComponent(message)}`;
 }
 
+function contactMessageText(lead) {
+  return [
+    "Bonjour ARASAKA, je souhaite être contacté pour un projet.",
+    lead.requestType ? `Type de demande: ${lead.requestType}` : "",
+    `Nom: ${lead.name}`,
+    `Téléphone: ${lead.phone}`,
+    lead.email ? `Email: ${lead.email}` : "",
+    lead.projectAddress ? `Adresse du projet: ${lead.projectAddress}` : "",
+    lead.messaging ? `Messagerie préférée: ${lead.messaging}` : "",
+    lead.projectType ? `Projet: ${lead.projectType}` : "",
+    lead.budget ? `Budget: ${lead.budget}` : "",
+    lead.message ? `Message: ${lead.message}` : "",
+  ]
+    .filter(Boolean)
+    .join("\n");
+}
+
 function smtpConfigured() {
   return Boolean(SMTP_USER && SMTP_PASS);
 }
@@ -192,6 +209,9 @@ async function sendContactEmailWithNodemailer(lead, contactText) {
     host: SMTP_HOST,
     port: SMTP_PORT,
     secure: SMTP_PORT === 465,
+    connectionTimeout: 15_000,
+    greetingTimeout: 15_000,
+    socketTimeout: 15_000,
     auth: {
       user: SMTP_USER,
       pass: SMTP_PASS,
@@ -1704,7 +1724,7 @@ function renderContact() {
           </div>
           <div class="tab-copy active" data-tab-copy="etude">
             <h2>Étude personnalisée</h2>
-            <p>Envoyez les informations principales. Si le serveur Gmail est connecté, la demande part par email; sinon elle est enregistrée et un message Gmail prêt à envoyer s'affiche.</p>
+            <p>Envoyez les informations principales. La demande est enregistrée, puis transmise par email lorsque l'envoi automatique est disponible. Des liens Gmail et WhatsApp restent prêts en secours.</p>
           </div>
           <div class="tab-copy" data-tab-copy="rdv">
             <h2>Rendez-vous à Abidjan</h2>
@@ -1730,8 +1750,8 @@ function renderContact() {
               <input name="projectAddress" type="text" autocomplete="street-address" placeholder="Ville, quartier, pays">
             </label>
             <label>
-              Messagerie
-              <input name="messaging" type="text" placeholder="WhatsApp, email, lien ou préférence">
+              Messagerie préférée
+              <input name="messaging" type="text" placeholder="WhatsApp, email, appel, lien ou préférence">
             </label>
             <label>
               Type de projet
@@ -1863,39 +1883,26 @@ async function handleContact(req, res) {
     };
 
     if (!lead.name || !lead.phone) {
-      sendJson(res, 400, { ok: false, message: "Le nom et le telephone sont obligatoires." });
+      sendJson(res, 400, { ok: false, message: "Le nom et le téléphone sont obligatoires." });
       return;
     }
 
     await fs.promises.mkdir(path.dirname(LEADS_FILE), { recursive: true });
     await fs.promises.appendFile(LEADS_FILE, `${JSON.stringify(lead)}\n`, "utf8");
 
-    const waText = [
-      "Bonjour ARASAKA, je souhaite être contacté pour un projet.",
-      `Nom: ${lead.name}`,
-      `Téléphone: ${lead.phone}`,
-      lead.email ? `Email: ${lead.email}` : "",
-      lead.projectAddress ? `Adresse du projet: ${lead.projectAddress}` : "",
-      lead.messaging ? `Messagerie: ${lead.messaging}` : "",
-      lead.projectType ? `Projet: ${lead.projectType}` : "",
-      lead.budget ? `Budget: ${lead.budget}` : "",
-      lead.message ? `Message: ${lead.message}` : "",
-    ]
-      .filter(Boolean)
-      .join("\n");
-
-    const subject = `Nouvelle demande ARASAKA - ${lead.name}`;
-    const emailResult = await sendContactEmail(lead, waText);
+    const contactText = contactMessageText(lead);
+    const subject = `${lead.requestType || "Nouvelle demande"} ARASAKA - ${lead.name}`;
+    const emailResult = await sendContactEmail(lead, contactText);
 
     sendJson(res, 200, {
       ok: true,
       message: emailResult.sent
-        ? "Demande enregistrée et transmise par email. Les messages Gmail et WhatsApp restent prêts à envoyer."
-        : "Email automatique non configuré sur ce serveur. La demande est enregistrée localement; ouvrez Gmail puis cliquez sur Envoyer pour la transmettre à ARASAKA CI.",
+        ? "Demande enregistrée et transmise à ARASAKA. Vous pouvez aussi envoyer une copie par Gmail ou WhatsApp."
+        : "Demande enregistrée. Pour garantir la transmission immédiate, ouvrez Gmail ou WhatsApp puis envoyez le message préparé.",
       emailSent: emailResult.sent,
       emailStatus: emailResult.reason || "SENT",
-      gmailUrl: gmailLink(subject, waText),
-      whatsappUrl: whatsappLink(waText),
+      gmailUrl: gmailLink(subject, contactText),
+      whatsappUrl: whatsappLink(contactText),
     });
   } catch (error) {
     sendJson(res, 500, {
